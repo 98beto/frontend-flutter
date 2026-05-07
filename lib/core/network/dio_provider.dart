@@ -7,6 +7,7 @@ import 'package:pos_desktop/features/settings/presentation/providers/settings_pr
 final dioProvider = Provider<Dio>((ref) {
   final session = ref.watch(authSessionProvider);
   final settings = ref.watch(settingsProvider);
+  var didHandleUnauthorized = false;
 
   final headers = <String, String>{
     'Accept': 'application/json',
@@ -18,7 +19,7 @@ final dioProvider = Provider<Dio>((ref) {
     headers['Authorization'] = 'Bearer $token';
   }
 
-  return Dio(
+  final dio = Dio(
     BaseOptions(
       baseUrl: settings.apiBaseUrl,
       connectTimeout: ApiConfig.connectTimeout,
@@ -26,4 +27,28 @@ final dioProvider = Provider<Dio>((ref) {
       headers: headers,
     ),
   );
+
+  dio.interceptors.add(
+    QueuedInterceptorsWrapper(
+      onError: (error, handler) async {
+        final path = error.requestOptions.path;
+        final isUnauthorized = error.response?.statusCode == 401;
+        final isLoginRequest = path == '/auth/device/login';
+
+        if (
+          isUnauthorized &&
+          !isLoginRequest &&
+          !didHandleUnauthorized &&
+          session?.isAuthenticated == true
+        ) {
+          didHandleUnauthorized = true;
+          await ref.read(authSessionProvider.notifier).clearSession();
+        }
+
+        handler.next(error);
+      },
+    ),
+  );
+
+  return dio;
 });

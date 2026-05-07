@@ -37,6 +37,14 @@ class AuthRemoteDatasource {
     }
   }
 
+  Future<void> validateSession() async {
+    try {
+      await _dio.get('/auth/device/me');
+    } on DioException catch (error) {
+      throw _mapDioException(error);
+    }
+  }
+
   ApiException _mapDioException(DioException error) {
     final responseData = error.response?.data;
     if (responseData is Map<String, dynamic>) {

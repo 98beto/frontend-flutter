@@ -5,6 +5,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:pos_desktop/core/network/paginated_response.dart';
 import 'package:pos_desktop/core/storage/shared_preferences_provider.dart';
 import 'package:pos_desktop/features/auth/data/models/device_session_model.dart';
+import 'package:pos_desktop/features/auth/domain/entities/device_session.dart';
+import 'package:pos_desktop/features/auth/domain/repositories/auth_repository.dart';
+import 'package:pos_desktop/features/auth/presentation/providers/auth_repository_provider.dart';
 import 'package:pos_desktop/main.dart';
 import 'package:pos_desktop/features/pos/data/models/sale_request_model.dart';
 import 'package:pos_desktop/features/pos/data/models/saved_cart_request_model.dart';
@@ -40,17 +43,52 @@ void main() {
       ProviderScope(
         overrides: [
           sharedPreferencesProvider.overrideWithValue(sharedPreferences),
+          authRepositoryProvider.overrideWithValue(_FakeAuthRepository()),
           posRepositoryProvider.overrideWithValue(_FakePosRepository()),
         ],
         child: const PosDesktopApp(),
       ),
     );
-    await tester.pump();
+    await tester.pumpAndSettle();
 
     expect(find.text('Punto de Venta'), findsOneWidget);
     expect(find.text('Carrito actual'), findsOneWidget);
     expect(find.text('Resumen de venta'), findsOneWidget);
   });
+}
+
+class _FakeAuthRepository implements AuthRepository {
+  @override
+  Future<void> clearSession() async {}
+
+  @override
+  DeviceSession? getSession() {
+    return const DeviceSession(
+      token: 'test-token',
+      deviceId: 1,
+      branchId: 1,
+      deviceName: 'Caja 1',
+      deviceIdentifier: 'POS-01',
+      branchName: 'Sucursal Centro',
+    );
+  }
+
+  @override
+  Future<DeviceSession> login({
+    required String identifier,
+    required String secret,
+  }) async {
+    return getSession()!;
+  }
+
+  @override
+  Future<void> logout() async {}
+
+  @override
+  DeviceSession saveSession(DeviceSession session) => session;
+
+  @override
+  Future<bool> validateSession() async => true;
 }
 
 class _FakePosRepository implements PosRepository {

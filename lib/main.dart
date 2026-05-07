@@ -54,6 +54,7 @@ class PosDesktopApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final session = ref.watch(authSessionProvider);
+    final authBootstrap = ref.watch(authBootstrapProvider);
     final settings = ref.watch(settingsProvider);
 
     return MaterialApp(
@@ -62,7 +63,16 @@ class PosDesktopApp extends ConsumerWidget {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: _resolveThemeMode(settings.themeMode),
-      home: session == null ? const DeviceLoginPage() : const AppShell(),
+      themeAnimationDuration: const Duration(milliseconds: 250),
+      themeAnimationCurve: Curves.easeInOut,
+      home: authBootstrap.when(
+        skipLoadingOnReload: true,
+        data: (_) =>
+            session == null ? const DeviceLoginPage() : const AppShell(),
+        error: (_, _) =>
+            session == null ? const DeviceLoginPage() : const AppShell(),
+        loading: () => const _AuthBootstrapLoader(),
+      ),
     );
   }
 
@@ -81,3 +91,20 @@ class PosDesktopApp extends ConsumerWidget {
 
 bool get _supportsDesktopWindowManagement =>
     Platform.isLinux || Platform.isMacOS || Platform.isWindows;
+
+class _AuthBootstrapLoader extends StatelessWidget {
+  const _AuthBootstrapLoader();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      body: Center(
+        child: SizedBox(
+          width: 32,
+          height: 32,
+          child: CircularProgressIndicator(strokeWidth: 3),
+        ),
+      ),
+    );
+  }
+}

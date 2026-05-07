@@ -10,6 +10,8 @@ abstract class AuthRepository {
     required String secret,
   });
 
+  Future<bool> validateSession();
+
   Future<void> logout();
 
   Future<void> clearSession();
