@@ -10,7 +10,9 @@ class InventoryMovementDetailDialog extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final movementAsync = ref.watch(inventoryMovementDetailProvider(movementId));
+    final movementAsync = ref.watch(
+      inventoryMovementDetailProvider(movementId),
+    );
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final dialogSurface = isDark ? AppTheme.panel : AppTheme.lightBg0;
     final borderColor = isDark ? AppTheme.border : AppTheme.lightBg4;
@@ -39,7 +41,11 @@ class InventoryMovementDetailDialog extends ConsumerWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.error_outline_rounded, color: errorColor, size: 40),
+                    Icon(
+                      Icons.error_outline_rounded,
+                      color: errorColor,
+                      size: 40,
+                    ),
                     const SizedBox(height: 16),
                     Text(
                       'No fue posible cargar el movimiento.',
@@ -63,7 +69,9 @@ class InventoryMovementDetailDialog extends ConsumerWidget {
                             children: [
                               Text(
                                 'Movimiento #${movement.id}',
-                                style: Theme.of(context).textTheme.headlineMedium,
+                                style: Theme.of(
+                                  context,
+                                ).textTheme.headlineMedium,
                               ),
                               const SizedBox(height: 8),
                               Text(
@@ -84,14 +92,26 @@ class InventoryMovementDetailDialog extends ConsumerWidget {
                       child: SingleChildScrollView(
                         child: Column(
                           children: [
-                            _InfoRow(label: 'Producto', value: movement.productName),
+                            _InfoRow(
+                              label: 'Producto',
+                              value: movement.productName,
+                            ),
                             const SizedBox(height: 12),
-                            _InfoRow(label: 'Tipo', value: _typeLabel(movement.type)),
+                            _InfoRow(
+                              label: 'Tipo',
+                              value: _typeLabel(movement.type),
+                            ),
                             const SizedBox(height: 12),
-                            _InfoRow(label: 'Origen', value: _sourceLabel(movement)),
+                            _InfoRow(
+                              label: 'Origen',
+                              value: _sourceLabel(movement),
+                            ),
                             if (movement.referenceId != null) ...[
                               const SizedBox(height: 12),
-                              _InfoRow(label: 'Referencia', value: '#${movement.referenceId}'),
+                              _InfoRow(
+                                label: 'Referencia',
+                                value: '#${movement.referenceId}',
+                              ),
                             ],
                             const SizedBox(height: 12),
                             _InfoRow(
@@ -109,8 +129,9 @@ class InventoryMovementDetailDialog extends ConsumerWidget {
                             const SizedBox(height: 12),
                             _InfoRow(
                               label: 'Notas',
-                              value:
-                                  movement.notes?.isNotEmpty == true ? movement.notes! : 'Sin notas',
+                              value: movement.notes?.isNotEmpty == true
+                                  ? movement.notes!
+                                  : 'Sin notas',
                             ),
                           ],
                         ),
@@ -189,7 +210,9 @@ class _InfoRow extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(child: Text(label, style: Theme.of(context).textTheme.bodyLarge)),
+          Expanded(
+            child: Text(label, style: Theme.of(context).textTheme.bodyLarge),
+          ),
           const SizedBox(width: 18),
           Expanded(
             child: Text(

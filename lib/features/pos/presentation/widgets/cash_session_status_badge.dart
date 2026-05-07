@@ -40,7 +40,8 @@ class CashSessionStatusBadge extends ConsumerWidget {
           ? (isDark ? AppTheme.danger : AppTheme.lightDanger)
           : (isDark ? AppTheme.success : AppTheme.lightSuccess),
       loading: () => isDark ? AppTheme.brand : AppTheme.lightBrand,
-      error: (error, stackTrace) => isDark ? AppTheme.danger : AppTheme.lightDanger,
+      error: (error, stackTrace) =>
+          isDark ? AppTheme.danger : AppTheme.lightDanger,
     );
 
     return Container(

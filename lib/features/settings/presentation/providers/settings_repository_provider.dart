@@ -5,11 +5,15 @@ import 'package:pos_desktop/features/settings/data/datasources/settings_remote_d
 import 'package:pos_desktop/features/settings/data/repositories/settings_repository_impl.dart';
 import 'package:pos_desktop/features/settings/domain/repositories/settings_repository.dart';
 
-final settingsLocalDatasourceProvider = Provider<SettingsLocalDatasource>((ref) {
+final settingsLocalDatasourceProvider = Provider<SettingsLocalDatasource>((
+  ref,
+) {
   return SettingsLocalDatasource(ref.watch(sharedPreferencesProvider));
 });
 
-final settingsRemoteDatasourceProvider = Provider<SettingsRemoteDatasource>((ref) {
+final settingsRemoteDatasourceProvider = Provider<SettingsRemoteDatasource>((
+  ref,
+) {
   return const SettingsRemoteDatasource();
 });
 

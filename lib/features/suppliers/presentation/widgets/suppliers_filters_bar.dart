@@ -46,7 +46,10 @@ class SuppliersFiltersBar extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Proveedores', style: Theme.of(context).textTheme.titleLarge),
+                      Text(
+                        'Proveedores',
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
                       const SizedBox(height: 4),
                       Text(
                         '$total registros cargados. Controla contactos, credito y relacion comercial.',

@@ -45,7 +45,10 @@ class CashSessionStatusCard extends StatelessWidget {
                 const SizedBox(width: 16),
                 const Spacer(),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 14,
+                    vertical: 9,
+                  ),
                   decoration: BoxDecoration(
                     color: statusBackground,
                     borderRadius: BorderRadius.circular(18),
@@ -91,7 +94,10 @@ class CashSessionStatusCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Notas de apertura', style: Theme.of(context).textTheme.titleMedium),
+                    Text(
+                      'Notas de apertura',
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
                     const SizedBox(height: 8),
                     Text(
                       session.notes!,

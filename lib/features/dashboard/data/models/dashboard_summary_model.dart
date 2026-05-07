@@ -29,8 +29,9 @@ class DashboardSummaryModel extends DashboardSummary {
       cashSessionOpenedAt: cashSession == null
           ? null
           : DateTime.tryParse(cashSession['opened_at'] as String? ?? ''),
-      cashSessionOpeningBalance:
-          cashSession == null ? null : _toDouble(cashSession['opening_balance']),
+      cashSessionOpeningBalance: cashSession == null
+          ? null
+          : _toDouble(cashSession['opening_balance']),
     );
   }
 

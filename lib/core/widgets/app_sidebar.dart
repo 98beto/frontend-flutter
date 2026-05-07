@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pos_desktop/core/theme/app_theme.dart';
-import 'package:pos_desktop/features/settings/presentation/providers/settings_provider.dart';
+import 'package:pos_desktop/features/auth/presentation/providers/auth_session_provider.dart';
 
 enum AppSection {
   dashboard,
@@ -32,7 +32,7 @@ class AppSidebar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final settings = ref.watch(settingsProvider);
+    final session = ref.watch(authSessionProvider);
     final colorScheme = theme.colorScheme;
     final textTheme = theme.textTheme;
     final isDark = theme.brightness == Brightness.dark;
@@ -44,20 +44,24 @@ class AppSidebar extends ConsumerWidget {
     final titleColor = colorScheme.onSurface;
     final subtitleColor = textTheme.bodyMedium?.color ?? AppTheme.grey;
     final menuLabelColor = textTheme.bodySmall?.color ?? AppTheme.grey;
-    final selectedBackgroundColor = isDark ? AppTheme.bgPurple : AppTheme.lightBgPurple;
+    final selectedBackgroundColor = isDark
+        ? AppTheme.bgPurple
+        : AppTheme.lightBgPurple;
     final selectedBorderColor = isDark ? AppTheme.purple : AppTheme.lightBrand;
-    final selectedIconColor = isDark ? AppTheme.filledBlue : AppTheme.lightBrand;
+    final selectedIconColor = isDark
+        ? AppTheme.filledBlue
+        : AppTheme.lightBrand;
     final selectedTextColor = colorScheme.onSurface;
     final unselectedIconColor = subtitleColor;
     final unselectedTextColor = subtitleColor;
     final brandAvatarColor = isDark ? AppTheme.accent : AppTheme.lightAccent;
     final brandAvatarIconColor = isDark ? AppTheme.black : AppTheme.lightBase00;
-    final sidebarPrimaryLabel = settings.deviceName.trim().isNotEmpty
-        ? settings.deviceName.trim()
-        : settings.deviceIdentifier.trim();
-    final sidebarSecondaryLabel = settings.branchName.trim().isNotEmpty
-        ? settings.branchName.trim()
-        : 'Sucursal #${settings.branchId}';
+    final sidebarPrimaryLabel = session?.deviceName.trim().isNotEmpty == true
+        ? session!.deviceName.trim()
+        : 'Sin sesion';
+    final sidebarSecondaryLabel = session?.branchName.trim().isNotEmpty == true
+        ? session!.branchName.trim()
+        : 'Sin sesion autenticada';
 
     final sidebarWidth = isCollapsed ? 96.0 : 292.0;
     final items = [
@@ -71,9 +75,17 @@ class AppSidebar extends ConsumerWidget {
       ),
       _SidebarItem(AppSection.products, Icons.inventory_2_rounded, 'Productos'),
       _SidebarItem(AppSection.inventory, Icons.warehouse_rounded, 'Inventario'),
-      _SidebarItem(AppSection.suppliers, Icons.local_shipping_rounded, 'Proveedores'),
+      _SidebarItem(
+        AppSection.suppliers,
+        Icons.local_shipping_rounded,
+        'Proveedores',
+      ),
       _SidebarItem(AppSection.clients, Icons.groups_rounded, 'Clientes'),
-      _SidebarItem(AppSection.settings, Icons.settings_rounded, 'Configuracion'),
+      _SidebarItem(
+        AppSection.settings,
+        Icons.settings_rounded,
+        'Configuracion',
+      ),
     ];
 
     return AnimatedContainer(
@@ -81,7 +93,12 @@ class AppSidebar extends ConsumerWidget {
       curve: Curves.easeOutCubic,
       width: sidebarWidth,
       color: sidebarColor,
-      padding: EdgeInsets.fromLTRB(isCollapsed ? 12 : 20, 24, isCollapsed ? 12 : 20, 20),
+      padding: EdgeInsets.fromLTRB(
+        isCollapsed ? 12 : 20,
+        24,
+        isCollapsed ? 12 : 20,
+        20,
+      ),
       child: LayoutBuilder(
         builder: (context, constraints) {
           final showExpandedContent = constraints.maxWidth >= 220;
@@ -89,8 +106,9 @@ class AppSidebar extends ConsumerWidget {
           final userAvatarRadius = showExpandedContent ? 20.0 : 18.0;
 
           return Column(
-            crossAxisAlignment:
-                showExpandedContent ? CrossAxisAlignment.start : CrossAxisAlignment.center,
+            crossAxisAlignment: showExpandedContent
+                ? CrossAxisAlignment.start
+                : CrossAxisAlignment.center,
             children: [
               Container(
                 padding: EdgeInsets.all(showExpandedContent ? 18 : 12),
@@ -120,22 +138,25 @@ class AppSidebar extends ConsumerWidget {
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                               children: [
-                                  Text(
-                                    'SISTEMA DE INVENTARIO',
-                                    style: TextStyle(
-                                      color: titleColor,
-                                      fontSize: 16,
-                                     fontWeight: FontWeight.w700,
-                                     letterSpacing: 0.4,
+                              children: [
+                                Text(
+                                  'SISTEMA DE INVENTARIO',
+                                  style: TextStyle(
+                                    color: titleColor,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w700,
+                                    letterSpacing: 0.4,
                                   ),
                                 ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    'Inventario y ventas',
-                                    style: TextStyle(color: subtitleColor, fontSize: 12),
+                                const SizedBox(height: 4),
+                                Text(
+                                  'Inventario y ventas',
+                                  style: TextStyle(
+                                    color: subtitleColor,
+                                    fontSize: 12,
                                   ),
-                               ],
+                                ),
+                              ],
                             ),
                           ),
                         ],
@@ -146,7 +167,9 @@ class AppSidebar extends ConsumerWidget {
               ),
               const SizedBox(height: 12),
               Align(
-                alignment: showExpandedContent ? Alignment.centerRight : Alignment.center,
+                alignment: showExpandedContent
+                    ? Alignment.centerRight
+                    : Alignment.center,
                 child: IconButton(
                   onPressed: onToggleCollapsed,
                   style: IconButton.styleFrom(
@@ -195,10 +218,14 @@ class AppSidebar extends ConsumerWidget {
                             vertical: 14,
                           ),
                           decoration: BoxDecoration(
-                            color: selected ? selectedBackgroundColor : AppTheme.transparent,
+                            color: selected
+                                ? selectedBackgroundColor
+                                : AppTheme.transparent,
                             borderRadius: BorderRadius.circular(18),
                             border: Border.all(
-                              color: selected ? selectedBorderColor : AppTheme.transparent,
+                              color: selected
+                                  ? selectedBorderColor
+                                  : AppTheme.transparent,
                             ),
                           ),
                           child: Row(
@@ -208,7 +235,9 @@ class AppSidebar extends ConsumerWidget {
                             children: [
                               Icon(
                                 item.icon,
-                                color: selected ? selectedIconColor : unselectedIconColor,
+                                color: selected
+                                    ? selectedIconColor
+                                    : unselectedIconColor,
                                 size: 20,
                               ),
                               if (showExpandedContent) ...[
@@ -218,10 +247,13 @@ class AppSidebar extends ConsumerWidget {
                                     item.label,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
-                                      color: selected ? selectedTextColor : unselectedTextColor,
+                                      color: selected
+                                          ? selectedTextColor
+                                          : unselectedTextColor,
                                       fontSize: 14,
-                                      fontWeight:
-                                          selected ? FontWeight.w700 : FontWeight.w500,
+                                      fontWeight: selected
+                                          ? FontWeight.w700
+                                          : FontWeight.w500,
                                     ),
                                   ),
                                 ),
@@ -260,20 +292,23 @@ class AppSidebar extends ConsumerWidget {
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                           children: [
-                              Text(
-                                sidebarPrimaryLabel,
-                                style: TextStyle(
-                                  color: titleColor,
-                                  fontWeight: FontWeight.w600,
-                                ),
+                          children: [
+                            Text(
+                              sidebarPrimaryLabel,
+                              style: TextStyle(
+                                color: titleColor,
+                                fontWeight: FontWeight.w600,
                               ),
-                              const SizedBox(height: 4),
-                              Text(
-                                sidebarSecondaryLabel,
-                                style: TextStyle(color: subtitleColor, fontSize: 12),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              sidebarSecondaryLabel,
+                              style: TextStyle(
+                                color: subtitleColor,
+                                fontSize: 12,
                               ),
-                           ],
+                            ),
+                          ],
                         ),
                       ),
                     ],

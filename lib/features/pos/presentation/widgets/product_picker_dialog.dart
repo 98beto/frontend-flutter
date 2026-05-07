@@ -13,7 +13,8 @@ class ProductPickerDialog extends ConsumerStatefulWidget {
   const ProductPickerDialog({super.key});
 
   @override
-  ConsumerState<ProductPickerDialog> createState() => _ProductPickerDialogState();
+  ConsumerState<ProductPickerDialog> createState() =>
+      _ProductPickerDialogState();
 }
 
 class _ProductPickerDialogState extends ConsumerState<ProductPickerDialog> {
@@ -45,18 +46,22 @@ class _ProductPickerDialogState extends ConsumerState<ProductPickerDialog> {
   }
 
   void _showStockWarning(Product product) {
-    ref.read(appNotificationProvider.notifier).showWarning(
-      title: 'Stock insuficiente',
-      message:
-          'Solo hay ${product.stock} unidades disponibles de ${product.name}.',
-    );
+    ref
+        .read(appNotificationProvider.notifier)
+        .showWarning(
+          title: 'Stock insuficiente',
+          message:
+              'Solo hay ${product.stock} unidades disponibles de ${product.name}.',
+        );
   }
 
   void _showAddedSuccess(Product product, int quantity) {
-    ref.read(appNotificationProvider.notifier).showSuccess(
-      title: 'Producto agregado',
-      message: '${product.name} x$quantity agregado al carrito.',
-    );
+    ref
+        .read(appNotificationProvider.notifier)
+        .showSuccess(
+          title: 'Producto agregado',
+          message: '${product.name} x$quantity agregado al carrito.',
+        );
   }
 
   Future<void> _addProductQuick(Product product) async {
@@ -98,10 +103,9 @@ class _ProductPickerDialogState extends ConsumerState<ProductPickerDialog> {
       return;
     }
 
-    final wasAdded = ref.read(posProvider.notifier).addProduct(
-          product,
-          quantity: requestedQuantity,
-        );
+    final wasAdded = ref
+        .read(posProvider.notifier)
+        .addProduct(product, quantity: requestedQuantity);
 
     if (!wasAdded) {
       _showStockWarning(product);
@@ -271,7 +275,10 @@ class _CategoryFiltersState extends State<_CategoryFilters> {
     }
 
     final position = _scrollController.position;
-    final target = (position.pixels + offset).clamp(0.0, position.maxScrollExtent);
+    final target = (position.pixels + offset).clamp(
+      0.0,
+      position.maxScrollExtent,
+    );
 
     await _scrollController.animateTo(
       target,
@@ -302,7 +309,9 @@ class _CategoryFiltersState extends State<_CategoryFilters> {
                   separatorBuilder: (_, index) => const SizedBox(width: 10),
                   itemBuilder: (context, index) {
                     final isAll = index == 0;
-                    final category = isAll ? null : widget.categories[index - 1];
+                    final category = isAll
+                        ? null
+                        : widget.categories[index - 1];
                     final selected = isAll
                         ? widget.selectedCategoryId == null
                         : widget.selectedCategoryId == category!.id;
@@ -310,9 +319,8 @@ class _CategoryFiltersState extends State<_CategoryFilters> {
                     return ChoiceChip(
                       label: Text(isAll ? 'Todas' : category!.name),
                       selected: selected,
-                      onSelected: (_) => widget.onSelected(
-                        isAll ? null : category!.id,
-                      ),
+                      onSelected: (_) =>
+                          widget.onSelected(isAll ? null : category!.id),
                     );
                   },
                 ),
@@ -411,10 +419,7 @@ class _ScrollFade extends StatelessWidget {
         gradient: LinearGradient(
           begin: begin,
           end: end,
-          colors: [
-            fadeColor,
-            AppTheme.transparent,
-          ],
+          colors: [fadeColor, AppTheme.transparent],
         ),
       ),
     );
@@ -447,12 +452,12 @@ class _ProductsContent extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(state.errorMessage!, style: Theme.of(context).textTheme.bodyLarge),
-            const SizedBox(height: 16),
-            OutlinedButton(
-              onPressed: onRetry,
-              child: const Text('Reintentar'),
+            Text(
+              state.errorMessage!,
+              style: Theme.of(context).textTheme.bodyLarge,
             ),
+            const SizedBox(height: 16),
+            OutlinedButton(onPressed: onRetry, child: const Text('Reintentar')),
           ],
         ),
       );
@@ -484,7 +489,8 @@ class _ProductsContent extends StatelessWidget {
               return _ProductCard(
                 product: product,
                 onAddProduct: () => onAddProduct(product),
-                onAddProductWithQuantity: () => onAddProductWithQuantity(product),
+                onAddProductWithQuantity: () =>
+                    onAddProductWithQuantity(product),
               );
             },
           ),
@@ -495,7 +501,10 @@ class _ProductsContent extends StatelessWidget {
         ],
         if (state.errorMessage != null && state.items.isNotEmpty) ...[
           const SizedBox(height: 16),
-          Text(state.errorMessage!, style: Theme.of(context).textTheme.bodyMedium),
+          Text(
+            state.errorMessage!,
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
         ],
       ],
     );
@@ -541,7 +550,9 @@ class _ProductCardState extends State<_ProductCard> {
     final categoryBackground = isDark
         ? AppTheme.soft.withValues(alpha: 0.35)
         : AppTheme.lightBgBlue;
-    final categoryTextColor = isDark ? AppTheme.filledBlue : AppTheme.lightBrand;
+    final categoryTextColor = isDark
+        ? AppTheme.filledBlue
+        : AppTheme.lightBrand;
     final ctaBackground = isOutOfStock
         ? (isDark ? AppTheme.bg4 : AppTheme.lightBg4)
         : (isDark ? AppTheme.purple : AppTheme.lightBrand);
@@ -556,22 +567,25 @@ class _ProductCardState extends State<_ProductCard> {
         borderRadius: BorderRadius.circular(24),
         hoverColor: AppTheme.transparent,
         overlayColor: WidgetStateProperty.resolveWith(
-          (states) => states.contains(WidgetState.hovered)
-              ? hoverOverlayColor
-              : null,
+          (states) =>
+              states.contains(WidgetState.hovered) ? hoverOverlayColor : null,
         ),
         onTap: isOutOfStock ? null : widget.onAddProduct,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 160),
           curve: Curves.easeOutCubic,
-          transform: Matrix4.translationValues(0, _isHovered && !isOutOfStock ? -2 : 0, 0),
+          transform: Matrix4.translationValues(
+            0,
+            _isHovered && !isOutOfStock ? -2 : 0,
+            0,
+          ),
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: _isHovered && !isOutOfStock ? hoverBackground : defaultBackground,
+            color: _isHovered && !isOutOfStock
+                ? hoverBackground
+                : defaultBackground,
             borderRadius: BorderRadius.circular(24),
-            border: Border.all(
-              color: borderColor,
-            ),
+            border: Border.all(color: borderColor),
             boxShadow: _isHovered && !isOutOfStock
                 ? [
                     BoxShadow(
@@ -588,7 +602,10 @@ class _ProductCardState extends State<_ProductCard> {
               Row(
                 children: [
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 6,
+                    ),
                     decoration: BoxDecoration(
                       color: categoryBackground,
                       borderRadius: BorderRadius.circular(14),
@@ -602,17 +619,20 @@ class _ProductCardState extends State<_ProductCard> {
                     ),
                   ),
                   const Spacer(),
-                    Text(
-                      product.sku,
-                      style: TextStyle(
-                        color: textTheme.bodySmall?.color,
-                        fontSize: 12,
-                      ),
+                  Text(
+                    product.sku,
+                    style: TextStyle(
+                      color: textTheme.bodySmall?.color,
+                      fontSize: 12,
                     ),
+                  ),
                 ],
               ),
               const Spacer(),
-              Text(product.name, style: Theme.of(context).textTheme.titleMedium),
+              Text(
+                product.name,
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
               const SizedBox(height: 8),
               Text(
                 isOutOfStock
@@ -631,13 +651,18 @@ class _ProductCardState extends State<_ProductCard> {
                   ),
                   const Spacer(),
                   OutlinedButton.icon(
-                    onPressed: isOutOfStock ? null : widget.onAddProductWithQuantity,
+                    onPressed: isOutOfStock
+                        ? null
+                        : widget.onAddProductWithQuantity,
                     icon: const Icon(Icons.tag_rounded, size: 16),
                     label: const Text('Cantidad'),
                   ),
                   const SizedBox(width: 10),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 8,
+                    ),
                     decoration: BoxDecoration(
                       color: ctaBackground,
                       borderRadius: BorderRadius.circular(16),

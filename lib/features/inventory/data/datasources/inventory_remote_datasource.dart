@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:pos_desktop/core/config/operation_context.dart';
 import 'package:pos_desktop/core/network/api_envelope.dart';
 import 'package:pos_desktop/core/network/api_exception.dart';
 import 'package:pos_desktop/core/network/paginated_response.dart';
@@ -8,10 +7,9 @@ import 'package:pos_desktop/features/inventory/data/models/inventory_movement_re
 import 'package:pos_desktop/features/products/data/models/product_record_model.dart';
 
 class InventoryRemoteDatasource {
-  const InventoryRemoteDatasource(this._dio, this._operationContext);
+  const InventoryRemoteDatasource(this._dio);
 
   final Dio _dio;
-  final OperationContext _operationContext;
 
   Future<PaginatedResponse<InventoryMovementModel>> getMovements({
     int page = 1,
@@ -24,7 +22,6 @@ class InventoryRemoteDatasource {
         '/inventory/movements',
         queryParameters: {
           'page': page,
-          'branch_id': _operationContext.branchId,
           'product_id': productId,
           if (type != null && type.isNotEmpty) 'type': type,
           if (source != null && source.isNotEmpty) 'source': source,
@@ -80,14 +77,13 @@ class InventoryRemoteDatasource {
     }
   }
 
-  Future<PaginatedResponse<ProductRecordModel>> getLowStockProducts({int page = 1}) async {
+  Future<PaginatedResponse<ProductRecordModel>> getLowStockProducts({
+    int page = 1,
+  }) async {
     try {
       final response = await _dio.get(
         '/products',
-        queryParameters: {
-          'page': page,
-          'low_stock': 1,
-        },
+        queryParameters: {'page': page, 'low_stock': 1},
       );
 
       final envelope = ApiEnvelope.fromJson(
@@ -109,7 +105,8 @@ class InventoryRemoteDatasource {
     if (responseData is Map<String, dynamic>) {
       return ApiException(
         message:
-            responseData['message'] as String? ?? 'No fue posible conectar con la API.',
+            responseData['message'] as String? ??
+            'No fue posible conectar con la API.',
         statusCode: error.response?.statusCode,
         errors: responseData['errors'] as Map<String, dynamic>?,
       );

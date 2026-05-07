@@ -1,5 +1,4 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pos_desktop/core/config/operation_context_provider.dart';
 import 'package:pos_desktop/features/cash_register/data/models/cash_movement_request_model.dart';
 import 'package:pos_desktop/features/cash_register/data/models/close_cash_request_model.dart';
 import 'package:pos_desktop/features/cash_register/data/models/open_cash_request_model.dart';
@@ -10,8 +9,8 @@ import 'package:pos_desktop/features/pos/presentation/providers/cash_session_pro
 
 final cashRegisterActionsProvider =
     AsyncNotifierProvider<CashRegisterActionsNotifier, CashCloseResult?>(
-  CashRegisterActionsNotifier.new,
-);
+      CashRegisterActionsNotifier.new,
+    );
 
 class CashRegisterActionsNotifier extends AsyncNotifier<CashCloseResult?> {
   @override
@@ -27,13 +26,10 @@ class CashRegisterActionsNotifier extends AsyncNotifier<CashCloseResult?> {
   }) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
-      await ref.read(cashRegisterRepositoryProvider).openCashSession(
-            OpenCashRequestModel(
-              branchId: ref.read(operationContextProvider).branchId,
-              deviceIdentifier: ref.read(operationContextProvider).deviceIdentifier,
-              openingBalance: openingBalance,
-              notes: notes,
-            ),
+      await ref
+          .read(cashRegisterRepositoryProvider)
+          .openCashSession(
+            OpenCashRequestModel(openingBalance: openingBalance, notes: notes),
           );
 
       ref.invalidate(cashSessionProvider);
@@ -49,12 +45,11 @@ class CashRegisterActionsNotifier extends AsyncNotifier<CashCloseResult?> {
   }) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
-      final result = await ref.read(cashRegisterRepositoryProvider).closeCashSession(
+      final result = await ref
+          .read(cashRegisterRepositoryProvider)
+          .closeCashSession(
             sessionId,
-            CloseCashRequestModel(
-              closingBalance: closingBalance,
-              notes: notes,
-            ),
+            CloseCashRequestModel(closingBalance: closingBalance, notes: notes),
           );
 
       ref.invalidate(cashSessionProvider);
@@ -70,7 +65,9 @@ class CashRegisterActionsNotifier extends AsyncNotifier<CashCloseResult?> {
   }) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
-      await ref.read(cashRegisterRepositoryProvider).createCashMovement(
+      await ref
+          .read(cashRegisterRepositoryProvider)
+          .createCashMovement(
             sessionId,
             CashMovementRequestModel(
               type: 'out',

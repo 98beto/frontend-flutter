@@ -113,7 +113,11 @@ class ClientsCardsGrid extends StatelessWidget {
 }
 
 class _ClientCard extends StatefulWidget {
-  const _ClientCard({required this.item, required this.onEdit, required this.onDelete});
+  const _ClientCard({
+    required this.item,
+    required this.onEdit,
+    required this.onDelete,
+  });
 
   final ClientRecord item;
   final VoidCallback onEdit;
@@ -129,12 +133,18 @@ class _ClientCardState extends State<_ClientCard> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final cardColor = _isHovered ? (isDark ? AppTheme.bg1 : AppTheme.lightBg1) : (isDark ? AppTheme.panel : AppTheme.lightBg0);
-    final borderColor = _isHovered ? (isDark ? AppTheme.accent : AppTheme.lightAccent) : (isDark ? AppTheme.border : AppTheme.lightBg4);
+    final cardColor = _isHovered
+        ? (isDark ? AppTheme.bg1 : AppTheme.lightBg1)
+        : (isDark ? AppTheme.panel : AppTheme.lightBg0);
+    final borderColor = _isHovered
+        ? (isDark ? AppTheme.accent : AppTheme.lightAccent)
+        : (isDark ? AppTheme.border : AppTheme.lightBg4);
     final shadowColor = isDark
         ? AppTheme.black.withValues(alpha: 0.18)
         : AppTheme.lightTextStrong.withValues(alpha: 0.08);
-    final iconBackground = isDark ? AppTheme.bgPurple : AppTheme.lightBgPurple.withValues(alpha: 0.55);
+    final iconBackground = isDark
+        ? AppTheme.bgPurple
+        : AppTheme.lightBgPurple.withValues(alpha: 0.55);
     final iconColor = isDark ? AppTheme.purple : AppTheme.lightBrand;
 
     return MouseRegion(
@@ -185,10 +195,19 @@ class _ClientCardState extends State<_ClientCard> {
                 ],
               ),
               const SizedBox(height: 18),
-              _InfoBlock(label: 'Correo', value: widget.item.email ?? 'Sin correo'),
-              _InfoBlock(label: 'Telefono', value: widget.item.phone ?? 'Sin telefono'),
+              _InfoBlock(
+                label: 'Correo',
+                value: widget.item.email ?? 'Sin correo',
+              ),
+              _InfoBlock(
+                label: 'Telefono',
+                value: widget.item.phone ?? 'Sin telefono',
+              ),
               _InfoBlock(label: 'RFC', value: widget.item.taxId ?? 'Sin RFC'),
-              _InfoBlock(label: 'Direccion', value: widget.item.address ?? 'Sin direccion'),
+              _InfoBlock(
+                label: 'Direccion',
+                value: widget.item.address ?? 'Sin direccion',
+              ),
               const SizedBox(height: 12),
               Row(
                 children: [

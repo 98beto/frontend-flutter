@@ -24,7 +24,8 @@ class SaleDetailModel extends SaleDetail {
     return SaleDetailModel(
       id: json['id'] as int? ?? 0,
       saleDate:
-          DateTime.tryParse(json['sale_date'] as String? ?? '') ?? DateTime.now(),
+          DateTime.tryParse(json['sale_date'] as String? ?? '') ??
+          DateTime.now(),
       paymentMethod: json['payment_method'] as String? ?? 'cash',
       status: json['status'] as String? ?? 'completed',
       subtotal: _toDouble(json['subtotal']),
@@ -34,8 +35,10 @@ class SaleDetailModel extends SaleDetail {
       customerName: customer?['name'] as String?,
       cashSessionId: cashSession?['id'] as int?,
       items: saleDetails
-          .map((item) =>
-              SaleDetailItemModel.fromJson(item as Map<String, dynamic>))
+          .map(
+            (item) =>
+                SaleDetailItemModel.fromJson(item as Map<String, dynamic>),
+          )
           .toList(),
     );
   }

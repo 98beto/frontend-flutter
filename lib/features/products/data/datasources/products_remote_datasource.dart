@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:pos_desktop/core/network/api_envelope.dart';
 import 'package:pos_desktop/core/network/api_exception.dart';
 import 'package:pos_desktop/core/network/paginated_response.dart';
+import 'package:pos_desktop/features/products/data/models/product_branch_update_request_model.dart';
 import 'package:pos_desktop/features/products/data/models/product_category_model.dart';
 import 'package:pos_desktop/features/products/data/models/product_record_model.dart';
 import 'package:pos_desktop/features/products/data/models/product_upsert_request_model.dart';
@@ -15,7 +16,7 @@ class ProductsRemoteDatasource {
     int page = 1,
     String? search,
     int? categoryId,
-    bool? isActive,
+    bool? isAvailable,
     bool lowStockOnly = false,
   }) async {
     try {
@@ -23,9 +24,10 @@ class ProductsRemoteDatasource {
         '/products',
         queryParameters: {
           'page': page,
-          if (search != null && search.trim().isNotEmpty) 'search': search.trim(),
+          if (search != null && search.trim().isNotEmpty)
+            'search': search.trim(),
           'category_id': categoryId,
-          'is_active': isActive == null ? null : (isActive ? 1 : 0),
+          'is_available': isAvailable == null ? null : (isAvailable ? 1 : 0),
           if (lowStockOnly) 'low_stock': 1,
         },
       );
@@ -52,11 +54,18 @@ class ProductsRemoteDatasource {
         response.data as Map<String, dynamic>,
         (raw) {
           if (raw is Map<String, dynamic>) {
-            return PaginatedResponse.fromJson(raw, ProductCategoryModel.fromJson).items;
+            return PaginatedResponse.fromJson(
+              raw,
+              ProductCategoryModel.fromJson,
+            ).items;
           }
           if (raw is List<dynamic>) {
             return raw
-                .map((item) => ProductCategoryModel.fromJson(item as Map<String, dynamic>))
+                .map(
+                  (item) => ProductCategoryModel.fromJson(
+                    item as Map<String, dynamic>,
+                  ),
+                )
                 .toList();
           }
           return <ProductCategoryModel>[];
@@ -84,7 +93,9 @@ class ProductsRemoteDatasource {
     }
   }
 
-  Future<ProductRecordModel> createProduct(ProductUpsertRequestModel request) async {
+  Future<ProductRecordModel> createProduct(
+    ProductUpsertRequestModel request,
+  ) async {
     try {
       final response = await _dio.post('/products', data: request.toJson());
 
@@ -104,7 +115,31 @@ class ProductsRemoteDatasource {
     ProductUpsertRequestModel request,
   ) async {
     try {
-      final response = await _dio.patch('/products/$id', data: request.toJson());
+      final response = await _dio.patch(
+        '/products/$id',
+        data: request.toJson(),
+      );
+
+      final envelope = ApiEnvelope.fromJson(
+        response.data as Map<String, dynamic>,
+        (raw) => ProductRecordModel.fromJson(raw as Map<String, dynamic>),
+      );
+
+      return envelope.data;
+    } on DioException catch (error) {
+      throw _mapDioException(error);
+    }
+  }
+
+  Future<ProductRecordModel> updateBranchProduct(
+    int id,
+    ProductBranchUpdateRequestModel request,
+  ) async {
+    try {
+      final response = await _dio.patch(
+        '/products/$id/branch',
+        data: request.toJson(),
+      );
 
       final envelope = ApiEnvelope.fromJson(
         response.data as Map<String, dynamic>,
@@ -130,7 +165,8 @@ class ProductsRemoteDatasource {
     if (responseData is Map<String, dynamic>) {
       return ApiException(
         message:
-            responseData['message'] as String? ?? 'No fue posible conectar con la API.',
+            responseData['message'] as String? ??
+            'No fue posible conectar con la API.',
         statusCode: error.response?.statusCode,
         errors: responseData['errors'] as Map<String, dynamic>?,
       );

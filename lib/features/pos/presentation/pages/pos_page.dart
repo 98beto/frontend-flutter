@@ -41,16 +41,20 @@ class PosPage extends ConsumerWidget {
     final state = ref.read(posProvider);
 
     if (state.cartItems.isEmpty) {
-      ref.read(appNotificationProvider.notifier).showWarning(
-        title: 'Carrito vacio',
-        message: 'Agrega productos antes de cobrar la venta.',
-      );
+      ref
+          .read(appNotificationProvider.notifier)
+          .showWarning(
+            title: 'Carrito vacio',
+            message: 'Agrega productos antes de cobrar la venta.',
+          );
       return;
     }
 
     try {
       final recoveredSavedCartId = state.activeSavedCartId;
-      final result = await ref.read(saleSubmissionProvider.notifier).submitSale(
+      final result = await ref
+          .read(saleSubmissionProvider.notifier)
+          .submitSale(
             paymentMethod: submission.method,
             items: state.cartItems,
             discountAmount: state.discount,
@@ -58,7 +62,9 @@ class PosPage extends ConsumerWidget {
           );
 
       if (recoveredSavedCartId != null) {
-        await ref.read(savedCartActionsProvider.notifier).deleteCart(recoveredSavedCartId);
+        await ref
+            .read(savedCartActionsProvider.notifier)
+            .deleteCart(recoveredSavedCartId);
         ref.invalidate(savedCartsProvider);
       }
 
@@ -73,11 +79,13 @@ class PosPage extends ConsumerWidget {
         return;
       }
 
-      ref.read(appNotificationProvider.notifier).showSuccess(
-        title: 'Venta registrada',
-        message:
-            'Venta #${result.id} registrada por \$${result.totalAmount.toStringAsFixed(2)}.',
-      );
+      ref
+          .read(appNotificationProvider.notifier)
+          .showSuccess(
+            title: 'Venta registrada',
+            message:
+                'Venta #${result.id} registrada por \$${result.totalAmount.toStringAsFixed(2)}.',
+          );
 
       await showDialog<void>(
         context: context,
@@ -94,19 +102,23 @@ class PosPage extends ConsumerWidget {
         return;
       }
 
-      ref.read(appNotificationProvider.notifier).showError(
-        title: 'No fue posible completar la venta',
-        message: _resolveSaleErrorMessage(error),
-      );
+      ref
+          .read(appNotificationProvider.notifier)
+          .showError(
+            title: 'No fue posible completar la venta',
+            message: _resolveSaleErrorMessage(error),
+          );
     } catch (_) {
       if (!context.mounted) {
         return;
       }
 
-      ref.read(appNotificationProvider.notifier).showError(
-        title: 'No fue posible completar la venta',
-        message: 'Verifica la conexion o intenta nuevamente.',
-      );
+      ref
+          .read(appNotificationProvider.notifier)
+          .showError(
+            title: 'No fue posible completar la venta',
+            message: 'Verifica la conexion o intenta nuevamente.',
+          );
     }
   }
 
@@ -114,10 +126,12 @@ class PosPage extends ConsumerWidget {
     final state = ref.read(posProvider);
 
     if (state.cartItems.isEmpty) {
-      ref.read(appNotificationProvider.notifier).showWarning(
-        title: 'Carrito vacio',
-        message: 'Agrega productos antes de guardar un carrito.',
-      );
+      ref
+          .read(appNotificationProvider.notifier)
+          .showWarning(
+            title: 'Carrito vacio',
+            message: 'Agrega productos antes de guardar un carrito.',
+          );
       return;
     }
 
@@ -134,7 +148,9 @@ class PosPage extends ConsumerWidget {
     final existingSavedCartId = state.activeSavedCartId;
 
     try {
-      final savedCart = await ref.read(savedCartActionsProvider.notifier).saveCart(
+      final savedCart = await ref
+          .read(savedCartActionsProvider.notifier)
+          .saveCart(
             items: state.cartItems,
             discountAmount: state.discount,
             notes: notes,
@@ -150,32 +166,44 @@ class PosPage extends ConsumerWidget {
         return;
       }
 
-      ref.read(appNotificationProvider.notifier).showSuccess(
-        title: existingSavedCartId == null ? 'Carrito guardado' : 'Carrito actualizado',
-        message: '${savedCart.name} quedo disponible para recuperarlo despues.',
-      );
+      ref
+          .read(appNotificationProvider.notifier)
+          .showSuccess(
+            title: existingSavedCartId == null
+                ? 'Carrito guardado'
+                : 'Carrito actualizado',
+            message:
+                '${savedCart.name} quedo disponible para recuperarlo despues.',
+          );
     } on ApiException catch (error) {
       if (!context.mounted) {
         return;
       }
 
-      ref.read(appNotificationProvider.notifier).showError(
-        title: 'No fue posible guardar el carrito',
-        message: error.message,
-      );
+      ref
+          .read(appNotificationProvider.notifier)
+          .showError(
+            title: 'No fue posible guardar el carrito',
+            message: error.message,
+          );
     } catch (_) {
       if (!context.mounted) {
         return;
       }
 
-      ref.read(appNotificationProvider.notifier).showError(
-        title: 'No fue posible guardar el carrito',
-        message: 'Verifica la conexion o intenta nuevamente.',
-      );
+      ref
+          .read(appNotificationProvider.notifier)
+          .showError(
+            title: 'No fue posible guardar el carrito',
+            message: 'Verifica la conexion o intenta nuevamente.',
+          );
     }
   }
 
-  bool _shouldBlockPos(AsyncValue<dynamic> cashSessionAsync, Object? currentCashSession) {
+  bool _shouldBlockPos(
+    AsyncValue<dynamic> cashSessionAsync,
+    Object? currentCashSession,
+  ) {
     return !cashSessionAsync.isLoading && currentCashSession == null;
   }
 
@@ -189,11 +217,13 @@ class PosPage extends ConsumerWidget {
   }
 
   void _showQuantityLimitNotification(WidgetRef ref, CartItem item) {
-    ref.read(appNotificationProvider.notifier).showWarning(
-      title: 'Cantidad no disponible',
-      message:
-          'Solo hay ${item.product.stock} unidades disponibles de ${item.product.name}.',
-    );
+    ref
+        .read(appNotificationProvider.notifier)
+        .showWarning(
+          title: 'Cantidad no disponible',
+          message:
+              'Solo hay ${item.product.stock} unidades disponibles de ${item.product.name}.',
+        );
   }
 
   String _paymentMethodLabel(String method) {
@@ -216,19 +246,19 @@ class PosPage extends ConsumerWidget {
     double currentDiscount,
   ) async {
     if (subtotal <= 0) {
-      ref.read(appNotificationProvider.notifier).showInfo(
-        title: 'Sin productos en el carrito',
-        message: 'Agrega productos antes de aplicar un descuento.',
-      );
+      ref
+          .read(appNotificationProvider.notifier)
+          .showInfo(
+            title: 'Sin productos en el carrito',
+            message: 'Agrega productos antes de aplicar un descuento.',
+          );
       return;
     }
 
     final discount = await showDialog<double>(
       context: context,
-      builder: (_) => DiscountDialog(
-        subtotal: subtotal,
-        initialDiscount: currentDiscount,
-      ),
+      builder: (_) =>
+          DiscountDialog(subtotal: subtotal, initialDiscount: currentDiscount),
     );
 
     if (discount == null) {
@@ -237,12 +267,14 @@ class PosPage extends ConsumerWidget {
 
     ref.read(posProvider.notifier).setDiscount(discount);
 
-    ref.read(appNotificationProvider.notifier).showSuccess(
-      title: discount > 0 ? 'Descuento aplicado' : 'Descuento eliminado',
-      message: discount > 0
-          ? 'Se aplico un descuento de \$${discount.toStringAsFixed(2)}.'
-          : 'La venta ya no tiene descuento aplicado.',
-    );
+    ref
+        .read(appNotificationProvider.notifier)
+        .showSuccess(
+          title: discount > 0 ? 'Descuento aplicado' : 'Descuento eliminado',
+          message: discount > 0
+              ? 'Se aplico un descuento de \$${discount.toStringAsFixed(2)}.'
+              : 'La venta ya no tiene descuento aplicado.',
+        );
   }
 
   Future<void> _showClientDialog(BuildContext context, WidgetRef ref) async {
@@ -257,22 +289,25 @@ class PosPage extends ConsumerWidget {
 
     if (selection.shouldClear) {
       ref.read(posProvider.notifier).clearCustomer();
-      ref.read(appNotificationProvider.notifier).showInfo(
-        title: 'Cliente removido',
-        message: 'La venta actual quedo como publico general.',
-      );
+      ref
+          .read(appNotificationProvider.notifier)
+          .showInfo(
+            title: 'Cliente removido',
+            message: 'La venta actual quedo como publico general.',
+          );
       return;
     }
 
     if (selection.id != null && selection.name != null) {
-      ref.read(posProvider.notifier).assignCustomer(
-            id: selection.id!,
-            name: selection.name!,
+      ref
+          .read(posProvider.notifier)
+          .assignCustomer(id: selection.id!, name: selection.name!);
+      ref
+          .read(appNotificationProvider.notifier)
+          .showSuccess(
+            title: 'Cliente asignado',
+            message: '${selection.name} fue asociado a la venta actual.',
           );
-      ref.read(appNotificationProvider.notifier).showSuccess(
-        title: 'Cliente asignado',
-        message: '${selection.name} fue asociado a la venta actual.',
-      );
     }
   }
 
@@ -295,12 +330,18 @@ class PosPage extends ConsumerWidget {
         return 'Sesion abierta #${session.id} desde ${session.openedAt.hour.toString().padLeft(2, '0')}:${session.openedAt.minute.toString().padLeft(2, '0')}.';
       },
       loading: () => 'Consultando sesion activa...',
-      error: (error, stackTrace) => 'No se pudo consultar la sesion de caja actual.',
+      error: (error, stackTrace) =>
+          'No se pudo consultar la sesion de caja actual.',
     );
 
     final canChargeSale =
-        !state.isCartEmpty && currentCashSession != null && !saleSubmissionState.isLoading;
-    final shouldBlockPos = _shouldBlockPos(cashSessionAsync, currentCashSession);
+        !state.isCartEmpty &&
+        currentCashSession != null &&
+        !saleSubmissionState.isLoading;
+    final shouldBlockPos = _shouldBlockPos(
+      cashSessionAsync,
+      currentCashSession,
+    );
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final scanButtonBackground = isDark ? AppTheme.bg1 : AppTheme.lightBg1;
     final scanButtonBorder = isDark ? AppTheme.border : AppTheme.lightBg4;
@@ -339,7 +380,10 @@ class PosPage extends ConsumerWidget {
                         ),
                         child: Row(
                           children: [
-                            Icon(Icons.qr_code_scanner_rounded, color: scanButtonForeground),
+                            Icon(
+                              Icons.qr_code_scanner_rounded,
+                              color: scanButtonForeground,
+                            ),
                             const SizedBox(width: 10),
                             Text(
                               'Escanear',
@@ -382,7 +426,9 @@ class PosPage extends ConsumerWidget {
                                   child: Text(
                                     '${state.totalItems} articulos',
                                     style: TextStyle(
-                                      color: isDark ? AppTheme.brand : AppTheme.lightBrand,
+                                      color: isDark
+                                          ? AppTheme.brand
+                                          : AppTheme.lightBrand,
                                       fontWeight: FontWeight.w700,
                                     ),
                                   ),
@@ -395,10 +441,13 @@ class PosPage extends ConsumerWidget {
                               child: CartItemsList(
                                 items: state.cartItems,
                                 onIncrement: (productId) {
-                                  final wasUpdated = notifier.incrementItem(productId);
+                                  final wasUpdated = notifier.incrementItem(
+                                    productId,
+                                  );
                                   if (!wasUpdated) {
                                     final item = state.cartItems.firstWhere(
-                                      (cartItem) => cartItem.product.id == productId,
+                                      (cartItem) =>
+                                          cartItem.product.id == productId,
                                     );
                                     _showQuantityLimitNotification(ref, item);
                                   }
@@ -412,7 +461,8 @@ class PosPage extends ConsumerWidget {
                                   );
                                   if (!wasUpdated) {
                                     final item = state.cartItems.firstWhere(
-                                      (cartItem) => cartItem.product.id == productId,
+                                      (cartItem) =>
+                                          cartItem.product.id == productId,
                                     );
                                     _showQuantityLimitNotification(ref, item);
                                   }
@@ -449,10 +499,12 @@ class PosPage extends ConsumerWidget {
                     ),
                     onClearDiscount: () {
                       notifier.clearDiscount();
-                      ref.read(appNotificationProvider.notifier).showInfo(
-                        title: 'Descuento eliminado',
-                        message: 'La venta ya no tiene descuento aplicado.',
-                      );
+                      ref
+                          .read(appNotificationProvider.notifier)
+                          .showInfo(
+                            title: 'Descuento eliminado',
+                            message: 'La venta ya no tiene descuento aplicado.',
+                          );
                     },
                   ),
                   const SizedBox(height: 18),
@@ -468,21 +520,21 @@ class PosPage extends ConsumerWidget {
                     onAssignCustomer: () => _showClientDialog(context, ref),
                     onClearCustomer: () {
                       notifier.clearCustomer();
-                      ref.read(appNotificationProvider.notifier).showInfo(
-                        title: 'Cliente removido',
-                        message: 'La venta actual quedo como publico general.',
-                      );
+                      ref
+                          .read(appNotificationProvider.notifier)
+                          .showInfo(
+                            title: 'Cliente removido',
+                            message:
+                                'La venta actual quedo como publico general.',
+                          );
                     },
                     isSubmittingSale: saleSubmissionState.isLoading,
                     onChargeSale: () => showDialog<void>(
                       context: context,
                       builder: (_) => PaymentMethodDialog(
                         total: state.total,
-                        onSelect: (submission) => _submitSale(
-                          context,
-                          ref,
-                          submission,
-                        ),
+                        onSelect: (submission) =>
+                            _submitSale(context, ref, submission),
                       ),
                     ),
                     onRecoverCart: () => showDialog<void>(
@@ -505,10 +557,12 @@ class PosPage extends ConsumerWidget {
           Positioned.fill(
             child: CashSessionBlocker(
               onGoToCash: () {
-                ref.read(appSectionProvider.notifier).state = AppSection.cashRegister;
+                ref.read(appSectionProvider.notifier).state =
+                    AppSection.cashRegister;
               },
               onDismiss: () {
-                ref.read(appSectionProvider.notifier).state = AppSection.dashboard;
+                ref.read(appSectionProvider.notifier).state =
+                    AppSection.dashboard;
               },
             ),
           ),

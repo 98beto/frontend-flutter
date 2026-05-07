@@ -3,7 +3,6 @@ import 'package:pos_desktop/features/pos/data/models/saved_cart_item_request_mod
 class SavedCartRequestModel {
   const SavedCartRequestModel({
     required this.name,
-    required this.branchId,
     required this.discountAmount,
     required this.status,
     required this.items,
@@ -13,7 +12,6 @@ class SavedCartRequestModel {
   });
 
   final String name;
-  final int branchId;
   final int? customerId;
   final int? cashSessionId;
   final double discountAmount;
@@ -24,7 +22,6 @@ class SavedCartRequestModel {
   Map<String, dynamic> toJson() {
     return {
       'name': name,
-      'branch_id': branchId,
       'customer_id': customerId,
       'cash_session_id': cashSessionId,
       'discount_amount': discountAmount,

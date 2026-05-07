@@ -27,7 +27,8 @@ class InventoryMovementsList extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final rowBackground = isDark ? AppTheme.bg1 : AppTheme.lightBg1;
     final rowBorder = isDark ? AppTheme.border : AppTheme.lightBg4;
-    final trailingColor = Theme.of(context).textTheme.bodyMedium?.color ?? AppTheme.muted;
+    final trailingColor =
+        Theme.of(context).textTheme.bodyMedium?.color ?? AppTheme.muted;
 
     if (isLoadingInitial) {
       return const Center(child: CircularProgressIndicator());
@@ -89,106 +90,125 @@ class InventoryMovementsList extends StatelessWidget {
                           borderRadius: BorderRadius.circular(22),
                           border: Border.all(color: rowBorder),
                         ),
-                       child: Row(
-                         children: [
-                          Container(
-                            width: 48,
-                            height: 48,
-                            decoration: BoxDecoration(
-                              color: color.withValues(alpha: 0.12),
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            child: Icon(_typeIcon(movement.type), color: color),
-                          ),
-                          const SizedBox(width: 14),
-                          Expanded(
-                            flex: 4,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  movement.productName,
-                                  style: Theme.of(context).textTheme.titleMedium,
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  movement.productSku?.isNotEmpty == true
-                                      ? movement.productSku!
-                                      : 'Sin SKU',
-                                  style: Theme.of(context).textTheme.bodyMedium,
-                                ),
-                              ],
-                            ),
-                          ),
-                          Expanded(
-                            flex: 2,
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 48,
+                              height: 48,
                               decoration: BoxDecoration(
                                 color: color.withValues(alpha: 0.12),
                                 borderRadius: BorderRadius.circular(16),
                               ),
-                              child: Text(
-                                _typeLabel(movement.type),
-                                textAlign: TextAlign.center,
-                                style: TextStyle(color: color, fontWeight: FontWeight.w700),
+                              child: Icon(
+                                _typeIcon(movement.type),
+                                color: color,
                               ),
                             ),
-                          ),
-                          const SizedBox(width: 14),
-                          Expanded(
-                            flex: 2,
-                            child: Align(
-                              alignment: Alignment.centerLeft,
+                            const SizedBox(width: 14),
+                            Expanded(
+                              flex: 4,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    movement.productName,
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.titleMedium,
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    movement.productSku?.isNotEmpty == true
+                                        ? movement.productSku!
+                                        : 'Sin SKU',
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.bodyMedium,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Expanded(
+                              flex: 2,
                               child: Container(
                                 padding: const EdgeInsets.symmetric(
                                   horizontal: 12,
                                   vertical: 8,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: sourceColor.withValues(alpha: 0.12),
+                                  color: color.withValues(alpha: 0.12),
                                   borderRadius: BorderRadius.circular(16),
                                 ),
                                 child: Text(
-                                  _sourceLabel(movement),
-                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    color: sourceColor,
+                                  _typeLabel(movement.type),
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: color,
                                     fontWeight: FontWeight.w700,
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                          Expanded(
-                            flex: 2,
-                            child: Text(
-                              _quantityLabel(movement),
-                              style: Theme.of(context).textTheme.titleMedium,
+                            const SizedBox(width: 14),
+                            Expanded(
+                              flex: 2,
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 12,
+                                    vertical: 8,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: sourceColor.withValues(alpha: 0.12),
+                                    borderRadius: BorderRadius.circular(16),
+                                  ),
+                                  child: Text(
+                                    _sourceLabel(movement),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(
+                                          color: sourceColor,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                  ),
+                                ),
+                              ),
                             ),
-                          ),
-                          Expanded(
-                            flex: 3,
-                            child: Text(
-                              _formatDateTime(movement.createdAt),
-                              style: Theme.of(context).textTheme.bodyMedium,
+                            Expanded(
+                              flex: 2,
+                              child: Text(
+                                _quantityLabel(movement),
+                                style: Theme.of(context).textTheme.titleMedium,
+                              ),
                             ),
-                          ),
-                          Expanded(
-                            flex: 3,
-                            child: Text(
-                              movement.notes?.isNotEmpty == true
-                                  ? movement.notes!
-                                  : 'Sin notas',
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              style: Theme.of(context).textTheme.bodyMedium,
+                            Expanded(
+                              flex: 3,
+                              child: Text(
+                                _formatDateTime(movement.createdAt),
+                                style: Theme.of(context).textTheme.bodyMedium,
+                              ),
                             ),
-                          ),
-                          const SizedBox(width: 8),
-                          Icon(Icons.chevron_right_rounded, color: trailingColor),
+                            Expanded(
+                              flex: 3,
+                              child: Text(
+                                movement.notes?.isNotEmpty == true
+                                    ? movement.notes!
+                                    : 'Sin notas',
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: Theme.of(context).textTheme.bodyMedium,
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Icon(
+                              Icons.chevron_right_rounded,
+                              color: trailingColor,
+                            ),
                           ],
-                         ),
-                       ),
+                        ),
+                      ),
                     ),
                   );
                 },
@@ -200,7 +220,10 @@ class InventoryMovementsList extends StatelessWidget {
             ],
             if (errorMessage != null && items.isNotEmpty) ...[
               const SizedBox(height: 16),
-              Text(errorMessage!, style: Theme.of(context).textTheme.bodyMedium),
+              Text(
+                errorMessage!,
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
             ],
           ],
         ),

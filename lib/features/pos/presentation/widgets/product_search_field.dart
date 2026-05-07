@@ -11,7 +11,8 @@ class ProductSearchField extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final backgroundColor = isDark ? AppTheme.bg1 : AppTheme.lightBg1;
     final borderColor = isDark ? AppTheme.border : AppTheme.lightBg4;
-    final mutedColor = Theme.of(context).textTheme.bodyMedium?.color ?? AppTheme.muted;
+    final mutedColor =
+        Theme.of(context).textTheme.bodyMedium?.color ?? AppTheme.muted;
     final accentColor = isDark ? AppTheme.brand : AppTheme.lightBrand;
 
     return InkWell(

@@ -118,8 +118,14 @@ class AppTheme {
           color: fg,
         ),
         bodyLarge: baseTextTheme.bodyLarge?.copyWith(fontSize: 15, color: fg),
-        bodyMedium: baseTextTheme.bodyMedium?.copyWith(fontSize: 14, color: muted),
-        bodySmall: baseTextTheme.bodySmall?.copyWith(fontSize: 12, color: greyDim),
+        bodyMedium: baseTextTheme.bodyMedium?.copyWith(
+          fontSize: 14,
+          color: muted,
+        ),
+        bodySmall: baseTextTheme.bodySmall?.copyWith(
+          fontSize: 12,
+          color: greyDim,
+        ),
       ),
       appBarTheme: const AppBarTheme(
         elevation: 0,
@@ -164,7 +170,10 @@ class AppTheme {
           borderRadius: BorderRadius.circular(18),
           borderSide: const BorderSide(color: danger, width: 1.5),
         ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 16,
+        ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
@@ -173,7 +182,9 @@ class AppTheme {
           disabledBackgroundColor: bg3,
           disabledForegroundColor: grey,
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(18),
+          ),
           textStyle: const TextStyle(fontWeight: FontWeight.w700),
         ),
       ),
@@ -185,7 +196,9 @@ class AppTheme {
           disabledBackgroundColor: bg1,
           side: const BorderSide(color: border),
           padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 15),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(18),
+          ),
           textStyle: const TextStyle(fontWeight: FontWeight.w600),
         ),
       ),
@@ -200,7 +213,10 @@ class AppTheme {
         selectedColor: bgPurple,
         disabledColor: bg2,
         labelStyle: const TextStyle(color: fg, fontWeight: FontWeight.w600),
-        secondaryLabelStyle: const TextStyle(color: fg, fontWeight: FontWeight.w600),
+        secondaryLabelStyle: const TextStyle(
+          color: fg,
+          fontWeight: FontWeight.w600,
+        ),
         side: const BorderSide(color: border),
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -330,7 +346,10 @@ class AppTheme {
           borderRadius: BorderRadius.circular(18),
           borderSide: const BorderSide(color: lightDanger, width: 1.5),
         ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 16,
+        ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
@@ -339,7 +358,9 @@ class AppTheme {
           disabledBackgroundColor: lightBg3,
           disabledForegroundColor: lightGrey,
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(18),
+          ),
           textStyle: const TextStyle(fontWeight: FontWeight.w700),
         ),
       ),
@@ -351,7 +372,9 @@ class AppTheme {
           disabledBackgroundColor: lightBg1,
           side: const BorderSide(color: lightBg4),
           padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 15),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(18),
+          ),
           textStyle: const TextStyle(fontWeight: FontWeight.w600),
         ),
       ),
@@ -380,7 +403,9 @@ class AppTheme {
       dropdownMenuTheme: const DropdownMenuThemeData(
         textStyle: TextStyle(color: lightTextPrimary),
       ),
-      progressIndicatorTheme: const ProgressIndicatorThemeData(color: lightBrand),
+      progressIndicatorTheme: const ProgressIndicatorThemeData(
+        color: lightBrand,
+      ),
       switchTheme: SwitchThemeData(
         thumbColor: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {

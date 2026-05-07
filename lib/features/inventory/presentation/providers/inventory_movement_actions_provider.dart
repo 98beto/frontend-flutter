@@ -12,14 +12,17 @@ import 'package:pos_desktop/features/products/presentation/providers/products_pr
 
 final inventoryMovementActionsProvider =
     AsyncNotifierProvider<InventoryMovementActionsNotifier, InventoryMovement?>(
-  InventoryMovementActionsNotifier.new,
-);
+      InventoryMovementActionsNotifier.new,
+    );
 
-class InventoryMovementActionsNotifier extends AsyncNotifier<InventoryMovement?> {
+class InventoryMovementActionsNotifier
+    extends AsyncNotifier<InventoryMovement?> {
   @override
   Future<InventoryMovement?> build() async => null;
 
-  Future<InventoryMovement> createMovement(InventoryMovementRequestModel request) async {
+  Future<InventoryMovement> createMovement(
+    InventoryMovementRequestModel request,
+  ) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(
       () => ref.read(inventoryRepositoryProvider).createMovement(request),

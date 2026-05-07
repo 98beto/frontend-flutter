@@ -2,8 +2,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pos_desktop/features/products/domain/entities/product_record.dart';
 import 'package:pos_desktop/features/products/presentation/providers/products_repository_provider.dart';
 
-final productsProvider =
-    NotifierProvider<ProductsNotifier, ProductsState>(ProductsNotifier.new);
+final productsProvider = NotifierProvider<ProductsNotifier, ProductsState>(
+  ProductsNotifier.new,
+);
 
 class ProductsNotifier extends Notifier<ProductsState> {
   @override
@@ -27,11 +28,13 @@ class ProductsNotifier extends Notifier<ProductsState> {
     );
 
     try {
-      final response = await ref.read(productsRepositoryProvider).getProducts(
+      final response = await ref
+          .read(productsRepositoryProvider)
+          .getProducts(
             page: 1,
             search: state.search,
             categoryId: state.categoryId,
-            isActive: state.isActive,
+            isAvailable: state.isAvailable,
             lowStockOnly: state.lowStockOnly,
           );
 
@@ -59,11 +62,13 @@ class ProductsNotifier extends Notifier<ProductsState> {
 
     try {
       final nextPage = state.currentPage + 1;
-      final response = await ref.read(productsRepositoryProvider).getProducts(
+      final response = await ref
+          .read(productsRepositoryProvider)
+          .getProducts(
             page: nextPage,
             search: state.search,
             categoryId: state.categoryId,
-            isActive: state.isActive,
+            isAvailable: state.isAvailable,
             lowStockOnly: state.lowStockOnly,
           );
 
@@ -92,8 +97,8 @@ class ProductsNotifier extends Notifier<ProductsState> {
     await loadInitial();
   }
 
-  Future<void> setIsActive(bool? value) async {
-    state = state.copyWith(isActive: value);
+  Future<void> setIsAvailable(bool? value) async {
+    state = state.copyWith(isAvailable: value);
     await loadInitial();
   }
 
@@ -106,7 +111,7 @@ class ProductsNotifier extends Notifier<ProductsState> {
     state = state.copyWith(
       search: '',
       categoryId: null,
-      isActive: null,
+      isAvailable: null,
       lowStockOnly: false,
     );
     await loadInitial();
@@ -118,7 +123,7 @@ class ProductsState {
     this.items = const [],
     this.search = '',
     this.categoryId,
-    this.isActive,
+    this.isAvailable,
     this.lowStockOnly = false,
     this.currentPage = 1,
     this.lastPage = 1,
@@ -131,7 +136,7 @@ class ProductsState {
   final List<ProductRecord> items;
   final String search;
   final int? categoryId;
-  final bool? isActive;
+  final bool? isAvailable;
   final bool lowStockOnly;
   final int currentPage;
   final int lastPage;
@@ -146,7 +151,7 @@ class ProductsState {
     List<ProductRecord>? items,
     String? search,
     Object? categoryId = _sentinel,
-    Object? isActive = _sentinel,
+    Object? isAvailable = _sentinel,
     bool? lowStockOnly,
     int? currentPage,
     int? lastPage,
@@ -158,8 +163,12 @@ class ProductsState {
     return ProductsState(
       items: items ?? this.items,
       search: search ?? this.search,
-      categoryId: identical(categoryId, _sentinel) ? this.categoryId : categoryId as int?,
-      isActive: identical(isActive, _sentinel) ? this.isActive : isActive as bool?,
+      categoryId: identical(categoryId, _sentinel)
+          ? this.categoryId
+          : categoryId as int?,
+      isAvailable: identical(isAvailable, _sentinel)
+          ? this.isAvailable
+          : isAvailable as bool?,
       lowStockOnly: lowStockOnly ?? this.lowStockOnly,
       currentPage: currentPage ?? this.currentPage,
       lastPage: lastPage ?? this.lastPage,

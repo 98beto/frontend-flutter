@@ -2,8 +2,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pos_desktop/features/pos/domain/entities/product.dart';
 import 'package:pos_desktop/features/pos/presentation/providers/pos_repository_provider.dart';
 
-final productsProvider =
-    NotifierProvider<ProductsNotifier, ProductsState>(ProductsNotifier.new);
+final productsProvider = NotifierProvider<ProductsNotifier, ProductsState>(
+  ProductsNotifier.new,
+);
 
 class ProductsNotifier extends Notifier<ProductsState> {
   @override
@@ -26,7 +27,9 @@ class ProductsNotifier extends Notifier<ProductsState> {
     );
 
     try {
-      final response = await ref.read(posRepositoryProvider).getProducts(
+      final response = await ref
+          .read(posRepositoryProvider)
+          .getProducts(
             page: 1,
             search: state.search,
             categoryId: state.selectedCategoryId,
@@ -65,7 +68,9 @@ class ProductsNotifier extends Notifier<ProductsState> {
 
     try {
       final nextPage = state.currentPage + 1;
-      final response = await ref.read(posRepositoryProvider).getProducts(
+      final response = await ref
+          .read(posRepositoryProvider)
+          .getProducts(
             page: nextPage,
             search: state.search,
             categoryId: state.selectedCategoryId,

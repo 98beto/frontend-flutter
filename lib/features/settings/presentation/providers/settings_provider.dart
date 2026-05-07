@@ -13,7 +13,9 @@ class SettingsNotifier extends Notifier<AppSettings> {
   }
 
   AppSettings saveSettings(AppSettings settings) {
-    final savedSettings = ref.read(settingsRepositoryProvider).saveSettings(settings);
+    final savedSettings = ref
+        .read(settingsRepositoryProvider)
+        .saveSettings(settings);
     state = savedSettings;
     return savedSettings;
   }

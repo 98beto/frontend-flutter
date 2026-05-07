@@ -23,7 +23,9 @@ class _DiscountDialogState extends State<DiscountDialog> {
   void initState() {
     super.initState();
     _controller = TextEditingController(
-      text: widget.initialDiscount > 0 ? widget.initialDiscount.toStringAsFixed(2) : '',
+      text: widget.initialDiscount > 0
+          ? widget.initialDiscount.toStringAsFixed(2)
+          : '',
     );
   }
 
@@ -46,7 +48,9 @@ class _DiscountDialogState extends State<DiscountDialog> {
           decoration: BoxDecoration(
             color: isDark ? AppTheme.panel : AppTheme.lightBg0,
             borderRadius: BorderRadius.circular(28),
-            border: Border.all(color: isDark ? AppTheme.border : AppTheme.lightBg4),
+            border: Border.all(
+              color: isDark ? AppTheme.border : AppTheme.lightBg4,
+            ),
           ),
           child: Form(
             key: _formKey,
@@ -66,7 +70,9 @@ class _DiscountDialogState extends State<DiscountDialog> {
                 const SizedBox(height: 22),
                 TextFormField(
                   controller: _controller,
-                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                  keyboardType: const TextInputType.numberWithOptions(
+                    decimal: true,
+                  ),
                   decoration: const InputDecoration(labelText: 'Descuento'),
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {

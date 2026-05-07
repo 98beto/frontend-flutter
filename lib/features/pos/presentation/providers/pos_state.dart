@@ -1,4 +1,5 @@
 import 'package:pos_desktop/features/pos/domain/entities/cart_item.dart';
+
 class PosState {
   const PosState({
     required this.cartItems,

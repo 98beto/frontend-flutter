@@ -1,21 +1,16 @@
 import 'package:dio/dio.dart';
-import 'package:pos_desktop/core/config/operation_context.dart';
 import 'package:pos_desktop/core/network/api_envelope.dart';
 import 'package:pos_desktop/core/network/api_exception.dart';
 import 'package:pos_desktop/features/dashboard/data/models/dashboard_summary_model.dart';
 
 class DashboardRemoteDatasource {
-  const DashboardRemoteDatasource(this._dio, this._operationContext);
+  const DashboardRemoteDatasource(this._dio);
 
   final Dio _dio;
-  final OperationContext _operationContext;
 
   Future<DashboardSummaryModel> getSummary() async {
     try {
-      final response = await _dio.get(
-        '/dashboard',
-        queryParameters: {'branch_id': _operationContext.branchId},
-      );
+      final response = await _dio.get('/dashboard');
 
       final envelope = ApiEnvelope.fromJson(
         response.data as Map<String, dynamic>,
@@ -27,7 +22,8 @@ class DashboardRemoteDatasource {
       final responseData = error.response?.data;
       if (responseData is Map<String, dynamic>) {
         throw ApiException(
-          message: responseData['message'] as String? ??
+          message:
+              responseData['message'] as String? ??
               'No fue posible conectar con la API.',
           statusCode: error.response?.statusCode,
           errors: responseData['errors'] as Map<String, dynamic>?,

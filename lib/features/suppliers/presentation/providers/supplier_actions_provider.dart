@@ -6,14 +6,16 @@ import 'package:pos_desktop/features/suppliers/presentation/providers/suppliers_
 
 final supplierActionsProvider =
     AsyncNotifierProvider<SupplierActionsNotifier, SupplierRecord?>(
-  SupplierActionsNotifier.new,
-);
+      SupplierActionsNotifier.new,
+    );
 
 class SupplierActionsNotifier extends AsyncNotifier<SupplierRecord?> {
   @override
   Future<SupplierRecord?> build() async => null;
 
-  Future<SupplierRecord> createSupplier(SupplierUpsertRequestModel request) async {
+  Future<SupplierRecord> createSupplier(
+    SupplierUpsertRequestModel request,
+  ) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(
       () => ref.read(suppliersRepositoryProvider).createSupplier(request),

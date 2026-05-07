@@ -56,7 +56,10 @@ class ProductsFiltersBar extends ConsumerWidget {
                     ...categories.map(
                       (category) => DropdownMenuItem<int?>(
                         value: category.id,
-                        child: Text(category.name, overflow: TextOverflow.ellipsis),
+                        child: Text(
+                          category.name,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                     ),
                   ],
@@ -68,7 +71,7 @@ class ProductsFiltersBar extends ConsumerWidget {
             final statusField = DropdownButtonFormField<bool?>(
               isExpanded: true,
               initialValue: selectedIsActive,
-              decoration: const InputDecoration(labelText: 'Estado'),
+              decoration: const InputDecoration(labelText: 'Disponibilidad'),
               items: const [
                 DropdownMenuItem<bool?>(
                   value: null,
@@ -76,11 +79,14 @@ class ProductsFiltersBar extends ConsumerWidget {
                 ),
                 DropdownMenuItem<bool?>(
                   value: true,
-                  child: Text('Activos', overflow: TextOverflow.ellipsis),
+                  child: Text('Disponibles', overflow: TextOverflow.ellipsis),
                 ),
                 DropdownMenuItem<bool?>(
                   value: false,
-                  child: Text('Inactivos', overflow: TextOverflow.ellipsis),
+                  child: Text(
+                    'No disponibles',
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
               ],
               onChanged: onIsActiveChanged,
@@ -135,7 +141,8 @@ class ProductsFiltersBar extends ConsumerWidget {
                           onSubmitted: onSearchSubmitted,
                           decoration: const InputDecoration(
                             prefixIcon: Icon(Icons.search_rounded),
-                            hintText: 'Buscar por nombre, SKU o codigo de barras...',
+                            hintText:
+                                'Buscar por nombre, SKU o codigo de barras...',
                           ),
                         ),
                       ),
@@ -206,7 +213,8 @@ class _LowStockToggle extends StatelessWidget {
     final inactiveBackground = isDark ? AppTheme.bg1 : AppTheme.lightBg1;
     final activeColor = isDark ? AppTheme.danger : AppTheme.lightDanger;
     final inactiveBorder = isDark ? AppTheme.border : AppTheme.lightBg4;
-    final inactiveIconColor = Theme.of(context).textTheme.bodyMedium?.color ?? AppTheme.muted;
+    final inactiveIconColor =
+        Theme.of(context).textTheme.bodyMedium?.color ?? AppTheme.muted;
     final inactiveTextColor = isDark ? AppTheme.brand : AppTheme.lightBrand;
     return InkWell(
       borderRadius: BorderRadius.circular(18),
@@ -216,9 +224,7 @@ class _LowStockToggle extends StatelessWidget {
         decoration: BoxDecoration(
           color: value ? activeBackground : inactiveBackground,
           borderRadius: BorderRadius.circular(18),
-          border: Border.all(
-            color: value ? activeColor : inactiveBorder,
-          ),
+          border: Border.all(color: value ? activeColor : inactiveBorder),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,

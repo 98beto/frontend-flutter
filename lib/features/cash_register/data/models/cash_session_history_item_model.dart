@@ -19,7 +19,9 @@ class CashSessionHistoryItemModel extends CashSessionHistoryItem {
       status: json['status'] as String? ?? 'closed',
       openingBalance: _toDouble(json['opening_balance']),
       closingBalance: _toNullableDouble(json['closing_balance']),
-      openedAt: DateTime.tryParse(json['opened_at'] as String? ?? '') ?? DateTime.now(),
+      openedAt:
+          DateTime.tryParse(json['opened_at'] as String? ?? '') ??
+          DateTime.now(),
       closedAt: DateTime.tryParse(json['closed_at'] as String? ?? ''),
       notes: json['notes'] as String?,
       deviceIdentifier: json['device_identifier'] as String?,

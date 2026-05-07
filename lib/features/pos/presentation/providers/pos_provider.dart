@@ -101,7 +101,9 @@ class PosNotifier extends Notifier<PosState> {
       return true;
     }
 
-    final index = state.cartItems.indexWhere((item) => item.product.id == productId);
+    final index = state.cartItems.indexWhere(
+      (item) => item.product.id == productId,
+    );
     if (index == -1) {
       return false;
     }
@@ -121,8 +123,8 @@ class PosNotifier extends Notifier<PosState> {
     final normalizedDiscount = discount < 0
         ? 0.0
         : discount > state.subtotal
-            ? state.subtotal
-            : discount;
+        ? state.subtotal
+        : discount;
 
     state = state.copyWith(discount: normalizedDiscount);
   }
@@ -152,7 +154,10 @@ class PosNotifier extends Notifier<PosState> {
   }
 
   void clearCustomer() {
-    state = state.copyWith(selectedCustomerId: null, selectedCustomerName: null);
+    state = state.copyWith(
+      selectedCustomerId: null,
+      selectedCustomerName: null,
+    );
   }
 
   void clearCart() {

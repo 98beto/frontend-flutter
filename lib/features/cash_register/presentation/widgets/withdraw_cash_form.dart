@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:pos_desktop/core/theme/app_theme.dart';
 
 class WithdrawCashForm extends StatefulWidget {
-  const WithdrawCashForm({super.key, required this.onSubmit, this.isSubmitting = false});
+  const WithdrawCashForm({
+    super.key,
+    required this.onSubmit,
+    this.isSubmitting = false,
+  });
 
   final Future<void> Function(double amount, String? notes) onSubmit;
   final bool isSubmitting;
@@ -31,14 +35,18 @@ class _WithdrawCashFormState extends State<WithdrawCashForm> {
     final amount = double.tryParse(_amountController.text.trim()) ?? 0;
     await widget.onSubmit(
       amount,
-      _notesController.text.trim().isEmpty ? null : _notesController.text.trim(),
+      _notesController.text.trim().isEmpty
+          ? null
+          : _notesController.text.trim(),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final accentBackground = isDark ? AppTheme.bgYellow : AppTheme.lightBgYellow;
+    final accentBackground = isDark
+        ? AppTheme.bgYellow
+        : AppTheme.lightBgYellow;
     final accentColor = isDark ? AppTheme.orange : AppTheme.lightOrange;
     final buttonForeground = isDark ? AppTheme.black : AppTheme.lightBase00;
 
@@ -106,7 +114,9 @@ class _WithdrawCashFormState extends State<WithdrawCashForm> {
                     const SizedBox(height: 14),
                     TextFormField(
                       controller: _amountController,
-                      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                      keyboardType: const TextInputType.numberWithOptions(
+                        decimal: true,
+                      ),
                       decoration: const InputDecoration(
                         labelText: 'Monto',
                         prefixText: '\$',
@@ -144,7 +154,9 @@ class _WithdrawCashFormState extends State<WithdrawCashForm> {
                   onPressed: widget.isSubmitting ? null : _handleSubmit,
                   icon: const Icon(Icons.outbox_rounded),
                   label: Text(
-                    widget.isSubmitting ? 'Registrando retiro...' : 'Registrar retiro',
+                    widget.isSubmitting
+                        ? 'Registrando retiro...'
+                        : 'Registrar retiro',
                   ),
                 ),
               ),

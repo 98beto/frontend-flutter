@@ -146,7 +146,9 @@ class _CartItemRowState extends State<_CartItemRow> {
     final rowBackground = _isHovered
         ? (isDark ? AppTheme.bg2 : AppTheme.lightBg2)
         : (isDark ? AppTheme.bg1 : AppTheme.lightBg1);
-    final rowBorder = _isHovered ? accentColor : (isDark ? AppTheme.border : AppTheme.lightBg4);
+    final rowBorder = _isHovered
+        ? accentColor
+        : (isDark ? AppTheme.border : AppTheme.lightBg4);
     final shadowColor = isDark
         ? AppTheme.black.withValues(alpha: 0.14)
         : AppTheme.lightTextStrong.withValues(alpha: 0.08);
@@ -190,17 +192,17 @@ class _CartItemRowState extends State<_CartItemRow> {
                 color: iconBackground,
                 borderRadius: BorderRadius.circular(18),
               ),
-              child: Icon(
-                Icons.inventory_2_rounded,
-                color: brandColor,
-              ),
+              child: Icon(Icons.inventory_2_rounded, color: brandColor),
             ),
             const SizedBox(width: 16),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(item.product.name, style: Theme.of(context).textTheme.titleMedium),
+                  Text(
+                    item.product.name,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
                   const SizedBox(height: 6),
                   Text(
                     '${item.product.category}  |  ${item.product.sku}',
@@ -218,10 +220,16 @@ class _CartItemRowState extends State<_CartItemRow> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Text(widget.currencyLabel, style: Theme.of(context).textTheme.titleMedium),
+                Text(
+                  widget.currencyLabel,
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
                 const SizedBox(height: 10),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 6,
+                  ),
                   decoration: BoxDecoration(
                     color: qtyPanelBackground,
                     borderRadius: BorderRadius.circular(18),
@@ -248,7 +256,9 @@ class _CartItemRowState extends State<_CartItemRow> {
                             color: qtyValueBackground,
                             borderRadius: BorderRadius.circular(14),
                             border: Border.all(
-                              color: isDark ? AppTheme.border : AppTheme.lightBg4,
+                              color: isDark
+                                  ? AppTheme.border
+                                  : AppTheme.lightBg4,
                             ),
                           ),
                           child: Center(

@@ -87,7 +87,10 @@ class _SessionSummaryCard extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 8,
+                  ),
                   decoration: BoxDecoration(
                     color: statusBackground,
                     borderRadius: BorderRadius.circular(999),
@@ -107,14 +110,20 @@ class _SessionSummaryCard extends StatelessWidget {
               spacing: 16,
               runSpacing: 14,
               children: [
-                _SummaryTile(label: 'Apertura', value: _currency(session.openingBalance)),
+                _SummaryTile(
+                  label: 'Apertura',
+                  value: _currency(session.openingBalance),
+                ),
                 _SummaryTile(
                   label: 'Monto cierre',
                   value: session.closingBalance == null
                       ? 'Pendiente'
                       : _currency(session.closingBalance!),
                 ),
-                _SummaryTile(label: 'Abierta', value: _formatDateTime(session.openedAt)),
+                _SummaryTile(
+                  label: 'Abierta',
+                  value: _formatDateTime(session.openedAt),
+                ),
                 _SummaryTile(
                   label: 'Cerrada',
                   value: session.closedAt == null
@@ -141,7 +150,10 @@ class _SessionSummaryCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Notas', style: Theme.of(context).textTheme.titleMedium),
+                    Text(
+                      'Notas',
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
                     const SizedBox(height: 6),
                     Text(
                       session.notes!.trim(),

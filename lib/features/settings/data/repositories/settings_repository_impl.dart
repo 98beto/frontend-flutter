@@ -17,7 +17,9 @@ class SettingsRepositoryImpl implements SettingsRepository {
 
   @override
   AppSettings saveSettings(AppSettings settings) {
-    return _localDatasource.saveSettings(AppSettingsModel.fromSettings(settings));
+    return _localDatasource.saveSettings(
+      AppSettingsModel.fromSettings(settings),
+    );
   }
 
   @override

@@ -24,13 +24,14 @@ class _AppNotificationCardState extends State<AppNotificationCard>
   @override
   void initState() {
     super.initState();
-    _progressController = AnimationController(
-      vsync: this,
-      duration: widget.notification.duration,
-      value: 1,
-    )
-      ..addStatusListener(_handleAnimationStatus)
-      ..reverse();
+    _progressController =
+        AnimationController(
+            vsync: this,
+            duration: widget.notification.duration,
+            value: 1,
+          )
+          ..addStatusListener(_handleAnimationStatus)
+          ..reverse();
   }
 
   @override
@@ -112,7 +113,9 @@ class _AppNotificationCardState extends State<AppNotificationCard>
                               ),
                             ),
                             if (widget.notification.message != null &&
-                                widget.notification.message!.trim().isNotEmpty) ...[
+                                widget.notification.message!
+                                    .trim()
+                                    .isNotEmpty) ...[
                               const SizedBox(height: 4),
                               Text(
                                 widget.notification.message!,

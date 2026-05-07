@@ -75,7 +75,9 @@ class _SalesPageState extends ConsumerState<SalesPage> {
       return;
     }
 
-    await ref.read(salesProvider.notifier).setDateRange(
+    await ref
+        .read(salesProvider.notifier)
+        .setDateRange(
           from: isFrom ? selected : state.dateFrom,
           to: isFrom ? state.dateTo : selected,
         );

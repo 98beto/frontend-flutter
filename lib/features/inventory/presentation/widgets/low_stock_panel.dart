@@ -39,9 +39,14 @@ class LowStockPanel extends StatelessWidget {
                 ),
                 if (items.isNotEmpty)
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 8,
+                    ),
                     decoration: BoxDecoration(
-                      color: (isDark ? AppTheme.danger.withValues(alpha: 0.12) : AppTheme.lightBgRed),
+                      color: (isDark
+                          ? AppTheme.danger.withValues(alpha: 0.12)
+                          : AppTheme.lightBgRed),
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: Text(
@@ -67,9 +72,15 @@ class LowStockPanel extends StatelessWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(errorMessage!, style: Theme.of(context).textTheme.bodyLarge),
+                    Text(
+                      errorMessage!,
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
                     const SizedBox(height: 12),
-                    OutlinedButton(onPressed: onRetry, child: const Text('Reintentar')),
+                    OutlinedButton(
+                      onPressed: onRetry,
+                      child: const Text('Reintentar'),
+                    ),
                   ],
                 ),
               )
@@ -99,10 +110,7 @@ class LowStockPanel extends StatelessWidget {
 }
 
 class _LowStockRow extends StatefulWidget {
-  const _LowStockRow({
-    required this.item,
-    required this.onQuickAdjustment,
-  });
+  const _LowStockRow({required this.item, required this.onQuickAdjustment});
 
   final ProductRecord item;
   final VoidCallback onQuickAdjustment;
@@ -121,7 +129,9 @@ class _LowStockRowState extends State<_LowStockRow> {
     final rowBackground = _isHovered
         ? (isDark ? AppTheme.bg2 : AppTheme.lightBg2)
         : (isDark ? AppTheme.bg1 : AppTheme.lightBg1);
-    final borderColor = _isHovered ? dangerColor : (isDark ? AppTheme.border : AppTheme.lightBg4);
+    final borderColor = _isHovered
+        ? dangerColor
+        : (isDark ? AppTheme.border : AppTheme.lightBg4);
     final shadowColor = isDark
         ? AppTheme.black.withValues(alpha: 0.14)
         : AppTheme.lightTextStrong.withValues(alpha: 0.08);
@@ -155,7 +165,9 @@ class _LowStockRowState extends State<_LowStockRow> {
               width: 44,
               height: 44,
               decoration: BoxDecoration(
-                color: isDark ? AppTheme.danger.withValues(alpha: 0.12) : AppTheme.lightBgRed,
+                color: isDark
+                    ? AppTheme.danger.withValues(alpha: 0.12)
+                    : AppTheme.lightBgRed,
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Icon(Icons.warning_amber_rounded, color: dangerColor),
@@ -166,10 +178,15 @@ class _LowStockRowState extends State<_LowStockRow> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(widget.item.name, style: Theme.of(context).textTheme.titleMedium),
+                  Text(
+                    widget.item.name,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
                   const SizedBox(height: 4),
                   Text(
-                    widget.item.sku?.isNotEmpty == true ? widget.item.sku! : 'Sin SKU',
+                    widget.item.sku?.isNotEmpty == true
+                        ? widget.item.sku!
+                        : 'Sin SKU',
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ],

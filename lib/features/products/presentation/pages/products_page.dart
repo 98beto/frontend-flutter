@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pos_desktop/core/network/api_exception.dart';
 import 'package:pos_desktop/core/notifications/app_notification_provider.dart';
-import 'package:pos_desktop/features/products/data/models/product_upsert_request_model.dart';
 import 'package:pos_desktop/features/products/domain/entities/product_record.dart';
 import 'package:pos_desktop/features/products/presentation/providers/product_actions_provider.dart';
 import 'package:pos_desktop/features/products/presentation/providers/products_provider.dart';
@@ -48,7 +47,7 @@ class _ProductsPageState extends ConsumerState<ProductsPage> {
   }
 
   Future<void> _openProductForm([ProductRecord? product]) async {
-    final request = await showDialog<ProductUpsertRequestModel>(
+    final request = await showDialog<ProductFormResult>(
       context: context,
       builder: (_) => ProductFormDialog(initialProduct: product),
     );
@@ -60,27 +59,41 @@ class _ProductsPageState extends ConsumerState<ProductsPage> {
     try {
       final notifier = ref.read(productActionsProvider.notifier);
       final savedProduct = product == null
-          ? await notifier.createProduct(request)
-          : await notifier.updateProduct(product.id, request);
+          ? await notifier.createProduct(request.product)
+          : await notifier.updateProduct(
+              product.id,
+              request.product,
+              request.branch,
+            );
 
       if (!mounted) {
         return;
       }
 
-      ref.read(appNotificationProvider.notifier).showSuccess(
-        title: product == null ? 'Producto creado' : 'Producto actualizado',
-        message: '${savedProduct.name} ya esta disponible en el catalogo.',
-      );
+      ref
+          .read(appNotificationProvider.notifier)
+          .showSuccess(
+            title: product == null ? 'Producto creado' : 'Producto actualizado',
+            message: '${savedProduct.name} ya esta disponible en el catalogo.',
+          );
     } on ApiException catch (error) {
-      ref.read(appNotificationProvider.notifier).showError(
-        title: product == null ? 'No fue posible crear el producto' : 'No fue posible actualizar el producto',
-        message: _resolveApiErrorMessage(error),
-      );
+      ref
+          .read(appNotificationProvider.notifier)
+          .showError(
+            title: product == null
+                ? 'No fue posible crear el producto'
+                : 'No fue posible actualizar el producto',
+            message: _resolveApiErrorMessage(error),
+          );
     } catch (_) {
-      ref.read(appNotificationProvider.notifier).showError(
-        title: product == null ? 'No fue posible crear el producto' : 'No fue posible actualizar el producto',
-        message: 'Verifica la conexion o intenta nuevamente.',
-      );
+      ref
+          .read(appNotificationProvider.notifier)
+          .showError(
+            title: product == null
+                ? 'No fue posible crear el producto'
+                : 'No fue posible actualizar el producto',
+            message: 'Verifica la conexion o intenta nuevamente.',
+          );
     }
   }
 
@@ -90,7 +103,9 @@ class _ProductsPageState extends ConsumerState<ProductsPage> {
       builder: (dialogContext) {
         return AlertDialog(
           title: const Text('Eliminar producto'),
-          content: Text('Se eliminara ${product.name}. Esta accion no se puede deshacer.'),
+          content: Text(
+            'Se eliminara ${product.name}. Esta accion no se puede deshacer.',
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(dialogContext).pop(false),
@@ -116,20 +131,26 @@ class _ProductsPageState extends ConsumerState<ProductsPage> {
         return;
       }
 
-      ref.read(appNotificationProvider.notifier).showSuccess(
-        title: 'Producto eliminado',
-        message: '${product.name} fue eliminado del catalogo.',
-      );
+      ref
+          .read(appNotificationProvider.notifier)
+          .showSuccess(
+            title: 'Producto eliminado',
+            message: '${product.name} fue eliminado del catalogo.',
+          );
     } on ApiException catch (error) {
-      ref.read(appNotificationProvider.notifier).showError(
-        title: 'No fue posible eliminar el producto',
-        message: _resolveApiErrorMessage(error),
-      );
+      ref
+          .read(appNotificationProvider.notifier)
+          .showError(
+            title: 'No fue posible eliminar el producto',
+            message: _resolveApiErrorMessage(error),
+          );
     } catch (_) {
-      ref.read(appNotificationProvider.notifier).showError(
-        title: 'No fue posible eliminar el producto',
-        message: 'Verifica la conexion o intenta nuevamente.',
-      );
+      ref
+          .read(appNotificationProvider.notifier)
+          .showError(
+            title: 'No fue posible eliminar el producto',
+            message: 'Verifica la conexion o intenta nuevamente.',
+          );
     }
   }
 
@@ -161,7 +182,7 @@ class _ProductsPageState extends ConsumerState<ProductsPage> {
         ProductsFiltersBar(
           searchController: _searchController,
           selectedCategoryId: state.categoryId,
-          selectedIsActive: state.isActive,
+          selectedIsActive: state.isAvailable,
           lowStockOnly: state.lowStockOnly,
           onSearchSubmitted: (value) {
             ref.read(productsProvider.notifier).setSearch(value);
@@ -170,7 +191,7 @@ class _ProductsPageState extends ConsumerState<ProductsPage> {
             ref.read(productsProvider.notifier).setCategoryId(value);
           },
           onIsActiveChanged: (value) {
-            ref.read(productsProvider.notifier).setIsActive(value);
+            ref.read(productsProvider.notifier).setIsAvailable(value);
           },
           onLowStockChanged: (value) {
             ref.read(productsProvider.notifier).setLowStockOnly(value);

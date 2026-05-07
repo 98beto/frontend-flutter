@@ -4,14 +4,14 @@ class ProductRecordModel extends ProductRecord {
   const ProductRecordModel({
     required super.id,
     required super.name,
+    required super.branchId,
     required super.price,
     required super.stockQuantity,
     required super.minStock,
     required super.unitMeasure,
-    required super.isActive,
+    required super.isAvailable,
     super.description,
     super.costPrice,
-    super.barcode,
     super.sku,
     super.categoryId,
     super.categoryName,
@@ -22,21 +22,23 @@ class ProductRecordModel extends ProductRecord {
   factory ProductRecordModel.fromJson(Map<String, dynamic> json) {
     final category = json['category'] as Map<String, dynamic>?;
     final brand = json['brand'] as Map<String, dynamic>?;
+    final branchProduct =
+        json['branch_product'] as Map<String, dynamic>? ?? const {};
 
     return ProductRecordModel(
       id: _toInt(json['id']),
       name: json['name'] as String? ?? 'Producto sin nombre',
+      branchId: _toInt(branchProduct['branch_id']),
       description: json['description'] as String?,
       costPrice: _toNullableDouble(json['cost_price']),
-      price: _toDouble(json['price']),
-      stockQuantity: _toInt(json['stock_quantity']),
-      minStock: _toInt(json['min_stock'], fallback: 5),
+      price: _toDouble(branchProduct['price']),
+      stockQuantity: _toInt(branchProduct['stock_quantity']),
+      minStock: _toInt(branchProduct['min_stock'], fallback: 5),
       unitMeasure: (json['unit_measure'] as String?)?.trim().isNotEmpty == true
           ? (json['unit_measure'] as String).trim()
           : 'PZA',
-      barcode: json['barcode'] as String?,
       sku: json['sku'] as String?,
-      isActive: json['is_active'] as bool? ?? false,
+      isAvailable: branchProduct['is_available'] as bool? ?? false,
       categoryId: _toNullableInt(json['category_id']),
       categoryName: category?['name'] as String?,
       brandId: _toNullableInt(json['brand_id']),

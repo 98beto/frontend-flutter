@@ -2,13 +2,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pos_desktop/features/cash_register/domain/entities/cash_movement.dart';
 import 'package:pos_desktop/features/cash_register/presentation/providers/cash_register_repository_provider.dart';
 
-final cashSessionMovementsProvider = NotifierProvider.family<
-  CashSessionMovementsNotifier,
-  CashSessionMovementsState,
-  int
->(CashSessionMovementsNotifier.new);
+final cashSessionMovementsProvider =
+    NotifierProvider.family<
+      CashSessionMovementsNotifier,
+      CashSessionMovementsState,
+      int
+    >(CashSessionMovementsNotifier.new);
 
-class CashSessionMovementsNotifier extends FamilyNotifier<CashSessionMovementsState, int> {
+class CashSessionMovementsNotifier
+    extends FamilyNotifier<CashSessionMovementsState, int> {
   @override
   CashSessionMovementsState build(int sessionId) {
     Future.microtask(loadInitial);
@@ -153,7 +155,9 @@ class CashSessionMovementsState {
     return CashSessionMovementsState(
       items: items ?? this.items,
       type: identical(type, _sentinel) ? this.type : type as String?,
-      category: identical(category, _sentinel) ? this.category : category as String?,
+      category: identical(category, _sentinel)
+          ? this.category
+          : category as String?,
       source: identical(source, _sentinel) ? this.source : source as String?,
       currentPage: currentPage ?? this.currentPage,
       lastPage: lastPage ?? this.lastPage,

@@ -19,7 +19,8 @@ class SuppliersRemoteDatasource {
         '/suppliers',
         queryParameters: {
           'page': page,
-          if (search != null && search.trim().isNotEmpty) 'search': search.trim(),
+          if (search != null && search.trim().isNotEmpty)
+            'search': search.trim(),
         },
       );
 
@@ -37,7 +38,9 @@ class SuppliersRemoteDatasource {
     }
   }
 
-  Future<SupplierRecordModel> createSupplier(SupplierUpsertRequestModel request) async {
+  Future<SupplierRecordModel> createSupplier(
+    SupplierUpsertRequestModel request,
+  ) async {
     try {
       final response = await _dio.post('/suppliers', data: request.toJson());
 
@@ -57,7 +60,10 @@ class SuppliersRemoteDatasource {
     SupplierUpsertRequestModel request,
   ) async {
     try {
-      final response = await _dio.patch('/suppliers/$id', data: request.toJson());
+      final response = await _dio.patch(
+        '/suppliers/$id',
+        data: request.toJson(),
+      );
 
       final envelope = ApiEnvelope.fromJson(
         response.data as Map<String, dynamic>,
@@ -83,7 +89,8 @@ class SuppliersRemoteDatasource {
     if (responseData is Map<String, dynamic>) {
       return ApiException(
         message:
-            responseData['message'] as String? ?? 'No fue posible conectar con la API.',
+            responseData['message'] as String? ??
+            'No fue posible conectar con la API.',
         statusCode: error.response?.statusCode,
         errors: responseData['errors'] as Map<String, dynamic>?,
       );

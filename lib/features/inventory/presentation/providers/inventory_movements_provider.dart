@@ -4,8 +4,8 @@ import 'package:pos_desktop/features/inventory/presentation/providers/inventory_
 
 final inventoryMovementsProvider =
     NotifierProvider<InventoryMovementsNotifier, InventoryMovementsState>(
-  InventoryMovementsNotifier.new,
-);
+      InventoryMovementsNotifier.new,
+    );
 
 class InventoryMovementsNotifier extends Notifier<InventoryMovementsState> {
   @override
@@ -29,7 +29,9 @@ class InventoryMovementsNotifier extends Notifier<InventoryMovementsState> {
     );
 
     try {
-      final response = await ref.read(inventoryRepositoryProvider).getMovements(
+      final response = await ref
+          .read(inventoryRepositoryProvider)
+          .getMovements(
             page: 1,
             productId: state.productId,
             type: state.type,
@@ -60,7 +62,9 @@ class InventoryMovementsNotifier extends Notifier<InventoryMovementsState> {
 
     try {
       final nextPage = state.currentPage + 1;
-      final response = await ref.read(inventoryRepositoryProvider).getMovements(
+      final response = await ref
+          .read(inventoryRepositoryProvider)
+          .getMovements(
             page: nextPage,
             productId: state.productId,
             type: state.type,
@@ -144,7 +148,9 @@ class InventoryMovementsState {
   }) {
     return InventoryMovementsState(
       items: items ?? this.items,
-      productId: identical(productId, _sentinel) ? this.productId : productId as int?,
+      productId: identical(productId, _sentinel)
+          ? this.productId
+          : productId as int?,
       type: identical(type, _sentinel) ? this.type : type as String?,
       source: identical(source, _sentinel) ? this.source : source as String?,
       currentPage: currentPage ?? this.currentPage,

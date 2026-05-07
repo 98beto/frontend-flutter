@@ -67,7 +67,9 @@ class CashSessionHistoryDialog extends ConsumerWidget {
                     ),
                     const SizedBox(width: 24),
                     Expanded(
-                      child: CashSessionHistoryDetail(session: state.selectedSession),
+                      child: CashSessionHistoryDetail(
+                        session: state.selectedSession,
+                      ),
                     ),
                   ],
                 ),

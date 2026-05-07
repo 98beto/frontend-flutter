@@ -40,12 +40,16 @@ class InventoryRepositoryImpl implements InventoryRepository {
   }
 
   @override
-  Future<InventoryMovement> createMovement(InventoryMovementRequestModel request) {
+  Future<InventoryMovement> createMovement(
+    InventoryMovementRequestModel request,
+  ) {
     return _remoteDatasource.createMovement(request);
   }
 
   @override
-  Future<PaginatedResponse<ProductRecord>> getLowStockProducts({int page = 1}) async {
+  Future<PaginatedResponse<ProductRecord>> getLowStockProducts({
+    int page = 1,
+  }) async {
     final response = await _remoteDatasource.getLowStockProducts(page: page);
 
     return PaginatedResponse<ProductRecord>(

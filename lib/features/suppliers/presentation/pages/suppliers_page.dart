@@ -67,20 +67,33 @@ class _SuppliersPageState extends ConsumerState<SuppliersPage> {
         return;
       }
 
-      ref.read(appNotificationProvider.notifier).showSuccess(
-        title: supplier == null ? 'Proveedor creado' : 'Proveedor actualizado',
-        message: '${savedSupplier.name} ya esta disponible en tu directorio.',
-      );
+      ref
+          .read(appNotificationProvider.notifier)
+          .showSuccess(
+            title: supplier == null
+                ? 'Proveedor creado'
+                : 'Proveedor actualizado',
+            message:
+                '${savedSupplier.name} ya esta disponible en tu directorio.',
+          );
     } on ApiException catch (error) {
-      ref.read(appNotificationProvider.notifier).showError(
-        title: supplier == null ? 'No fue posible crear el proveedor' : 'No fue posible actualizar el proveedor',
-        message: _resolveApiErrorMessage(error),
-      );
+      ref
+          .read(appNotificationProvider.notifier)
+          .showError(
+            title: supplier == null
+                ? 'No fue posible crear el proveedor'
+                : 'No fue posible actualizar el proveedor',
+            message: _resolveApiErrorMessage(error),
+          );
     } catch (_) {
-      ref.read(appNotificationProvider.notifier).showError(
-        title: supplier == null ? 'No fue posible crear el proveedor' : 'No fue posible actualizar el proveedor',
-        message: 'Verifica la conexion o intenta nuevamente.',
-      );
+      ref
+          .read(appNotificationProvider.notifier)
+          .showError(
+            title: supplier == null
+                ? 'No fue posible crear el proveedor'
+                : 'No fue posible actualizar el proveedor',
+            message: 'Verifica la conexion o intenta nuevamente.',
+          );
     }
   }
 
@@ -90,7 +103,9 @@ class _SuppliersPageState extends ConsumerState<SuppliersPage> {
       builder: (dialogContext) {
         return AlertDialog(
           title: const Text('Eliminar proveedor'),
-          content: Text('Se eliminara ${supplier.name}. Esta accion no se puede deshacer.'),
+          content: Text(
+            'Se eliminara ${supplier.name}. Esta accion no se puede deshacer.',
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(dialogContext).pop(false),
@@ -110,26 +125,34 @@ class _SuppliersPageState extends ConsumerState<SuppliersPage> {
     }
 
     try {
-      await ref.read(supplierActionsProvider.notifier).deleteSupplier(supplier.id);
+      await ref
+          .read(supplierActionsProvider.notifier)
+          .deleteSupplier(supplier.id);
 
       if (!mounted) {
         return;
       }
 
-      ref.read(appNotificationProvider.notifier).showSuccess(
-        title: 'Proveedor eliminado',
-        message: '${supplier.name} fue eliminado del directorio.',
-      );
+      ref
+          .read(appNotificationProvider.notifier)
+          .showSuccess(
+            title: 'Proveedor eliminado',
+            message: '${supplier.name} fue eliminado del directorio.',
+          );
     } on ApiException catch (error) {
-      ref.read(appNotificationProvider.notifier).showError(
-        title: 'No fue posible eliminar el proveedor',
-        message: _resolveApiErrorMessage(error),
-      );
+      ref
+          .read(appNotificationProvider.notifier)
+          .showError(
+            title: 'No fue posible eliminar el proveedor',
+            message: _resolveApiErrorMessage(error),
+          );
     } catch (_) {
-      ref.read(appNotificationProvider.notifier).showError(
-        title: 'No fue posible eliminar el proveedor',
-        message: 'Verifica la conexion o intenta nuevamente.',
-      );
+      ref
+          .read(appNotificationProvider.notifier)
+          .showError(
+            title: 'No fue posible eliminar el proveedor',
+            message: 'Verifica la conexion o intenta nuevamente.',
+          );
     }
   }
 

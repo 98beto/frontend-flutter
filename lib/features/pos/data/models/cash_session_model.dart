@@ -14,7 +14,8 @@ class CashSessionModel extends CashSession {
       id: json['id'] as int? ?? 0,
       status: json['status'] as String? ?? 'closed',
       openingBalance: _toDouble(json['opening_balance']),
-      openedAt: DateTime.tryParse(json['opened_at'] as String? ?? '') ??
+      openedAt:
+          DateTime.tryParse(json['opened_at'] as String? ?? '') ??
           DateTime.now(),
       notes: json['notes'] as String?,
     );

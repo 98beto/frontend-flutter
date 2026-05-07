@@ -14,7 +14,10 @@ class SuppliersRepositoryImpl implements SuppliersRepository {
     int page = 1,
     String? search,
   }) async {
-    final response = await _remoteDatasource.getSuppliers(page: page, search: search);
+    final response = await _remoteDatasource.getSuppliers(
+      page: page,
+      search: search,
+    );
 
     return PaginatedResponse<SupplierRecord>(
       items: response.items,
@@ -32,7 +35,10 @@ class SuppliersRepositoryImpl implements SuppliersRepository {
   }
 
   @override
-  Future<SupplierRecord> updateSupplier(int id, SupplierUpsertRequestModel request) {
+  Future<SupplierRecord> updateSupplier(
+    int id,
+    SupplierUpsertRequestModel request,
+  ) {
     return _remoteDatasource.updateSupplier(id, request);
   }
 

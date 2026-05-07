@@ -132,7 +132,8 @@ class _PaymentMethodDialogState extends State<PaymentMethodDialog> {
               _PaymentTile(
                 icon: Icons.payments_rounded,
                 title: 'Efectivo',
-                subtitle: 'Cobro inmediato en caja con monto recibido y cambio.',
+                subtitle:
+                    'Cobro inmediato en caja con monto recibido y cambio.',
                 selected: _selectedMethod == 'cash',
                 onTap: () {
                   setState(() {
@@ -171,7 +172,9 @@ class _PaymentMethodDialogState extends State<PaymentMethodDialog> {
                     children: [
                       TextFormField(
                         controller: _receivedAmountController,
-                        keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                        keyboardType: const TextInputType.numberWithOptions(
+                          decimal: true,
+                        ),
                         decoration: const InputDecoration(
                           labelText: 'Monto recibido',
                         ),
@@ -186,23 +189,23 @@ class _PaymentMethodDialogState extends State<PaymentMethodDialog> {
                         },
                       ),
                       const SizedBox(height: 16),
-                        Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color: changePanelColor,
-                            borderRadius: BorderRadius.circular(18),
-                            border: Border.all(color: borderColor),
-                            boxShadow: [
-                              BoxShadow(
-                                color: changeShadowColor,
-                                blurRadius: 10,
-                                offset: const Offset(0, 4),
-                              ),
-                            ],
-                          ),
-                          child: Row(
-                            children: [
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: changePanelColor,
+                          borderRadius: BorderRadius.circular(18),
+                          border: Border.all(color: borderColor),
+                          boxShadow: [
+                            BoxShadow(
+                              color: changeShadowColor,
+                              blurRadius: 10,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: Row(
+                          children: [
                             Expanded(
                               child: Text(
                                 'Cambio',
@@ -216,9 +219,12 @@ class _PaymentMethodDialogState extends State<PaymentMethodDialog> {
                               _changeAmount >= 0
                                   ? '\$${_changeAmount.toStringAsFixed(2)}'
                                   : '--',
-                              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                color: _changeAmount >= 0 ? successColor : mutedValueColor,
-                              ),
+                              style: Theme.of(context).textTheme.titleMedium
+                                  ?.copyWith(
+                                    color: _changeAmount >= 0
+                                        ? successColor
+                                        : mutedValueColor,
+                                  ),
                             ),
                           ],
                         ),
@@ -302,15 +308,19 @@ class _PaymentTileState extends State<_PaymentTile> {
         : AppTheme.lightTextStrong.withValues(alpha: 0.10);
     final iconDefaultBackground = isDark ? AppTheme.bg2 : AppTheme.lightBg2;
     final iconHoverBackground = isDark ? AppTheme.bg3 : AppTheme.lightBg3;
-    final iconSelectedBackground = isDark ? AppTheme.bgBlue : AppTheme.lightBgBlue;
+    final iconSelectedBackground = isDark
+        ? AppTheme.bgBlue
+        : AppTheme.lightBgBlue;
     final iconDefaultColor = textTheme.bodyMedium?.color ?? AppTheme.grey;
     final iconHoverColor = colorScheme.onSurface;
-    final iconSelectedColor = isDark ? AppTheme.filledBlue : AppTheme.lightBrand;
+    final iconSelectedColor = isDark
+        ? AppTheme.filledBlue
+        : AppTheme.lightBrand;
     final trailingColor = widget.selected
         ? selectedBorder
         : _isHovered
-            ? hoverBorder
-            : textTheme.bodyMedium?.color ?? AppTheme.muted;
+        ? hoverBorder
+        : textTheme.bodyMedium?.color ?? AppTheme.muted;
 
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
@@ -319,9 +329,8 @@ class _PaymentTileState extends State<_PaymentTile> {
         borderRadius: BorderRadius.circular(22),
         hoverColor: AppTheme.transparent,
         overlayColor: WidgetStateProperty.resolveWith(
-          (states) => states.contains(WidgetState.hovered)
-              ? hoverOverlayColor
-              : null,
+          (states) =>
+              states.contains(WidgetState.hovered) ? hoverOverlayColor : null,
         ),
         onTap: widget.onTap,
         child: AnimatedContainer(
@@ -333,15 +342,15 @@ class _PaymentTileState extends State<_PaymentTile> {
             color: widget.selected
                 ? selectedBackground
                 : _isHovered
-                    ? hoverBackground
-                    : defaultBackground,
+                ? hoverBackground
+                : defaultBackground,
             borderRadius: BorderRadius.circular(22),
             border: Border.all(
               color: widget.selected
                   ? selectedBorder
                   : _isHovered
-                      ? hoverBorder
-                      : defaultBorder,
+                  ? hoverBorder
+                  : defaultBorder,
               width: widget.selected ? 1.5 : 1,
             ),
             boxShadow: isActive
@@ -363,8 +372,8 @@ class _PaymentTileState extends State<_PaymentTile> {
                   color: widget.selected
                       ? iconSelectedBackground
                       : _isHovered
-                          ? iconHoverBackground
-                          : iconDefaultBackground,
+                      ? iconHoverBackground
+                      : iconDefaultBackground,
                   borderRadius: BorderRadius.circular(18),
                 ),
                 child: Icon(
@@ -372,8 +381,8 @@ class _PaymentTileState extends State<_PaymentTile> {
                   color: widget.selected
                       ? iconSelectedColor
                       : _isHovered
-                          ? iconHoverColor
-                          : iconDefaultColor,
+                      ? iconHoverColor
+                      : iconDefaultColor,
                 ),
               ),
               const SizedBox(width: 14),
@@ -381,9 +390,15 @@ class _PaymentTileState extends State<_PaymentTile> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(widget.title, style: Theme.of(context).textTheme.titleMedium),
+                    Text(
+                      widget.title,
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
                     const SizedBox(height: 4),
-                    Text(widget.subtitle, style: Theme.of(context).textTheme.bodyMedium),
+                    Text(
+                      widget.subtitle,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
                   ],
                 ),
               ),

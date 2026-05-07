@@ -1,5 +1,4 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pos_desktop/core/config/operation_context_provider.dart';
 import 'package:pos_desktop/core/network/api_exception.dart';
 import 'package:pos_desktop/features/pos/data/models/sale_item_request_model.dart';
 import 'package:pos_desktop/features/pos/data/models/sale_request_model.dart';
@@ -11,8 +10,8 @@ import 'package:pos_desktop/features/pos/presentation/providers/pos_repository_p
 
 final saleSubmissionProvider =
     AsyncNotifierProvider<SaleSubmissionNotifier, SaleResult?>(
-  SaleSubmissionNotifier.new,
-);
+      SaleSubmissionNotifier.new,
+    );
 
 class SaleSubmissionNotifier extends AsyncNotifier<SaleResult?> {
   @override
@@ -48,7 +47,6 @@ class SaleSubmissionNotifier extends AsyncNotifier<SaleResult?> {
     }).toList();
 
     final request = SaleRequestModel(
-      branchId: ref.read(operationContextProvider).branchId,
       customerId: posState.selectedCustomerId,
       cashSessionId: cashSession.id,
       paymentMethod: paymentMethod,

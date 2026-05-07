@@ -104,7 +104,9 @@ class SaleDetailDialog extends ConsumerWidget {
                                       value: _currency(sale.taxAmount),
                                     ),
                                     const Padding(
-                                      padding: EdgeInsets.symmetric(vertical: 16),
+                                      padding: EdgeInsets.symmetric(
+                                        vertical: 16,
+                                      ),
                                       child: Divider(height: 1),
                                     ),
                                     _SummaryRow(
@@ -122,7 +124,9 @@ class SaleDetailDialog extends ConsumerWidget {
                                   children: [
                                     _SummaryRow(
                                       label: 'Cliente',
-                                      value: sale.customerName ?? 'Publico general',
+                                      value:
+                                          sale.customerName ??
+                                          'Publico general',
                                     ),
                                     const SizedBox(height: 12),
                                     _SummaryRow(
@@ -270,10 +274,7 @@ class _SummaryRow extends StatelessWidget {
     return Row(
       children: [
         Expanded(child: Text(label, style: style)),
-        Text(
-          value,
-          style: style?.copyWith(fontWeight: FontWeight.w700),
-        ),
+        Text(value, style: style?.copyWith(fontWeight: FontWeight.w700)),
       ],
     );
   }
@@ -298,12 +299,12 @@ class _DetailItemRow extends StatelessWidget {
     final rowColor = isDark ? AppTheme.bg1 : AppTheme.lightBg1;
 
     return Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: rowColor,
-          borderRadius: BorderRadius.circular(18),
-        ),
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: rowColor,
+        borderRadius: BorderRadius.circular(18),
+      ),
       child: Row(
         children: [
           Expanded(
@@ -319,10 +320,7 @@ class _DetailItemRow extends StatelessWidget {
               ],
             ),
           ),
-          Text(
-            'x$quantity',
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
+          Text('x$quantity', style: Theme.of(context).textTheme.titleMedium),
           const SizedBox(width: 20),
           Text(
             '\$${total.toStringAsFixed(2)}',

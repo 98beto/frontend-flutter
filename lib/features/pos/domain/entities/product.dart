@@ -3,23 +3,23 @@ class Product {
     required this.id,
     required this.name,
     required this.sku,
+    required this.branchId,
     required this.price,
     required this.stock,
     required this.category,
     this.categoryId,
-    this.barcode,
     this.brand,
-    this.isActive = true,
+    this.isAvailable = true,
   });
 
   final String id;
   final String name;
   final String sku;
+  final int branchId;
   final double price;
   final int stock;
   final String category;
   final int? categoryId;
-  final String? barcode;
   final String? brand;
-  final bool isActive;
+  final bool isAvailable;
 }

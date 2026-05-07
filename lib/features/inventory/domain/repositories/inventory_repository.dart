@@ -13,7 +13,9 @@ abstract class InventoryRepository {
 
   Future<InventoryMovement> getMovementById(int id);
 
-  Future<InventoryMovement> createMovement(InventoryMovementRequestModel request);
+  Future<InventoryMovement> createMovement(
+    InventoryMovementRequestModel request,
+  );
 
   Future<PaginatedResponse<ProductRecord>> getLowStockProducts({int page = 1});
 }

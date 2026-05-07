@@ -29,10 +29,9 @@ class SuppliersNotifier extends Notifier<SuppliersState> {
     );
 
     try {
-      final response = await ref.read(suppliersRepositoryProvider).getSuppliers(
-            page: 1,
-            search: state.search,
-          );
+      final response = await ref
+          .read(suppliersRepositoryProvider)
+          .getSuppliers(page: 1, search: state.search);
 
       state = state.copyWith(
         items: response.items,
@@ -58,10 +57,9 @@ class SuppliersNotifier extends Notifier<SuppliersState> {
 
     try {
       final nextPage = state.currentPage + 1;
-      final response = await ref.read(suppliersRepositoryProvider).getSuppliers(
-            page: nextPage,
-            search: state.search,
-          );
+      final response = await ref
+          .read(suppliersRepositoryProvider)
+          .getSuppliers(page: nextPage, search: state.search);
 
       state = state.copyWith(
         items: [...state.items, ...response.items],

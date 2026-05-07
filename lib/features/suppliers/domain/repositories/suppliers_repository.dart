@@ -10,7 +10,10 @@ abstract class SuppliersRepository {
 
   Future<SupplierRecord> createSupplier(SupplierUpsertRequestModel request);
 
-  Future<SupplierRecord> updateSupplier(int id, SupplierUpsertRequestModel request);
+  Future<SupplierRecord> updateSupplier(
+    int id,
+    SupplierUpsertRequestModel request,
+  );
 
   Future<void> deleteSupplier(int id);
 }

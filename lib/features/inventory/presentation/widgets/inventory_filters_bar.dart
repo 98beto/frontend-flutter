@@ -29,7 +29,9 @@ class InventoryFiltersBar extends ConsumerWidget {
     final productsState = ref.watch(productsProvider);
     final selectedProduct = selectedProductId == null
         ? null
-        : productsState.items.where((product) => product.id == selectedProductId).firstOrNull;
+        : productsState.items
+              .where((product) => product.id == selectedProductId)
+              .firstOrNull;
 
     return Card(
       child: Padding(
@@ -69,7 +71,9 @@ class InventoryFiltersBar extends ConsumerWidget {
 
                       onProductChanged(selected.id);
                     },
-                    onClear: selectedProductId == null ? null : () => onProductChanged(null),
+                    onClear: selectedProductId == null
+                        ? null
+                        : () => onProductChanged(null),
                   ),
                 ),
                 const SizedBox(width: 14),
@@ -79,10 +83,22 @@ class InventoryFiltersBar extends ConsumerWidget {
                     initialValue: selectedType,
                     decoration: const InputDecoration(labelText: 'Tipo'),
                     items: const [
-                      DropdownMenuItem<String?>(value: null, child: Text('Todos')),
-                      DropdownMenuItem<String?>(value: 'in', child: Text('Entrada')),
-                      DropdownMenuItem<String?>(value: 'out', child: Text('Salida')),
-                      DropdownMenuItem<String?>(value: 'adjustment', child: Text('Ajuste')),
+                      DropdownMenuItem<String?>(
+                        value: null,
+                        child: Text('Todos'),
+                      ),
+                      DropdownMenuItem<String?>(
+                        value: 'in',
+                        child: Text('Entrada'),
+                      ),
+                      DropdownMenuItem<String?>(
+                        value: 'out',
+                        child: Text('Salida'),
+                      ),
+                      DropdownMenuItem<String?>(
+                        value: 'adjustment',
+                        child: Text('Ajuste'),
+                      ),
                     ],
                     onChanged: onTypeChanged,
                   ),
@@ -94,9 +110,18 @@ class InventoryFiltersBar extends ConsumerWidget {
                     initialValue: selectedSource,
                     decoration: const InputDecoration(labelText: 'Origen'),
                     items: const [
-                      DropdownMenuItem<String?>(value: null, child: Text('Todos')),
-                      DropdownMenuItem<String?>(value: 'manual', child: Text('Manual')),
-                      DropdownMenuItem<String?>(value: 'sale', child: Text('Venta')),
+                      DropdownMenuItem<String?>(
+                        value: null,
+                        child: Text('Todos'),
+                      ),
+                      DropdownMenuItem<String?>(
+                        value: 'manual',
+                        child: Text('Manual'),
+                      ),
+                      DropdownMenuItem<String?>(
+                        value: 'sale',
+                        child: Text('Venta'),
+                      ),
                     ],
                     onChanged: onSourceChanged,
                   ),
@@ -212,7 +237,10 @@ class _ProductFilterFieldState extends State<_ProductFilterField> {
 }
 
 class _ProductFilterDialog extends StatefulWidget {
-  const _ProductFilterDialog({required this.products, required this.selectedProductId});
+  const _ProductFilterDialog({
+    required this.products,
+    required this.selectedProductId,
+  });
 
   final List<ProductRecord> products;
   final int? selectedProductId;
@@ -307,10 +335,12 @@ class _ProductFilterDialogState extends State<_ProductFilterDialog> {
                         )
                       : ListView.separated(
                           itemCount: filteredProducts.length,
-                          separatorBuilder: (_, _) => const SizedBox(height: 10),
+                          separatorBuilder: (_, _) =>
+                              const SizedBox(height: 10),
                           itemBuilder: (context, index) {
                             final product = filteredProducts[index];
-                            final selected = product.id == widget.selectedProductId;
+                            final selected =
+                                product.id == widget.selectedProductId;
 
                             return _ProductFilterOption(
                               product: product,
@@ -379,15 +409,15 @@ class _ProductFilterOptionState extends State<_ProductFilterOption> {
             color: widget.selected
                 ? selectedBackground
                 : _isHovered
-                    ? hoverBackground
-                    : defaultBackground,
+                ? hoverBackground
+                : defaultBackground,
             borderRadius: BorderRadius.circular(18),
             border: Border.all(
               color: widget.selected
                   ? selectedBorder
                   : _isHovered
-                      ? hoverBorder
-                      : defaultBorder,
+                  ? hoverBorder
+                  : defaultBorder,
             ),
             boxShadow: _isHovered
                 ? [
@@ -420,10 +450,7 @@ class _ProductFilterOptionState extends State<_ProductFilterOption> {
                 ),
               ),
               if (widget.selected)
-                Icon(
-                  Icons.check_circle_rounded,
-                  color: successColor,
-                ),
+                Icon(Icons.check_circle_rounded, color: successColor),
             ],
           ),
         ),

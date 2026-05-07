@@ -3,8 +3,8 @@ import 'package:pos_desktop/core/notifications/app_notification.dart';
 
 final appNotificationProvider =
     NotifierProvider<AppNotificationNotifier, List<AppNotification>>(
-  AppNotificationNotifier.new,
-);
+      AppNotificationNotifier.new,
+    );
 
 class AppNotificationNotifier extends Notifier<List<AppNotification>> {
   static const _maxNotifications = 3;
@@ -21,7 +21,11 @@ class AppNotificationNotifier extends Notifier<List<AppNotification>> {
     );
   }
 
-  void showSuccess({required String title, String? message, Duration? duration}) {
+  void showSuccess({
+    required String title,
+    String? message,
+    Duration? duration,
+  }) {
     _show(
       title: title,
       message: message,
@@ -30,7 +34,11 @@ class AppNotificationNotifier extends Notifier<List<AppNotification>> {
     );
   }
 
-  void showWarning({required String title, String? message, Duration? duration}) {
+  void showWarning({
+    required String title,
+    String? message,
+    Duration? duration,
+  }) {
     _show(
       title: title,
       message: message,
@@ -50,6 +58,10 @@ class AppNotificationNotifier extends Notifier<List<AppNotification>> {
 
   void dismiss(String id) {
     state = state.where((notification) => notification.id != id).toList();
+  }
+
+  void clear() {
+    state = const [];
   }
 
   void _show({

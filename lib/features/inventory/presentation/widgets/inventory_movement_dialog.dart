@@ -1,22 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pos_desktop/core/config/operation_context_provider.dart';
 import 'package:pos_desktop/core/theme/app_theme.dart';
 import 'package:pos_desktop/features/inventory/data/models/inventory_movement_request_model.dart';
 import 'package:pos_desktop/features/products/domain/entities/product_record.dart';
 import 'package:pos_desktop/features/products/presentation/providers/products_provider.dart';
 
 class InventoryMovementDialog extends ConsumerStatefulWidget {
-  const InventoryMovementDialog({super.key, this.initialProductId, this.initialType});
+  const InventoryMovementDialog({
+    super.key,
+    this.initialProductId,
+    this.initialType,
+  });
 
   final int? initialProductId;
   final String? initialType;
 
   @override
-  ConsumerState<InventoryMovementDialog> createState() => _InventoryMovementDialogState();
+  ConsumerState<InventoryMovementDialog> createState() =>
+      _InventoryMovementDialogState();
 }
 
-class _InventoryMovementDialogState extends ConsumerState<InventoryMovementDialog> {
+class _InventoryMovementDialogState
+    extends ConsumerState<InventoryMovementDialog> {
   final _formKey = GlobalKey<FormState>();
   final _quantityController = TextEditingController();
   final _notesController = TextEditingController();
@@ -47,7 +52,6 @@ class _InventoryMovementDialogState extends ConsumerState<InventoryMovementDialo
     Navigator.of(context).pop(
       InventoryMovementRequestModel(
         productId: _productId!,
-        branchId: ref.read(operationContextProvider).branchId,
         type: _type,
         quantity: int.parse(_quantityController.text.trim()),
         notes: _notesController.text.trim(),
@@ -61,7 +65,9 @@ class _InventoryMovementDialogState extends ConsumerState<InventoryMovementDialo
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final selectedProduct = _productId == null
         ? null
-        : productsState.items.where((product) => product.id == _productId).firstOrNull;
+        : productsState.items
+              .where((product) => product.id == _productId)
+              .firstOrNull;
 
     return Dialog(
       backgroundColor: AppTheme.transparent,
@@ -73,7 +79,9 @@ class _InventoryMovementDialogState extends ConsumerState<InventoryMovementDialo
           decoration: BoxDecoration(
             color: isDark ? AppTheme.panel : AppTheme.lightBg0,
             borderRadius: BorderRadius.circular(30),
-            border: Border.all(color: isDark ? AppTheme.border : AppTheme.lightBg4),
+            border: Border.all(
+              color: isDark ? AppTheme.border : AppTheme.lightBg4,
+            ),
           ),
           child: Form(
             key: _formKey,
@@ -123,16 +131,29 @@ class _InventoryMovementDialogState extends ConsumerState<InventoryMovementDialo
 
                     setState(() => _productId = selected.id);
                   },
-                  errorText: _productId == null ? 'Selecciona un producto.' : null,
+                  errorText: _productId == null
+                      ? 'Selecciona un producto.'
+                      : null,
                 ),
                 const SizedBox(height: 14),
                 DropdownButtonFormField<String>(
                   initialValue: _type,
-                  decoration: const InputDecoration(labelText: 'Tipo de movimiento'),
+                  decoration: const InputDecoration(
+                    labelText: 'Tipo de movimiento',
+                  ),
                   items: const [
-                    DropdownMenuItem<String>(value: 'in', child: Text('Entrada')),
-                    DropdownMenuItem<String>(value: 'out', child: Text('Salida')),
-                    DropdownMenuItem<String>(value: 'adjustment', child: Text('Ajuste')),
+                    DropdownMenuItem<String>(
+                      value: 'in',
+                      child: Text('Entrada'),
+                    ),
+                    DropdownMenuItem<String>(
+                      value: 'out',
+                      child: Text('Salida'),
+                    ),
+                    DropdownMenuItem<String>(
+                      value: 'adjustment',
+                      child: Text('Ajuste'),
+                    ),
                   ],
                   onChanged: (value) {
                     if (value == null) {
@@ -146,7 +167,9 @@ class _InventoryMovementDialogState extends ConsumerState<InventoryMovementDialo
                   controller: _quantityController,
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
-                    labelText: _type == 'adjustment' ? 'Nuevo stock' : 'Cantidad',
+                    labelText: _type == 'adjustment'
+                        ? 'Nuevo stock'
+                        : 'Cantidad',
                   ),
                   validator: (value) {
                     final parsed = int.tryParse(value?.trim() ?? '');
@@ -172,7 +195,9 @@ class _InventoryMovementDialogState extends ConsumerState<InventoryMovementDialo
                   decoration: BoxDecoration(
                     color: isDark ? AppTheme.bg1 : AppTheme.lightBg1,
                     borderRadius: BorderRadius.circular(18),
-                    border: Border.all(color: isDark ? AppTheme.border : AppTheme.lightBg4),
+                    border: Border.all(
+                      color: isDark ? AppTheme.border : AppTheme.lightBg4,
+                    ),
                   ),
                   child: Text(
                     _helperText(_type),
@@ -231,7 +256,8 @@ class _MovementProductField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final mutedColor = Theme.of(context).textTheme.bodyMedium?.color ?? AppTheme.muted;
+    final mutedColor =
+        Theme.of(context).textTheme.bodyMedium?.color ?? AppTheme.muted;
     final selectedColor = isDark ? AppTheme.brand : AppTheme.lightBrand;
     final errorColor = isDark ? AppTheme.danger : AppTheme.lightDanger;
 
@@ -262,8 +288,12 @@ class _MovementProductField extends StatelessWidget {
                         ? 'Buscar producto para el movimiento...'
                         : selectedProduct!.name,
                     style: TextStyle(
-                      color: selectedProduct == null ? mutedColor : selectedColor,
-                      fontWeight: selectedProduct == null ? FontWeight.w500 : FontWeight.w600,
+                      color: selectedProduct == null
+                          ? mutedColor
+                          : selectedColor,
+                      fontWeight: selectedProduct == null
+                          ? FontWeight.w500
+                          : FontWeight.w600,
                     ),
                   ),
                 ),
@@ -274,10 +304,7 @@ class _MovementProductField extends StatelessWidget {
         ),
         if (errorText != null) ...[
           const SizedBox(height: 6),
-          Text(
-            errorText!,
-            style: TextStyle(color: errorColor, fontSize: 12),
-          ),
+          Text(errorText!, style: TextStyle(color: errorColor, fontSize: 12)),
         ],
       ],
     );
@@ -285,7 +312,10 @@ class _MovementProductField extends StatelessWidget {
 }
 
 class _MovementProductDialog extends StatefulWidget {
-  const _MovementProductDialog({required this.products, required this.selectedProductId});
+  const _MovementProductDialog({
+    required this.products,
+    required this.selectedProductId,
+  });
 
   final List<ProductRecord> products;
   final int? selectedProductId;
@@ -328,14 +358,14 @@ class _MovementProductDialogState extends State<_MovementProductDialog> {
     return Dialog(
       backgroundColor: AppTheme.transparent,
       insetPadding: const EdgeInsets.all(32),
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 680, maxHeight: 640),
-          child: Container(
-            decoration: BoxDecoration(
-              color: dialogSurface,
-              borderRadius: BorderRadius.circular(30),
-              border: Border.all(color: borderColor),
-            ),
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 680, maxHeight: 640),
+        child: Container(
+          decoration: BoxDecoration(
+            color: dialogSurface,
+            borderRadius: BorderRadius.circular(30),
+            border: Border.all(color: borderColor),
+          ),
           child: Padding(
             padding: const EdgeInsets.all(24),
             child: Column(
@@ -385,10 +415,12 @@ class _MovementProductDialogState extends State<_MovementProductDialog> {
                         )
                       : ListView.separated(
                           itemCount: filteredProducts.length,
-                          separatorBuilder: (_, _) => const SizedBox(height: 10),
+                          separatorBuilder: (_, _) =>
+                              const SizedBox(height: 10),
                           itemBuilder: (context, index) {
                             final product = filteredProducts[index];
-                            final selected = product.id == widget.selectedProductId;
+                            final selected =
+                                product.id == widget.selectedProductId;
 
                             return InkWell(
                               borderRadius: BorderRadius.circular(18),
@@ -396,28 +428,37 @@ class _MovementProductDialogState extends State<_MovementProductDialog> {
                               child: Ink(
                                 padding: const EdgeInsets.all(16),
                                 decoration: BoxDecoration(
-                                  color: selected ? selectedBackground : defaultBackground,
+                                  color: selected
+                                      ? selectedBackground
+                                      : defaultBackground,
                                   borderRadius: BorderRadius.circular(18),
                                   border: Border.all(
-                                    color: selected ? selectedBorder : borderColor,
+                                    color: selected
+                                        ? selectedBorder
+                                        : borderColor,
                                   ),
                                 ),
                                 child: Row(
                                   children: [
                                     Expanded(
                                       child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Text(
                                             product.name,
-                                            style: Theme.of(context).textTheme.titleMedium,
+                                            style: Theme.of(
+                                              context,
+                                            ).textTheme.titleMedium,
                                           ),
                                           const SizedBox(height: 4),
                                           Text(
                                             product.sku?.isNotEmpty == true
                                                 ? product.sku!
                                                 : 'Sin SKU',
-                                            style: Theme.of(context).textTheme.bodyMedium,
+                                            style: Theme.of(
+                                              context,
+                                            ).textTheme.bodyMedium,
                                           ),
                                         ],
                                       ),

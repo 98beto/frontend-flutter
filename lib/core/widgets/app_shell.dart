@@ -72,12 +72,16 @@ class _AppShellState extends ConsumerState<AppShell> {
                                 children: [
                                   Text(
                                     view.title,
-                                    style: Theme.of(context).textTheme.headlineMedium,
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.headlineMedium,
                                   ),
                                   const SizedBox(height: 6),
                                   Text(
                                     view.subtitle,
-                                    style: Theme.of(context).textTheme.bodyMedium,
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.bodyMedium,
                                   ),
                                   const SizedBox(height: 16),
                                   const CashSessionStatusBadge(),
@@ -89,16 +93,21 @@ class _AppShellState extends ConsumerState<AppShell> {
                               children: [
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         view.title,
-                                        style: Theme.of(context).textTheme.headlineMedium,
+                                        style: Theme.of(
+                                          context,
+                                        ).textTheme.headlineMedium,
                                       ),
                                       const SizedBox(height: 6),
                                       Text(
                                         view.subtitle,
-                                        style: Theme.of(context).textTheme.bodyMedium,
+                                        style: Theme.of(
+                                          context,
+                                        ).textTheme.bodyMedium,
                                       ),
                                     ],
                                   ),
@@ -145,7 +154,8 @@ class _AppShellState extends ConsumerState<AppShell> {
       case AppSection.sales:
         return const _ShellView(
           title: 'Ventas',
-          subtitle: 'Consulta el historial de ventas y revisa el detalle de cada operacion.',
+          subtitle:
+              'Consulta el historial de ventas y revisa el detalle de cada operacion.',
           child: SalesPage(),
         );
       case AppSection.cashRegister:

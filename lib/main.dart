@@ -6,6 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pos_desktop/core/storage/shared_preferences_provider.dart';
 import 'package:pos_desktop/core/theme/app_theme.dart';
 import 'package:pos_desktop/core/widgets/app_shell.dart';
+import 'package:pos_desktop/features/auth/presentation/pages/device_login_page.dart';
+import 'package:pos_desktop/features/auth/presentation/providers/auth_session_provider.dart';
 import 'package:pos_desktop/features/settings/presentation/providers/settings_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:window_manager/window_manager.dart';
@@ -51,6 +53,7 @@ class PosDesktopApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final session = ref.watch(authSessionProvider);
     final settings = ref.watch(settingsProvider);
 
     return MaterialApp(
@@ -59,7 +62,7 @@ class PosDesktopApp extends ConsumerWidget {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: _resolveThemeMode(settings.themeMode),
-      home: const AppShell(),
+      home: session == null ? const DeviceLoginPage() : const AppShell(),
     );
   }
 

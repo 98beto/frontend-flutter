@@ -18,7 +18,8 @@ class SaleListItemModel extends SaleListItem {
     return SaleListItemModel(
       id: json['id'] as int? ?? 0,
       saleDate:
-          DateTime.tryParse(json['sale_date'] as String? ?? '') ?? DateTime.now(),
+          DateTime.tryParse(json['sale_date'] as String? ?? '') ??
+          DateTime.now(),
       paymentMethod: json['payment_method'] as String? ?? 'cash',
       status: json['status'] as String? ?? 'completed',
       totalAmount: _toDouble(json['total_amount']),

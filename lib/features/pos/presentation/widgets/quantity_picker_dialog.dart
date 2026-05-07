@@ -61,7 +61,9 @@ class _QuantityPickerDialogState extends State<QuantityPickerDialog> {
           decoration: BoxDecoration(
             color: isDark ? AppTheme.panel : AppTheme.lightBg0,
             borderRadius: BorderRadius.circular(28),
-            border: Border.all(color: isDark ? AppTheme.border : AppTheme.lightBg4),
+            border: Border.all(
+              color: isDark ? AppTheme.border : AppTheme.lightBg4,
+            ),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -80,7 +82,9 @@ class _QuantityPickerDialogState extends State<QuantityPickerDialog> {
                 children: [
                   _StepButton(
                     icon: Icons.remove_rounded,
-                    onPressed: _quantity > 1 ? () => _updateQuantity(_quantity - 1) : null,
+                    onPressed: _quantity > 1
+                        ? () => _updateQuantity(_quantity - 1)
+                        : null,
                   ),
                   const SizedBox(width: 12),
                   Expanded(

@@ -80,7 +80,9 @@ class PaymentActions extends StatelessWidget {
       }),
       overlayColor: WidgetStateProperty.resolveWith((states) {
         if (states.contains(WidgetState.hovered)) {
-          return (isDark ? AppTheme.accent : AppTheme.lightAccent).withValues(alpha: 0.08);
+          return (isDark ? AppTheme.accent : AppTheme.lightAccent).withValues(
+            alpha: 0.08,
+          );
         }
         return null;
       }),
@@ -100,10 +102,7 @@ class PaymentActions extends StatelessWidget {
         RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
       ),
       textStyle: const WidgetStatePropertyAll(
-        TextStyle(
-          fontSize: 14,
-          fontWeight: FontWeight.w600,
-        ),
+        TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
       ),
     );
 
@@ -119,10 +118,17 @@ class PaymentActions extends StatelessWidget {
               width: double.infinity,
               child: ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: isDark ? AppTheme.success : AppTheme.lightSuccess,
-                  foregroundColor: isDark ? AppTheme.black : AppTheme.lightBase00,
+                  backgroundColor: isDark
+                      ? AppTheme.success
+                      : AppTheme.lightSuccess,
+                  foregroundColor: isDark
+                      ? AppTheme.black
+                      : AppTheme.lightBase00,
                   minimumSize: const Size.fromHeight(60),
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 18,
+                  ),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                   ),
@@ -131,7 +137,9 @@ class PaymentActions extends StatelessWidget {
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                onPressed: canChargeSale && !isSubmittingSale ? onChargeSale : null,
+                onPressed: canChargeSale && !isSubmittingSale
+                    ? onChargeSale
+                    : null,
                 icon: const Icon(Icons.payments_rounded, size: 22),
                 label: Text(chargeLabel),
               ),
@@ -141,7 +149,9 @@ class PaymentActions extends StatelessWidget {
               width: double.infinity,
               child: OutlinedButton.icon(
                 style: pendingButtonStyle,
-                onPressed: isCartEmpty && savedCartsCount > 0 ? onRecoverCart : null,
+                onPressed: isCartEmpty && savedCartsCount > 0
+                    ? onRecoverCart
+                    : null,
                 icon: const Icon(Icons.history_rounded, size: 18),
                 label: Text(
                   savedCartsCount > 0
@@ -193,7 +203,9 @@ class PaymentActions extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              hasAssignedCustomer ? 'Cliente asignado' : 'Publico general',
+                              hasAssignedCustomer
+                                  ? 'Cliente asignado'
+                                  : 'Publico general',
                               style: Theme.of(context).textTheme.titleMedium,
                             ),
                             const SizedBox(height: 4),
@@ -216,7 +228,11 @@ class PaymentActions extends StatelessWidget {
                           style: pendingButtonStyle,
                           onPressed: onAssignCustomer,
                           icon: const Icon(Icons.search_rounded, size: 18),
-                          label: Text(hasAssignedCustomer ? 'Cambiar cliente' : 'Asignar cliente'),
+                          label: Text(
+                            hasAssignedCustomer
+                                ? 'Cambiar cliente'
+                                : 'Asignar cliente',
+                          ),
                         ),
                       ),
                       if (hasAssignedCustomer) ...[
@@ -225,7 +241,10 @@ class PaymentActions extends StatelessWidget {
                           child: OutlinedButton.icon(
                             style: pendingButtonStyle,
                             onPressed: onClearCustomer,
-                            icon: const Icon(Icons.person_off_rounded, size: 18),
+                            icon: const Icon(
+                              Icons.person_off_rounded,
+                              size: 18,
+                            ),
                             label: const Text('Quitar'),
                           ),
                         ),

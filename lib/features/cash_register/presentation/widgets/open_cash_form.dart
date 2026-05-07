@@ -3,7 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:pos_desktop/core/theme/app_theme.dart';
 
 class OpenCashForm extends StatefulWidget {
-  const OpenCashForm({super.key, required this.onSubmit, this.isSubmitting = false});
+  const OpenCashForm({
+    super.key,
+    required this.onSubmit,
+    this.isSubmitting = false,
+  });
 
   final Future<void> Function(double openingBalance, String? notes) onSubmit;
   final bool isSubmitting;
@@ -32,7 +36,9 @@ class _OpenCashFormState extends State<OpenCashForm> {
     final amount = double.tryParse(_amountController.text.trim()) ?? 0;
     await widget.onSubmit(
       amount,
-      _notesController.text.trim().isEmpty ? null : _notesController.text.trim(),
+      _notesController.text.trim().isEmpty
+          ? null
+          : _notesController.text.trim(),
     );
   }
 
@@ -65,7 +71,10 @@ class _OpenCashFormState extends State<OpenCashForm> {
                 ),
               ),
               const SizedBox(height: 18),
-              Text('Abrir caja', style: Theme.of(context).textTheme.headlineMedium),
+              Text(
+                'Abrir caja',
+                style: Theme.of(context).textTheme.headlineMedium,
+              ),
               const SizedBox(height: 10),
               Text(
                 'Registra el monto inicial para comenzar un nuevo turno de caja.',
@@ -74,8 +83,12 @@ class _OpenCashFormState extends State<OpenCashForm> {
               const SizedBox(height: 24),
               TextFormField(
                 controller: _amountController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                decoration: const InputDecoration(labelText: 'Monto de apertura'),
+                keyboardType: const TextInputType.numberWithOptions(
+                  decimal: true,
+                ),
+                decoration: const InputDecoration(
+                  labelText: 'Monto de apertura',
+                ),
                 validator: (value) {
                   final amount = double.tryParse(value?.trim() ?? '');
                   if (amount == null || amount <= 0) {
@@ -88,7 +101,9 @@ class _OpenCashFormState extends State<OpenCashForm> {
               TextFormField(
                 controller: _notesController,
                 maxLines: 3,
-                decoration: const InputDecoration(labelText: 'Notas (opcional)'),
+                decoration: const InputDecoration(
+                  labelText: 'Notas (opcional)',
+                ),
               ),
               const SizedBox(height: 24),
               SizedBox(

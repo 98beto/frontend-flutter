@@ -12,7 +12,8 @@ class AppNotificationOverlay extends ConsumerStatefulWidget {
       _AppNotificationOverlayState();
 }
 
-class _AppNotificationOverlayState extends ConsumerState<AppNotificationOverlay> {
+class _AppNotificationOverlayState
+    extends ConsumerState<AppNotificationOverlay> {
   static const _animationDuration = Duration(milliseconds: 260);
 
   final _listKey = GlobalKey<AnimatedListState>();
@@ -21,14 +22,19 @@ class _AppNotificationOverlayState extends ConsumerState<AppNotificationOverlay>
   @override
   void initState() {
     super.initState();
-    _notifications = List<AppNotification>.of(ref.read(appNotificationProvider));
+    _notifications = List<AppNotification>.of(
+      ref.read(appNotificationProvider),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     final notifications = ref.watch(appNotificationProvider);
 
-    ref.listen<List<AppNotification>>(appNotificationProvider, (previous, next) {
+    ref.listen<List<AppNotification>>(appNotificationProvider, (
+      previous,
+      next,
+    ) {
       _syncNotifications(next);
     });
 

@@ -19,12 +19,17 @@ class SettingsRemoteDatasource {
     );
 
     try {
-      await dio.get('/dashboard');
+      await dio.get('/auth/device/me');
     } on DioException catch (error) {
+      if (error.response?.statusCode == 401) {
+        return;
+      }
+
       final responseData = error.response?.data;
       if (responseData is Map<String, dynamic>) {
         throw ApiException(
-          message: responseData['message'] as String? ??
+          message:
+              responseData['message'] as String? ??
               'No fue posible conectar con la API.',
           statusCode: error.response?.statusCode,
           errors: responseData['errors'] as Map<String, dynamic>?,
@@ -45,6 +50,8 @@ class SettingsRemoteDatasource {
       throw const ApiException(message: 'Ingresa una URL valida para la API.');
     }
 
-    return trimmed.endsWith('/') ? trimmed.substring(0, trimmed.length - 1) : trimmed;
+    return trimmed.endsWith('/')
+        ? trimmed.substring(0, trimmed.length - 1)
+        : trimmed;
   }
 }

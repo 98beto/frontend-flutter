@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:pos_desktop/core/config/operation_context.dart';
 import 'package:pos_desktop/core/network/api_envelope.dart';
 import 'package:pos_desktop/core/network/api_exception.dart';
 import 'package:pos_desktop/core/network/paginated_response.dart';
@@ -12,10 +11,9 @@ import 'package:pos_desktop/features/pos/data/models/sale_request_model.dart';
 import 'package:pos_desktop/features/pos/data/models/sale_response_model.dart';
 
 class PosRemoteDatasource {
-  const PosRemoteDatasource(this._dio, this._operationContext);
+  const PosRemoteDatasource(this._dio);
 
   final Dio _dio;
-  final OperationContext _operationContext;
 
   Future<PaginatedResponse<ProductModel>> getProducts({
     int page = 1,
@@ -27,7 +25,8 @@ class PosRemoteDatasource {
         '/products',
         queryParameters: {
           'page': page,
-          if (search != null && search.trim().isNotEmpty) 'search': search.trim(),
+          if (search != null && search.trim().isNotEmpty)
+            'search': search.trim(),
           'category_id': categoryId,
         },
       );
@@ -54,11 +53,17 @@ class PosRemoteDatasource {
         response.data as Map<String, dynamic>,
         (raw) {
           if (raw is Map<String, dynamic>) {
-            return PaginatedResponse.fromJson(raw, CategoryModel.fromJson).items;
+            return PaginatedResponse.fromJson(
+              raw,
+              CategoryModel.fromJson,
+            ).items;
           }
           if (raw is List<dynamic>) {
             return raw
-                .map((item) => CategoryModel.fromJson(item as Map<String, dynamic>))
+                .map(
+                  (item) =>
+                      CategoryModel.fromJson(item as Map<String, dynamic>),
+                )
                 .toList();
           }
           return <CategoryModel>[];
@@ -73,13 +78,7 @@ class PosRemoteDatasource {
 
   Future<CashSessionModel?> getCurrentCashSession() async {
     try {
-      final response = await _dio.get(
-        '/cash-sessions/current',
-        queryParameters: {
-          'branch_id': _operationContext.branchId,
-          'device_identifier': _operationContext.deviceIdentifier,
-        },
-      );
+      final response = await _dio.get('/cash-sessions/current');
 
       final envelope = ApiEnvelope.fromJson(
         response.data as Map<String, dynamic>,
@@ -113,10 +112,7 @@ class PosRemoteDatasource {
 
   Future<PaginatedResponse<SavedCartModel>> getSavedCarts() async {
     try {
-      final response = await _dio.get(
-        '/saved-carts',
-        queryParameters: {'branch_id': _operationContext.branchId},
-      );
+      final response = await _dio.get('/saved-carts');
 
       final envelope = ApiEnvelope.fromJson(
         response.data as Map<String, dynamic>,
@@ -149,10 +145,7 @@ class PosRemoteDatasource {
 
   Future<SavedCartModel> recoverSavedCart(String id) async {
     try {
-      final response = await _dio.patch(
-        '/saved-carts/$id/recover',
-        queryParameters: {'branch_id': _operationContext.branchId},
-      );
+      final response = await _dio.patch('/saved-carts/$id/recover');
 
       final envelope = ApiEnvelope.fromJson(
         response.data as Map<String, dynamic>,
@@ -170,7 +163,10 @@ class PosRemoteDatasource {
     SavedCartRequestModel request,
   ) async {
     try {
-      final response = await _dio.patch('/saved-carts/$id', data: request.toJson());
+      final response = await _dio.patch(
+        '/saved-carts/$id',
+        data: request.toJson(),
+      );
 
       final envelope = ApiEnvelope.fromJson(
         response.data as Map<String, dynamic>,
@@ -196,7 +192,8 @@ class PosRemoteDatasource {
     if (responseData is Map<String, dynamic>) {
       return ApiException(
         message:
-            responseData['message'] as String? ?? 'No fue posible conectar con la API.',
+            responseData['message'] as String? ??
+            'No fue posible conectar con la API.',
         statusCode: error.response?.statusCode,
         errors: responseData['errors'] as Map<String, dynamic>?,
       );

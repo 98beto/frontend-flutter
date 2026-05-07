@@ -4,5 +4,5 @@ import 'package:pos_desktop/features/inventory/presentation/providers/inventory_
 
 final inventoryMovementDetailProvider =
     FutureProvider.family<InventoryMovement, int>((ref, id) async {
-  return ref.watch(inventoryRepositoryProvider).getMovementById(id);
-});
+      return ref.watch(inventoryRepositoryProvider).getMovementById(id);
+    });

@@ -78,108 +78,115 @@ class SalesList extends StatelessWidget {
             itemBuilder: (context, index) {
               final item = items[index];
 
-               return TweenAnimationBuilder<double>(
-                 tween: Tween(begin: 0, end: 0),
-                 duration: const Duration(milliseconds: 160),
-                 builder: (context, _, child) {
-                   return Material(
-                      color: AppTheme.transparent,
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(22),
-                        hoverColor: AppTheme.transparent,
-                        overlayColor: WidgetStateProperty.resolveWith(
-                          (states) => states.contains(WidgetState.hovered)
-                              ? hoverOverlayColor
-                              : null,
-                        ),
-                        onTap: () => onOpenDetail(item),
-                        child: Ink(
-                          padding: const EdgeInsets.all(20),
-                          decoration: BoxDecoration(
-                            color: itemBackground,
-                            borderRadius: BorderRadius.circular(22),
-                            border: Border.all(color: itemBorderColor),
-                          ),
-                   child: Row(
-                     children: [
-                      Container(
-                        width: 52,
-                        height: 52,
+              return TweenAnimationBuilder<double>(
+                tween: Tween(begin: 0, end: 0),
+                duration: const Duration(milliseconds: 160),
+                builder: (context, _, child) {
+                  return Material(
+                    color: AppTheme.transparent,
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(22),
+                      hoverColor: AppTheme.transparent,
+                      overlayColor: WidgetStateProperty.resolveWith(
+                        (states) => states.contains(WidgetState.hovered)
+                            ? hoverOverlayColor
+                            : null,
+                      ),
+                      onTap: () => onOpenDetail(item),
+                      child: Ink(
+                        padding: const EdgeInsets.all(20),
                         decoration: BoxDecoration(
-                          color: iconBackground,
-                          borderRadius: BorderRadius.circular(18),
+                          color: itemBackground,
+                          borderRadius: BorderRadius.circular(22),
+                          border: Border.all(color: itemBorderColor),
                         ),
-                        child: Icon(
-                          Icons.receipt_long_rounded,
-                          color: iconColor,
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        flex: 4,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        child: Row(
                           children: [
-                            Text(
-                              'Venta #${item.id}',
-                              style: Theme.of(context).textTheme.titleMedium,
-                            ),
-                            const SizedBox(height: 6),
-                            Text(
-                              item.customerName ?? 'Publico general',
-                              style: Theme.of(context).textTheme.bodyMedium,
-                            ),
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        flex: 3,
-                        child: Text(
-                          _formatDateTime(item.saleDate),
-                          style: Theme.of(context).textTheme.bodyMedium,
-                        ),
-                      ),
-                      Expanded(
-                        flex: 2,
-                        child: Text(
-                          _paymentMethodLabel(item.paymentMethod),
-                          style: Theme.of(context).textTheme.bodyMedium,
-                        ),
-                      ),
-                      Expanded(
-                        flex: 2,
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 12,
-                              vertical: 8,
-                            ),
-                            decoration: BoxDecoration(
-                              color: successBackground,
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            child: Text(
-                              'Completed',
-                              style: TextStyle(
-                                color: successColor,
-                                fontWeight: FontWeight.w700,
+                            Container(
+                              width: 52,
+                              height: 52,
+                              decoration: BoxDecoration(
+                                color: iconBackground,
+                                borderRadius: BorderRadius.circular(18),
+                              ),
+                              child: Icon(
+                                Icons.receipt_long_rounded,
+                                color: iconColor,
                               ),
                             ),
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 2,
-                        child: Text(
-                          _currency(item.totalAmount),
-                          textAlign: TextAlign.right,
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                       Icon(Icons.chevron_right_rounded, color: trailingColor),
-                     ],
+                            const SizedBox(width: 16),
+                            Expanded(
+                              flex: 4,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Venta #${item.id}',
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.titleMedium,
+                                  ),
+                                  const SizedBox(height: 6),
+                                  Text(
+                                    item.customerName ?? 'Publico general',
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.bodyMedium,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Expanded(
+                              flex: 3,
+                              child: Text(
+                                _formatDateTime(item.saleDate),
+                                style: Theme.of(context).textTheme.bodyMedium,
+                              ),
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: Text(
+                                _paymentMethodLabel(item.paymentMethod),
+                                style: Theme.of(context).textTheme.bodyMedium,
+                              ),
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 12,
+                                    vertical: 8,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: successBackground,
+                                    borderRadius: BorderRadius.circular(16),
+                                  ),
+                                  child: Text(
+                                    'Completed',
+                                    style: TextStyle(
+                                      color: successColor,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: Text(
+                                _currency(item.totalAmount),
+                                textAlign: TextAlign.right,
+                                style: Theme.of(context).textTheme.titleMedium,
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Icon(
+                              Icons.chevron_right_rounded,
+                              color: trailingColor,
+                            ),
+                          ],
                         ),
                       ),
                     ),

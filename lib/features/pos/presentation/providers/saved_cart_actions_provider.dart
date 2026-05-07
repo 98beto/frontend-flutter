@@ -1,5 +1,4 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pos_desktop/core/config/operation_context_provider.dart';
 import 'package:pos_desktop/features/pos/data/models/saved_cart_item_request_model.dart';
 import 'package:pos_desktop/features/pos/data/models/saved_cart_request_model.dart';
 import 'package:pos_desktop/features/pos/domain/entities/cart_item.dart';
@@ -10,8 +9,8 @@ import 'package:pos_desktop/features/pos/presentation/providers/pos_repository_p
 
 final savedCartActionsProvider =
     AsyncNotifierProvider<SavedCartActionsNotifier, SavedCart?>(
-  SavedCartActionsNotifier.new,
-);
+      SavedCartActionsNotifier.new,
+    );
 
 class SavedCartActionsNotifier extends AsyncNotifier<SavedCart?> {
   @override
@@ -31,7 +30,6 @@ class SavedCartActionsNotifier extends AsyncNotifier<SavedCart?> {
 
     final request = SavedCartRequestModel(
       name: name,
-      branchId: ref.read(operationContextProvider).branchId,
       customerId: posState.selectedCustomerId,
       cashSessionId: cashSession?.id,
       discountAmount: discountAmount,
@@ -44,10 +42,9 @@ class SavedCartActionsNotifier extends AsyncNotifier<SavedCart?> {
     state = await AsyncValue.guard(
       () => existingSavedCartId == null
           ? ref.read(posRepositoryProvider).createSavedCart(request)
-          : ref.read(posRepositoryProvider).updateSavedCart(
-                existingSavedCartId,
-                request,
-              ),
+          : ref
+                .read(posRepositoryProvider)
+                .updateSavedCart(existingSavedCartId, request),
     );
 
     return state.requireValue!;
@@ -70,7 +67,10 @@ class SavedCartActionsNotifier extends AsyncNotifier<SavedCart?> {
     });
   }
 
-  List<SavedCartItemRequestModel> _mapItems(List<CartItem> items, double taxRate) {
+  List<SavedCartItemRequestModel> _mapItems(
+    List<CartItem> items,
+    double taxRate,
+  ) {
     return items.map((item) {
       final subtotal = item.product.price * item.quantity;
       final taxAmount = subtotal * taxRate;

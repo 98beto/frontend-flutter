@@ -133,8 +133,12 @@ class _SupplierCardState extends State<_SupplierCard> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final cardColor = _isHovered ? (isDark ? AppTheme.bg1 : AppTheme.lightBg1) : (isDark ? AppTheme.panel : AppTheme.lightBg0);
-    final borderColor = _isHovered ? (isDark ? AppTheme.orange : AppTheme.lightOrange) : (isDark ? AppTheme.border : AppTheme.lightBg4);
+    final cardColor = _isHovered
+        ? (isDark ? AppTheme.bg1 : AppTheme.lightBg1)
+        : (isDark ? AppTheme.panel : AppTheme.lightBg0);
+    final borderColor = _isHovered
+        ? (isDark ? AppTheme.orange : AppTheme.lightOrange)
+        : (isDark ? AppTheme.border : AppTheme.lightBg4);
     final shadowColor = isDark
         ? AppTheme.black.withValues(alpha: 0.18)
         : AppTheme.lightTextStrong.withValues(alpha: 0.08);
@@ -189,15 +193,30 @@ class _SupplierCardState extends State<_SupplierCard> {
                 ],
               ),
               const SizedBox(height: 18),
-              _InfoBlock(label: 'Contacto', value: widget.item.contactPerson ?? 'Sin contacto'),
-              _InfoBlock(label: 'Correo', value: widget.item.email ?? 'Sin correo'),
-              _InfoBlock(label: 'Telefono', value: widget.item.phone ?? 'Sin telefono'),
+              _InfoBlock(
+                label: 'Contacto',
+                value: widget.item.contactPerson ?? 'Sin contacto',
+              ),
+              _InfoBlock(
+                label: 'Correo',
+                value: widget.item.email ?? 'Sin correo',
+              ),
+              _InfoBlock(
+                label: 'Telefono',
+                value: widget.item.phone ?? 'Sin telefono',
+              ),
               _InfoBlock(
                 label: 'Credito',
                 value: '${widget.item.creditDays ?? 0} dias',
               ),
-              _InfoBlock(label: 'Direccion', value: widget.item.address ?? 'Sin direccion'),
-              _InfoBlock(label: 'Banco', value: widget.item.bankInfo ?? 'Sin datos bancarios'),
+              _InfoBlock(
+                label: 'Direccion',
+                value: widget.item.address ?? 'Sin direccion',
+              ),
+              _InfoBlock(
+                label: 'Banco',
+                value: widget.item.bankInfo ?? 'Sin datos bancarios',
+              ),
               const SizedBox(height: 12),
               Row(
                 children: [

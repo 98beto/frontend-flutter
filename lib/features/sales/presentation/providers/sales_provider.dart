@@ -2,7 +2,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pos_desktop/features/sales/domain/entities/sale_list_item.dart';
 import 'package:pos_desktop/features/sales/presentation/providers/sales_repository_provider.dart';
 
-final salesProvider = NotifierProvider<SalesNotifier, SalesState>(SalesNotifier.new);
+final salesProvider = NotifierProvider<SalesNotifier, SalesState>(
+  SalesNotifier.new,
+);
 
 class SalesNotifier extends Notifier<SalesState> {
   @override
@@ -26,7 +28,9 @@ class SalesNotifier extends Notifier<SalesState> {
     );
 
     try {
-      final response = await ref.read(salesRepositoryProvider).getSales(
+      final response = await ref
+          .read(salesRepositoryProvider)
+          .getSales(
             page: 1,
             search: state.search,
             paymentMethod: state.paymentMethod,
@@ -57,7 +61,9 @@ class SalesNotifier extends Notifier<SalesState> {
 
     try {
       final nextPage = state.currentPage + 1;
-      final response = await ref.read(salesRepositoryProvider).getSales(
+      final response = await ref
+          .read(salesRepositoryProvider)
+          .getSales(
             page: nextPage,
             search: state.search,
             paymentMethod: state.paymentMethod,
@@ -150,7 +156,9 @@ class SalesState {
       paymentMethod: identical(paymentMethod, _sentinel)
           ? this.paymentMethod
           : paymentMethod as String?,
-      dateFrom: identical(dateFrom, _sentinel) ? this.dateFrom : dateFrom as DateTime?,
+      dateFrom: identical(dateFrom, _sentinel)
+          ? this.dateFrom
+          : dateFrom as DateTime?,
       dateTo: identical(dateTo, _sentinel) ? this.dateTo : dateTo as DateTime?,
       currentPage: currentPage ?? this.currentPage,
       lastPage: lastPage ?? this.lastPage,

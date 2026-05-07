@@ -27,37 +27,42 @@ class CashRegisterPage extends ConsumerWidget {
     String? notes,
   ) async {
     try {
-      await ref.read(cashRegisterActionsProvider.notifier).openCashSession(
-            openingBalance: openingBalance,
-            notes: notes,
-          );
+      await ref
+          .read(cashRegisterActionsProvider.notifier)
+          .openCashSession(openingBalance: openingBalance, notes: notes);
 
       if (!context.mounted) {
         return;
       }
 
-      ref.read(appNotificationProvider.notifier).showSuccess(
-        title: 'Caja abierta correctamente',
-        message: 'La sesion ya esta lista para operar.',
-      );
+      ref
+          .read(appNotificationProvider.notifier)
+          .showSuccess(
+            title: 'Caja abierta correctamente',
+            message: 'La sesion ya esta lista para operar.',
+          );
     } on ApiException catch (error) {
       if (!context.mounted) {
         return;
       }
 
-      ref.read(appNotificationProvider.notifier).showError(
-        title: 'No fue posible abrir la caja',
-        message: error.message,
-      );
+      ref
+          .read(appNotificationProvider.notifier)
+          .showError(
+            title: 'No fue posible abrir la caja',
+            message: error.message,
+          );
     } catch (_) {
       if (!context.mounted) {
         return;
       }
 
-      ref.read(appNotificationProvider.notifier).showError(
-        title: 'No fue posible abrir la caja',
-        message: 'Verifica la informacion e intenta nuevamente.',
-      );
+      ref
+          .read(appNotificationProvider.notifier)
+          .showError(
+            title: 'No fue posible abrir la caja',
+            message: 'Verifica la informacion e intenta nuevamente.',
+          );
     }
   }
 
@@ -69,39 +74,44 @@ class CashRegisterPage extends ConsumerWidget {
     String? notes,
   ) async {
     try {
-      await ref.read(cashRegisterActionsProvider.notifier).withdrawCash(
-            sessionId: sessionId,
-            amount: amount,
-            notes: notes,
-          );
+      await ref
+          .read(cashRegisterActionsProvider.notifier)
+          .withdrawCash(sessionId: sessionId, amount: amount, notes: notes);
 
       if (!context.mounted) {
         return;
       }
 
-      ref.read(appNotificationProvider.notifier).showSuccess(
-        title: 'Retiro registrado',
-        message: 'La salida de efectivo se registro correctamente en la sesion.',
-      );
+      ref
+          .read(appNotificationProvider.notifier)
+          .showSuccess(
+            title: 'Retiro registrado',
+            message:
+                'La salida de efectivo se registro correctamente en la sesion.',
+          );
       ref.invalidate(cashSessionMovementsProvider(sessionId));
     } on ApiException catch (error) {
       if (!context.mounted) {
         return;
       }
 
-      ref.read(appNotificationProvider.notifier).showError(
-        title: 'No fue posible registrar el retiro',
-        message: error.message,
-      );
+      ref
+          .read(appNotificationProvider.notifier)
+          .showError(
+            title: 'No fue posible registrar el retiro',
+            message: error.message,
+          );
     } catch (_) {
       if (!context.mounted) {
         return;
       }
 
-      ref.read(appNotificationProvider.notifier).showError(
-        title: 'No fue posible registrar el retiro',
-        message: 'Verifica la informacion e intenta nuevamente.',
-      );
+      ref
+          .read(appNotificationProvider.notifier)
+          .showError(
+            title: 'No fue posible registrar el retiro',
+            message: 'Verifica la informacion e intenta nuevamente.',
+          );
     }
   }
 
@@ -113,7 +123,9 @@ class CashRegisterPage extends ConsumerWidget {
     String? notes,
   ) async {
     try {
-      await ref.read(cashRegisterActionsProvider.notifier).closeCashSession(
+      await ref
+          .read(cashRegisterActionsProvider.notifier)
+          .closeCashSession(
             sessionId: sessionId,
             closingBalance: closingBalance,
             notes: notes,
@@ -123,33 +135,42 @@ class CashRegisterPage extends ConsumerWidget {
         return;
       }
 
-      ref.read(appNotificationProvider.notifier).showSuccess(
-        title: 'Caja cerrada correctamente',
-        message: 'El cierre se registro y el POS quedo bloqueado.',
-      );
+      ref
+          .read(appNotificationProvider.notifier)
+          .showSuccess(
+            title: 'Caja cerrada correctamente',
+            message: 'El cierre se registro y el POS quedo bloqueado.',
+          );
       ref.invalidate(cashSessionMovementsProvider(sessionId));
     } on ApiException catch (error) {
       if (!context.mounted) {
         return;
       }
 
-      ref.read(appNotificationProvider.notifier).showError(
-        title: 'No fue posible cerrar la caja',
-        message: error.message,
-      );
+      ref
+          .read(appNotificationProvider.notifier)
+          .showError(
+            title: 'No fue posible cerrar la caja',
+            message: error.message,
+          );
     } catch (_) {
       if (!context.mounted) {
         return;
       }
 
-      ref.read(appNotificationProvider.notifier).showError(
-        title: 'No fue posible cerrar la caja',
-        message: 'Verifica la informacion e intenta nuevamente.',
-      );
+      ref
+          .read(appNotificationProvider.notifier)
+          .showError(
+            title: 'No fue posible cerrar la caja',
+            message: 'Verifica la informacion e intenta nuevamente.',
+          );
     }
   }
 
-  Future<void> _showCashSessionHistoryDialog(BuildContext context, WidgetRef ref) {
+  Future<void> _showCashSessionHistoryDialog(
+    BuildContext context,
+    WidgetRef ref,
+  ) {
     ref.invalidate(cashSessionsHistoryProvider);
     return showDialog<void>(
       context: context,
@@ -260,12 +281,13 @@ class CashRegisterPage extends ConsumerWidget {
                             children: [
                               OpenCashForm(
                                 isSubmitting: actionsState.isLoading,
-                                onSubmit: (openingBalance, notes) => _openCashSession(
-                                  context,
-                                  ref,
-                                  openingBalance,
-                                  notes,
-                                ),
+                                onSubmit: (openingBalance, notes) =>
+                                    _openCashSession(
+                                      context,
+                                      ref,
+                                      openingBalance,
+                                      notes,
+                                    ),
                               ),
                               const SizedBox(height: 18),
                               const _CashRegisterInfoCard(),
@@ -294,7 +316,9 @@ class CashRegisterPage extends ConsumerWidget {
                         final canShowSideBySide = constraints.maxWidth >= 960;
 
                         final withdrawForm = SizedBox(
-                          width: canShowSideBySide ? withdrawWidth : double.infinity,
+                          width: canShowSideBySide
+                              ? withdrawWidth
+                              : double.infinity,
                           child: WithdrawCashForm(
                             isSubmitting: actionsState.isLoading,
                             onSubmit: (amount, notes) => _withdrawCash(
@@ -309,13 +333,14 @@ class CashRegisterPage extends ConsumerWidget {
 
                         final closeForm = CloseCashForm(
                           isSubmitting: actionsState.isLoading,
-                          onSubmit: (closingBalance, notes) => _closeCashSession(
-                            context,
-                            ref,
-                            session.id,
-                            closingBalance,
-                            notes,
-                          ),
+                          onSubmit: (closingBalance, notes) =>
+                              _closeCashSession(
+                                context,
+                                ref,
+                                session.id,
+                                closingBalance,
+                                notes,
+                              ),
                         );
 
                         if (canShowSideBySide) {

@@ -18,10 +18,7 @@ class SettingsConnectionState {
     : this(type: SettingsConnectionStateType.testing);
 
   const SettingsConnectionState.success(DateTime checkedAt)
-    : this(
-        type: SettingsConnectionStateType.success,
-        lastCheckedAt: checkedAt,
-      );
+    : this(type: SettingsConnectionStateType.success, lastCheckedAt: checkedAt);
 
   const SettingsConnectionState.failure({String? message, DateTime? checkedAt})
     : this(
@@ -31,10 +28,7 @@ class SettingsConnectionState {
       );
 
   const SettingsConnectionState.invalidUrl({String? message})
-    : this(
-        type: SettingsConnectionStateType.invalidUrl,
-        message: message,
-      );
+    : this(type: SettingsConnectionStateType.invalidUrl, message: message);
 
   final SettingsConnectionStateType type;
   final String? message;
@@ -45,8 +39,8 @@ class SettingsConnectionState {
 
 final settingsConnectionProvider =
     NotifierProvider<SettingsConnectionNotifier, SettingsConnectionState>(
-  SettingsConnectionNotifier.new,
-);
+      SettingsConnectionNotifier.new,
+    );
 
 class SettingsConnectionNotifier extends Notifier<SettingsConnectionState> {
   @override
@@ -57,7 +51,10 @@ class SettingsConnectionNotifier extends Notifier<SettingsConnectionState> {
   Future<void> testConnection(String baseUrl) async {
     final trimmedBaseUrl = baseUrl.trim();
     final uri = Uri.tryParse(trimmedBaseUrl);
-    if (trimmedBaseUrl.isEmpty || uri == null || !uri.hasScheme || uri.host.isEmpty) {
+    if (trimmedBaseUrl.isEmpty ||
+        uri == null ||
+        !uri.hasScheme ||
+        uri.host.isEmpty) {
       state = const SettingsConnectionState.invalidUrl(
         message: 'Ingresa una URL valida. Ejemplo: http://127.0.0.1:8000/api',
       );

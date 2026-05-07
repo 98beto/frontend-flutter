@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:pos_desktop/core/config/operation_context.dart';
 import 'package:pos_desktop/core/network/api_envelope.dart';
 import 'package:pos_desktop/core/network/api_exception.dart';
 import 'package:pos_desktop/core/network/paginated_response.dart';
@@ -7,10 +6,9 @@ import 'package:pos_desktop/features/sales/data/models/sale_detail_model.dart';
 import 'package:pos_desktop/features/sales/data/models/sale_list_item_model.dart';
 
 class SalesRemoteDatasource {
-  const SalesRemoteDatasource(this._dio, this._operationContext);
+  const SalesRemoteDatasource(this._dio);
 
   final Dio _dio;
-  final OperationContext _operationContext;
 
   Future<PaginatedResponse<SaleListItemModel>> getSales({
     int page = 1,
@@ -24,8 +22,8 @@ class SalesRemoteDatasource {
         '/sales',
         queryParameters: {
           'page': page,
-          'branch_id': _operationContext.branchId,
-          if (search != null && search.trim().isNotEmpty) 'search': search.trim(),
+          if (search != null && search.trim().isNotEmpty)
+            'search': search.trim(),
           if (paymentMethod != null && paymentMethod.isNotEmpty)
             'payment_method': paymentMethod,
           if (dateFrom != null) 'date_from': _formatDate(dateFrom),
@@ -67,7 +65,8 @@ class SalesRemoteDatasource {
     if (responseData is Map<String, dynamic>) {
       return ApiException(
         message:
-            responseData['message'] as String? ?? 'No fue posible conectar con la API.',
+            responseData['message'] as String? ??
+            'No fue posible conectar con la API.',
         statusCode: error.response?.statusCode,
         errors: responseData['errors'] as Map<String, dynamic>?,
       );

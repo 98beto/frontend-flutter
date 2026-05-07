@@ -31,11 +31,14 @@ class _DashboardMetricCardState extends State<DashboardMetricCard> {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
     final isDark = theme.brightness == Brightness.dark;
-    final color = widget.accentColor ?? (isDark ? AppTheme.brand : AppTheme.lightBrand);
+    final color =
+        widget.accentColor ?? (isDark ? AppTheme.brand : AppTheme.lightBrand);
     final backgroundColor = _isHovered
         ? (isDark ? AppTheme.bg1 : AppTheme.lightBg1)
         : (isDark ? AppTheme.panel : AppTheme.lightBg0);
-    final borderColor = _isHovered ? color : (isDark ? AppTheme.border : AppTheme.lightBg4);
+    final borderColor = _isHovered
+        ? color
+        : (isDark ? AppTheme.border : AppTheme.lightBg4);
     final shadowColor = isDark
         ? AppTheme.black.withValues(alpha: 0.18)
         : AppTheme.lightTextStrong.withValues(alpha: 0.08);
@@ -64,7 +67,8 @@ class _DashboardMetricCardState extends State<DashboardMetricCard> {
         ),
         child: LayoutBuilder(
           builder: (context, constraints) {
-            final isCompact = constraints.maxWidth < 210 || constraints.maxHeight < 120;
+            final isCompact =
+                constraints.maxWidth < 210 || constraints.maxHeight < 120;
             final padding = isCompact ? 12.0 : 16.0;
             final titleFontSize = isCompact ? 14.0 : 15.0;
             final iconBoxSize = isCompact ? 38.0 : 42.0;
@@ -102,8 +106,12 @@ class _DashboardMetricCardState extends State<DashboardMetricCard> {
                         width: iconBoxSize,
                         height: iconBoxSize,
                         decoration: BoxDecoration(
-                          color: color.withValues(alpha: _isHovered ? 0.18 : 0.12),
-                          borderRadius: BorderRadius.circular(isCompact ? 14 : 16),
+                          color: color.withValues(
+                            alpha: _isHovered ? 0.18 : 0.12,
+                          ),
+                          borderRadius: BorderRadius.circular(
+                            isCompact ? 14 : 16,
+                          ),
                         ),
                         child: Icon(widget.icon, color: color, size: iconSize),
                       ),

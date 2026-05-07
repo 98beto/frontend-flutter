@@ -25,7 +25,9 @@ class CashMovementModel extends CashMovement {
       source: json['source'] as String? ?? 'manual',
       referenceId: json['reference_id'] as int?,
       notes: json['notes'] as String?,
-      createdAt: DateTime.tryParse(json['created_at'] as String? ?? '') ?? DateTime.now(),
+      createdAt:
+          DateTime.tryParse(json['created_at'] as String? ?? '') ??
+          DateTime.now(),
     );
   }
 

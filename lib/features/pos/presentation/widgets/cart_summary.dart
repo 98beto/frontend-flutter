@@ -55,8 +55,12 @@ class CartSummary extends StatelessWidget {
                 ),
                 OutlinedButton.icon(
                   onPressed: onEditDiscount,
-                  icon: Icon(hasDiscount ? Icons.edit_rounded : Icons.sell_rounded),
-                  label: Text(hasDiscount ? 'Editar descuento' : 'Aplicar descuento'),
+                  icon: Icon(
+                    hasDiscount ? Icons.edit_rounded : Icons.sell_rounded,
+                  ),
+                  label: Text(
+                    hasDiscount ? 'Editar descuento' : 'Aplicar descuento',
+                  ),
                 ),
               ],
             ),
@@ -125,10 +129,7 @@ class _SummaryRow extends StatelessWidget {
           child: Row(
             children: [
               Flexible(child: Text(label, style: baseStyle)),
-              if (action != null) ...[
-                const SizedBox(width: 8),
-                action!,
-              ],
+              if (action != null) ...[const SizedBox(width: 8), action!],
             ],
           ),
         ),

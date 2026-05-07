@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pos_desktop/core/network/dio_provider.dart';
 import 'package:pos_desktop/core/notifications/app_notification_provider.dart';
 import 'package:pos_desktop/core/theme/app_theme.dart';
+import 'package:pos_desktop/features/auth/presentation/providers/auth_actions_provider.dart';
+import 'package:pos_desktop/features/auth/presentation/providers/auth_session_provider.dart';
 import 'package:pos_desktop/features/cash_register/presentation/providers/cash_sessions_history_provider.dart';
 import 'package:pos_desktop/features/dashboard/presentation/providers/dashboard_provider.dart';
 import 'package:pos_desktop/features/inventory/presentation/providers/inventory_movements_provider.dart';
@@ -28,10 +30,6 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
   static const _twoColumnBreakpoint = 1100.0;
 
   final _formKey = GlobalKey<FormState>();
-  final _branchIdController = TextEditingController();
-  final _branchNameController = TextEditingController();
-  final _deviceIdentifierController = TextEditingController();
-  final _deviceNameController = TextEditingController();
   final _apiBaseUrlController = TextEditingController();
   final _defaultTaxRateController = TextEditingController();
 
@@ -44,26 +42,14 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
   @override
   void initState() {
     super.initState();
-    _branchIdController.addListener(_handleDraftChanged);
-    _branchNameController.addListener(_handleDraftChanged);
-    _deviceIdentifierController.addListener(_handleDraftChanged);
-    _deviceNameController.addListener(_handleDraftChanged);
     _defaultTaxRateController.addListener(_handleDraftChanged);
     _apiBaseUrlController.addListener(_handleApiUrlChanged);
   }
 
   @override
   void dispose() {
-    _branchIdController.removeListener(_handleDraftChanged);
-    _branchNameController.removeListener(_handleDraftChanged);
-    _deviceIdentifierController.removeListener(_handleDraftChanged);
-    _deviceNameController.removeListener(_handleDraftChanged);
     _defaultTaxRateController.removeListener(_handleDraftChanged);
     _apiBaseUrlController.removeListener(_handleApiUrlChanged);
-    _branchIdController.dispose();
-    _branchNameController.dispose();
-    _deviceIdentifierController.dispose();
-    _deviceNameController.dispose();
     _apiBaseUrlController.dispose();
     _defaultTaxRateController.dispose();
     super.dispose();
@@ -72,7 +58,11 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     final settings = ref.watch(settingsProvider);
+    final session = ref.watch(authSessionProvider);
     final connectionState = ref.watch(settingsConnectionProvider);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final dangerColor = isDark ? AppTheme.danger : AppTheme.lightDanger;
+    final dangerBackground = isDark ? AppTheme.bgRed : AppTheme.lightBgRed;
 
     if (!_didSeedForm) {
       _seedForm(settings);
@@ -80,57 +70,6 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
 
     final hasChanges = _buildDraft() != settings;
     final canSave = !_isSaving && hasChanges;
-
-    final operationCard = _SettingsCard(
-      title: 'Operacion',
-      subtitle: 'Identifica esta caja dentro de la operacion actual.',
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          TextFormField(
-            controller: _branchIdController,
-            keyboardType: TextInputType.number,
-            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-            decoration: const InputDecoration(labelText: 'Branch ID'),
-            validator: _validateBranchId,
-          ),
-          const SizedBox(height: 8),
-          const _FieldHint(
-            'ID numerico de la sucursal usada por ventas, caja e inventario. Debe existir en la API.',
-          ),
-          const SizedBox(height: 18),
-          TextFormField(
-            controller: _branchNameController,
-            decoration: const InputDecoration(labelText: 'Nombre de sucursal'),
-          ),
-          const SizedBox(height: 8),
-          const _FieldHint(
-            'Nombre descriptivo local para identificar esta caja.',
-          ),
-          const SizedBox(height: 18),
-          TextFormField(
-            controller: _deviceIdentifierController,
-            decoration: const InputDecoration(labelText: 'ID del dispositivo'),
-            validator: _validateDeviceIdentifier,
-          ),
-          const SizedBox(height: 8),
-          const _FieldHint(
-            'Se envia a la API para identificar esta caja. Ejemplo: POS-01',
-          ),
-          const SizedBox(height: 18),
-          TextFormField(
-            controller: _deviceNameController,
-            decoration: const InputDecoration(
-              labelText: 'Nombre visible del equipo',
-            ),
-          ),
-          const SizedBox(height: 8),
-          const _FieldHint(
-            'Nombre mostrado dentro de la aplicacion.',
-          ),
-        ],
-      ),
-    );
 
     final connectionCard = _SettingsCard(
       title: 'Conexion',
@@ -145,7 +84,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
           ),
           const SizedBox(height: 8),
           const _FieldHint(
-            'Direccion base del backend para consultas y operaciones del sistema.',
+            'Direccion base del backend. Si la API responde 401, la URL sigue siendo valida pero requiere sesion.',
           ),
           const SizedBox(height: 20),
           _ConnectionStatusCard(state: connectionState),
@@ -153,7 +92,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
           Align(
             alignment: Alignment.centerRight,
             child: OutlinedButton.icon(
-              onPressed: connectionState.isTesting ? null : () => _testConnection(context),
+              onPressed: connectionState.isTesting ? null : _testConnection,
               icon: connectionState.isTesting
                   ? const SizedBox(
                       width: 16,
@@ -198,10 +137,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
             items: const [
               DropdownMenuItem(value: 'cash', child: Text('Efectivo')),
               DropdownMenuItem(value: 'card', child: Text('Tarjeta')),
-              DropdownMenuItem(
-                value: 'transfer',
-                child: Text('Transferencia'),
-              ),
+              DropdownMenuItem(value: 'transfer', child: Text('Transferencia')),
             ],
             onChanged: (value) {
               if (value == null) {
@@ -240,24 +176,82 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       ),
     );
 
-    final systemCard = _SettingsCard(
-      title: 'Sistema',
-      subtitle: 'Informacion general y diagnostico rapido.',
-      child: Wrap(
-        spacing: 24,
-        runSpacing: 16,
+    final sessionCard = _SettingsCard(
+      title: 'Sesion actual',
+      subtitle: 'Resumen del estado autenticado y acciones de sesion.',
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          _InfoLine(label: 'Version de la app', value: '1.0.0+1'),
-          _InfoLine(label: 'Branch ID actual', value: '${settings.branchId}'),
-          _InfoLine(
-            label: 'Device ID actual',
-            value: settings.deviceIdentifier,
+          Wrap(
+            spacing: 24,
+            runSpacing: 16,
+            children: [
+              const _InfoLine(label: 'Version de la app', value: '1.0.0+1'),
+              _InfoLine(
+                label: 'Estado de sesion',
+                value: session == null
+                    ? 'Sin sesion autenticada'
+                    : 'Dispositivo autenticado',
+              ),
+              _InfoLine(
+                label: 'Sucursal activa',
+                value: session?.branchName ?? 'Se definira al iniciar sesion',
+              ),
+              _InfoLine(
+                label: 'Dispositivo activo',
+                value:
+                    session?.deviceIdentifier ??
+                    'Se definira al iniciar sesion',
+              ),
+              _InfoLine(label: 'API actual', value: settings.apiBaseUrl),
+              _InfoLine(
+                label: 'Estado de conexion',
+                value: _connectionLabel(connectionState),
+              ),
+            ],
           ),
-          _InfoLine(label: 'API actual', value: settings.apiBaseUrl),
-          _InfoLine(
-            label: 'Estado de conexion',
-            value: _connectionLabel(connectionState),
-          ),
+          if (session != null) ...[
+            const SizedBox(height: 20),
+            Container(
+              padding: const EdgeInsets.all(18),
+              decoration: BoxDecoration(
+                color: dangerBackground,
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: dangerColor),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    'Cerrar sesion del dispositivo',
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    'Finaliza la sesion actual y devuelve la app a la pantalla de acceso.',
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                  const SizedBox(height: 16),
+                  ElevatedButton.icon(
+                    onPressed: _logout,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: dangerColor,
+                      foregroundColor: Theme.of(context).colorScheme.onError,
+                      disabledBackgroundColor: dangerColor.withValues(
+                        alpha: 0.35,
+                      ),
+                      disabledForegroundColor: Theme.of(
+                        context,
+                      ).colorScheme.onError.withValues(alpha: 0.7),
+                      minimumSize: const Size.fromHeight(56),
+                    ),
+                    icon: const Icon(Icons.logout_rounded),
+                    label: const Text('Cerrar sesion'),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ],
       ),
     );
@@ -270,7 +264,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
         ),
         const Spacer(),
         ElevatedButton(
-          onPressed: canSave ? () => _saveSettings(context) : null,
+          onPressed: canSave ? _saveSettings : null,
           child: _isSaving
               ? const SizedBox(
                   width: 18,
@@ -290,18 +284,17 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
             key: _formKey,
             child: LayoutBuilder(
               builder: (context, constraints) {
-                final useTwoColumns = constraints.maxWidth >= _twoColumnBreakpoint;
+                final useTwoColumns =
+                    constraints.maxWidth >= _twoColumnBreakpoint;
 
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     if (useTwoColumns) ...[
-                      _TwoColumnRow(left: operationCard, right: connectionCard),
+                      _TwoColumnRow(left: connectionCard, right: saleCard),
                       const SizedBox(height: 20),
-                      _TwoColumnRow(left: saleCard, right: appearanceCard),
+                      appearanceCard,
                     ] else ...[
-                      operationCard,
-                      const SizedBox(height: 20),
                       connectionCard,
                       const SizedBox(height: 20),
                       saleCard,
@@ -309,7 +302,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                       appearanceCard,
                     ],
                     const SizedBox(height: 20),
-                    systemCard,
+                    sessionCard,
                     const SizedBox(height: 24),
                     actions,
                   ],
@@ -324,10 +317,6 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
 
   void _seedForm(AppSettings settings) {
     _isSyncingForm = true;
-    _branchIdController.text = '${settings.branchId}';
-    _branchNameController.text = settings.branchName;
-    _deviceIdentifierController.text = settings.deviceIdentifier;
-    _deviceNameController.text = settings.deviceName;
     _apiBaseUrlController.text = settings.apiBaseUrl;
     _defaultTaxRateController.text = settings.defaultTaxRate.toStringAsFixed(2);
     _defaultPaymentMethod = settings.defaultPaymentMethod;
@@ -359,24 +348,23 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
 
   AppSettings _buildDraft() {
     return AppSettings(
-      branchId: int.tryParse(_branchIdController.text.trim()) ?? 0,
-      branchName: _branchNameController.text.trim(),
-      deviceIdentifier: _deviceIdentifierController.text.trim(),
-      deviceName: _deviceNameController.text.trim(),
       apiBaseUrl: _normalizeBaseUrl(_apiBaseUrlController.text),
-      defaultTaxRate: double.tryParse(_defaultTaxRateController.text.trim()) ?? -1,
+      defaultTaxRate:
+          double.tryParse(_defaultTaxRateController.text.trim()) ?? -1,
       defaultPaymentMethod: _defaultPaymentMethod,
       themeMode: _themeMode,
     );
   }
 
-  Future<void> _testConnection(BuildContext context) async {
+  Future<void> _testConnection() async {
     if (_validateApiBaseUrl(_apiBaseUrlController.text) != null) {
       _formKey.currentState?.validate();
-      ref.read(appNotificationProvider.notifier).showWarning(
-        title: 'URL invalida',
-        message: 'Ingresa una URL valida para probar la conexion.',
-      );
+      ref
+          .read(appNotificationProvider.notifier)
+          .showWarning(
+            title: 'URL invalida',
+            message: 'Ingresa una URL valida para probar la conexion.',
+          );
       return;
     }
 
@@ -391,22 +379,25 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     final state = ref.read(settingsConnectionProvider);
     switch (state.type) {
       case SettingsConnectionStateType.success:
-        ref.read(appNotificationProvider.notifier).showSuccess(
-          title: 'Conexion verificada',
-          message: 'La API respondio correctamente.',
-        );
+        ref
+            .read(appNotificationProvider.notifier)
+            .showSuccess(
+              title: 'Conexion verificada',
+              message: 'La API es alcanzable desde esta app.',
+            );
         break;
       case SettingsConnectionStateType.failure:
-        ref.read(appNotificationProvider.notifier).showError(
-          title: 'No fue posible conectar con la API',
-          message: state.message,
-        );
+        ref
+            .read(appNotificationProvider.notifier)
+            .showError(
+              title: 'No fue posible conectar con la API',
+              message: state.message,
+            );
         break;
       case SettingsConnectionStateType.invalidUrl:
-        ref.read(appNotificationProvider.notifier).showWarning(
-          title: 'URL invalida',
-          message: state.message,
-        );
+        ref
+            .read(appNotificationProvider.notifier)
+            .showWarning(title: 'URL invalida', message: state.message);
         break;
       case SettingsConnectionStateType.idle:
       case SettingsConnectionStateType.testing:
@@ -414,13 +405,15 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     }
   }
 
-  Future<void> _saveSettings(BuildContext context) async {
+  Future<void> _saveSettings() async {
     final form = _formKey.currentState;
     if (form == null || !form.validate()) {
-      ref.read(appNotificationProvider.notifier).showWarning(
-        title: 'Revisa los campos marcados',
-        message: 'Corrige los valores antes de guardar los cambios.',
-      );
+      ref
+          .read(appNotificationProvider.notifier)
+          .showWarning(
+            title: 'Revisa los campos marcados',
+            message: 'Corrige los valores antes de guardar los cambios.',
+          );
       return;
     }
 
@@ -451,18 +444,21 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       _isSaving = false;
     });
 
-    ref.read(appNotificationProvider.notifier).showSuccess(
-      title: 'Configuracion guardada',
-      message: 'Los cambios ya estan disponibles en esta caja.',
-    );
+    ref
+        .read(appNotificationProvider.notifier)
+        .showSuccess(
+          title: 'Configuracion guardada',
+          message: 'Los cambios locales ya estan disponibles en esta app.',
+        );
 
-    if (previousSettings.branchId != nextSettings.branchId ||
-        previousSettings.deviceIdentifier != nextSettings.deviceIdentifier ||
-        previousSettings.apiBaseUrl != nextSettings.apiBaseUrl) {
-      ref.read(appNotificationProvider.notifier).showInfo(
-        title: 'Contexto operativo actualizado',
-        message: 'La app recargara caja, ventas y catalogos con la nueva configuracion.',
-      );
+    if (previousSettings.apiBaseUrl != nextSettings.apiBaseUrl) {
+      ref
+          .read(appNotificationProvider.notifier)
+          .showInfo(
+            title: 'API actualizada',
+            message:
+                'La siguiente autenticacion usara la nueva URL configurada.',
+          );
     }
   }
 
@@ -475,34 +471,45 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     ref.invalidate(dioProvider);
     ref.invalidate(cashSessionProvider);
 
-    ref.read(appNotificationProvider.notifier).showInfo(
-      title: 'Configuracion restablecida',
-      message: 'Se restauraron los valores predeterminados.',
-    );
+    ref
+        .read(appNotificationProvider.notifier)
+        .showInfo(
+          title: 'Configuracion restablecida',
+          message: 'Se restauraron los valores predeterminados.',
+        );
   }
 
-  String? _validateBranchId(String? value) {
-    final parsed = int.tryParse(value?.trim() ?? '');
-    if (parsed == null || parsed <= 0) {
-      return 'El Branch ID es obligatorio y debe ser mayor a 0.';
+  Future<void> _logout() async {
+    try {
+      await ref.read(authActionsProvider.notifier).logout();
+
+      if (!mounted) {
+        return;
+      }
+
+      ref
+          .read(appNotificationProvider.notifier)
+          .showSuccess(
+            title: 'Sesion cerrada',
+            message: 'El dispositivo ya no tiene una sesion activa.',
+          );
+    } catch (_) {
+      ref
+          .read(appNotificationProvider.notifier)
+          .showError(
+            title: 'No fue posible cerrar sesion',
+            message: 'Verifica la conexion o intenta nuevamente.',
+          );
     }
-
-    return null;
-  }
-
-  String? _validateDeviceIdentifier(String? value) {
-    final normalized = value?.trim() ?? '';
-    if (normalized.isEmpty) {
-      return 'El ID del dispositivo es obligatorio.';
-    }
-
-    return null;
   }
 
   String? _validateApiBaseUrl(String? value) {
     final normalized = _normalizeBaseUrl(value);
     final uri = Uri.tryParse(normalized);
-    if (normalized.isEmpty || uri == null || !uri.hasScheme || uri.host.isEmpty) {
+    if (normalized.isEmpty ||
+        uri == null ||
+        !uri.hasScheme ||
+        uri.host.isEmpty) {
       return 'Ingresa una URL valida. Ejemplo: http://127.0.0.1:8000/api';
     }
 
@@ -520,7 +527,9 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
 
   String _normalizeBaseUrl(String? value) {
     final trimmed = value?.trim() ?? '';
-    return trimmed.endsWith('/') ? trimmed.substring(0, trimmed.length - 1) : trimmed;
+    return trimmed.endsWith('/')
+        ? trimmed.substring(0, trimmed.length - 1)
+        : trimmed;
   }
 
   String _connectionLabel(SettingsConnectionState state) {
@@ -596,10 +605,7 @@ class _FieldHint extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      text,
-      style: Theme.of(context).textTheme.bodySmall,
-    );
+    return Text(text, style: Theme.of(context).textTheme.bodySmall);
   }
 }
 
@@ -632,11 +638,14 @@ class _ConnectionStatusCard extends StatelessWidget {
     };
 
     final description = switch (state.type) {
-      SettingsConnectionStateType.idle => 'Ultima prueba: Sin pruebas recientes',
-      SettingsConnectionStateType.testing => 'Ultima prueba: Verificando respuesta del servidor...',
+      SettingsConnectionStateType.idle =>
+        'Ultima prueba: Sin pruebas recientes',
+      SettingsConnectionStateType.testing =>
+        'Ultima prueba: Verificando respuesta del servidor...',
       SettingsConnectionStateType.success =>
         'Ultima prueba: ${_formatRelative(state.lastCheckedAt)}',
-      SettingsConnectionStateType.failure => 'Ultima prueba: Error en la ultima verificacion',
+      SettingsConnectionStateType.failure =>
+        'Ultima prueba: Error en la ultima verificacion',
       SettingsConnectionStateType.invalidUrl =>
         'Ultima prueba: Corrige la direccion antes de intentar de nuevo',
     };
@@ -655,7 +664,10 @@ class _ConnectionStatusCard extends StatelessWidget {
           Row(
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 8,
+                ),
                 decoration: BoxDecoration(
                   color: color.withValues(alpha: 0.14),
                   borderRadius: BorderRadius.circular(999),

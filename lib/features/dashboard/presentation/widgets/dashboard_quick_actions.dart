@@ -58,7 +58,8 @@ class DashboardQuickActions extends StatelessWidget {
             id: 'cash',
             icon: Icons.account_balance_wallet_rounded,
             title: 'Abrir caja',
-            subtitle: 'Necesaria para habilitar el cobro en POS y comenzar a operar.',
+            subtitle:
+                'Necesaria para habilitar el cobro en POS y comenzar a operar.',
             onTap: onOpenCashRegister,
             badge: 'Accion prioritaria',
             accentColor: isDark ? AppTheme.danger : AppTheme.lightDanger,
@@ -68,7 +69,8 @@ class DashboardQuickActions extends StatelessWidget {
             id: 'inventory',
             icon: Icons.warning_amber_rounded,
             title: 'Revisar inventario',
-            subtitle: 'Hay $lowStockCount productos con alerta de stock por atender.',
+            subtitle:
+                'Hay $lowStockCount productos con alerta de stock por atender.',
             onTap: onOpenInventory,
             badge: 'Atencion requerida',
             accentColor: isDark ? AppTheme.danger : AppTheme.lightDanger,
@@ -77,7 +79,8 @@ class DashboardQuickActions extends StatelessWidget {
             id: 'pos',
             icon: Icons.point_of_sale_rounded,
             title: 'Ir a POS',
-            subtitle: 'Continua cobrando y gestionando el carrito activo del mostrador.',
+            subtitle:
+                'Continua cobrando y gestionando el carrito activo del mostrador.',
             onTap: onOpenPos,
             badge: 'Siguiente paso',
           );
@@ -132,7 +135,8 @@ class _PrimaryQuickActionCard extends StatefulWidget {
   final _QuickActionData action;
 
   @override
-  State<_PrimaryQuickActionCard> createState() => _PrimaryQuickActionCardState();
+  State<_PrimaryQuickActionCard> createState() =>
+      _PrimaryQuickActionCardState();
 }
 
 class _PrimaryQuickActionCardState extends State<_PrimaryQuickActionCard> {
@@ -143,7 +147,9 @@ class _PrimaryQuickActionCardState extends State<_PrimaryQuickActionCard> {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
     final isDark = theme.brightness == Brightness.dark;
-    final color = widget.action.accentColor ?? (isDark ? AppTheme.brand : AppTheme.lightBrand);
+    final color =
+        widget.action.accentColor ??
+        (isDark ? AppTheme.brand : AppTheme.lightBrand);
     final shadowColor = isDark
         ? AppTheme.black.withValues(alpha: 0.18)
         : AppTheme.lightTextStrong.withValues(alpha: 0.08);
@@ -163,7 +169,9 @@ class _PrimaryQuickActionCardState extends State<_PrimaryQuickActionCard> {
           decoration: BoxDecoration(
             color: color.withValues(alpha: _isHovered ? 0.12 : 0.08),
             borderRadius: BorderRadius.circular(24),
-            border: Border.all(color: color.withValues(alpha: _isHovered ? 0.45 : 0.2)),
+            border: Border.all(
+              color: color.withValues(alpha: _isHovered ? 0.45 : 0.2),
+            ),
             boxShadow: _isHovered
                 ? [
                     BoxShadow(
@@ -178,7 +186,10 @@ class _PrimaryQuickActionCardState extends State<_PrimaryQuickActionCard> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 6,
+                ),
                 decoration: BoxDecoration(
                   color: color.withValues(alpha: _isHovered ? 0.2 : 0.14),
                   borderRadius: BorderRadius.circular(999),
@@ -201,7 +212,11 @@ class _PrimaryQuickActionCardState extends State<_PrimaryQuickActionCard> {
                     decoration: BoxDecoration(
                       color: iconCardColor,
                       borderRadius: BorderRadius.circular(18),
-                      border: Border.all(color: color.withValues(alpha: _isHovered ? 0.36 : 0.18)),
+                      border: Border.all(
+                        color: color.withValues(
+                          alpha: _isHovered ? 0.36 : 0.18,
+                        ),
+                      ),
                     ),
                     child: Icon(widget.action.icon, color: color, size: 26),
                   ),
@@ -212,16 +227,14 @@ class _PrimaryQuickActionCardState extends State<_PrimaryQuickActionCard> {
                       children: [
                         Text(
                           widget.action.title,
-                          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            fontWeight: FontWeight.w700,
-                          ),
+                          style: Theme.of(context).textTheme.titleLarge
+                              ?.copyWith(fontWeight: FontWeight.w700),
                         ),
                         const SizedBox(height: 6),
                         Text(
                           widget.action.subtitle,
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: subtitleColor,
-                          ),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(color: subtitleColor),
                         ),
                       ],
                     ),
@@ -334,9 +347,15 @@ class _QuickActionRowState extends State<_QuickActionRow> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(widget.title, style: Theme.of(context).textTheme.titleMedium),
+                    Text(
+                      widget.title,
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
                     const SizedBox(height: 4),
-                    Text(widget.subtitle, style: Theme.of(context).textTheme.bodyMedium),
+                    Text(
+                      widget.subtitle,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
                   ],
                 ),
               ),

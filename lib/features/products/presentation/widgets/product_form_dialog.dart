@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pos_desktop/core/theme/app_theme.dart';
+import 'package:pos_desktop/features/products/data/models/product_branch_update_request_model.dart';
 import 'package:pos_desktop/features/products/data/models/product_upsert_request_model.dart';
 import 'package:pos_desktop/features/products/domain/entities/product_category.dart';
 import 'package:pos_desktop/features/products/domain/entities/product_record.dart';
 import 'package:pos_desktop/features/products/presentation/providers/product_categories_provider.dart';
+
+typedef ProductFormResult = ({
+  ProductUpsertRequestModel product,
+  ProductBranchUpdateRequestModel branch,
+});
 
 class ProductFormDialog extends ConsumerStatefulWidget {
   const ProductFormDialog({super.key, this.initialProduct});
@@ -26,29 +32,37 @@ class _ProductFormDialogState extends ConsumerState<ProductFormDialog> {
   late final TextEditingController _stockController;
   late final TextEditingController _minStockController;
   late final TextEditingController _unitMeasureController;
-  late final TextEditingController _barcodeController;
   late final TextEditingController _skuController;
 
   int? _categoryId;
-  bool _isActive = true;
+  bool _isAvailable = true;
 
   @override
   void initState() {
     super.initState();
     final product = widget.initialProduct;
     _nameController = TextEditingController(text: product?.name ?? '');
-    _descriptionController = TextEditingController(text: product?.description ?? '');
+    _descriptionController = TextEditingController(
+      text: product?.description ?? '',
+    );
     _costPriceController = TextEditingController(
       text: product?.costPrice?.toStringAsFixed(2) ?? '',
     );
-    _priceController = TextEditingController(text: product?.price.toStringAsFixed(2) ?? '');
-    _stockController = TextEditingController(text: product?.stockQuantity.toString() ?? '0');
-    _minStockController = TextEditingController(text: product?.minStock.toString() ?? '5');
-    _unitMeasureController = TextEditingController(text: product?.unitMeasure ?? 'PZA');
-    _barcodeController = TextEditingController(text: product?.barcode ?? '');
+    _priceController = TextEditingController(
+      text: product?.price.toStringAsFixed(2) ?? '',
+    );
+    _stockController = TextEditingController(
+      text: product?.stockQuantity.toString() ?? '0',
+    );
+    _minStockController = TextEditingController(
+      text: product?.minStock.toString() ?? '5',
+    );
+    _unitMeasureController = TextEditingController(
+      text: product?.unitMeasure ?? 'PZA',
+    );
     _skuController = TextEditingController(text: product?.sku ?? '');
     _categoryId = product?.categoryId;
-    _isActive = product?.isActive ?? true;
+    _isAvailable = product?.isAvailable ?? true;
   }
 
   @override
@@ -60,7 +74,6 @@ class _ProductFormDialogState extends ConsumerState<ProductFormDialog> {
     _stockController.dispose();
     _minStockController.dispose();
     _unitMeasureController.dispose();
-    _barcodeController.dispose();
     _skuController.dispose();
     super.dispose();
   }
@@ -75,17 +88,19 @@ class _ProductFormDialogState extends ConsumerState<ProductFormDialog> {
       name: _nameController.text.trim(),
       description: _descriptionController.text.trim(),
       costPrice: _parseOptionalDouble(_costPriceController.text),
-      price: _parseDouble(_priceController.text),
-      stockQuantity: _parseInt(_stockController.text),
-      minStock: _parseInt(_minStockController.text),
       unitMeasure: _unitMeasureController.text.trim(),
-      barcode: _barcodeController.text.trim(),
       sku: _skuController.text.trim(),
-      isActive: _isActive,
       categoryId: _categoryId,
     );
 
-    Navigator.of(context).pop(request);
+    final branchRequest = ProductBranchUpdateRequestModel(
+      price: _parseDouble(_priceController.text),
+      stockQuantity: _parseInt(_stockController.text),
+      minStock: _parseInt(_minStockController.text),
+      isAvailable: _isAvailable,
+    );
+
+    Navigator.of(context).pop((product: request, branch: branchRequest));
   }
 
   @override
@@ -130,7 +145,9 @@ class _ProductFormDialogState extends ConsumerState<ProductFormDialog> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            widget.isEditing ? 'Editar producto' : 'Nuevo producto',
+                            widget.isEditing
+                                ? 'Editar producto'
+                                : 'Nuevo producto',
                             style: Theme.of(context).textTheme.titleLarge,
                           ),
                           const SizedBox(height: 6),
@@ -163,7 +180,8 @@ class _ProductFormDialogState extends ConsumerState<ProductFormDialog> {
                             Expanded(
                               child: _FormSection(
                                 title: 'General',
-                                subtitle: 'Informacion base y visibilidad del producto.',
+                                subtitle:
+                                    'Informacion base y visibilidad del producto.',
                                 child: Column(
                                   children: [
                                     _buildTextField(
@@ -173,7 +191,10 @@ class _ProductFormDialogState extends ConsumerState<ProductFormDialog> {
                                     ),
                                     const SizedBox(height: 14),
                                     categoriesAsync.when(
-                                      loading: () => const LinearProgressIndicator(minHeight: 2),
+                                      loading: () =>
+                                          const LinearProgressIndicator(
+                                            minHeight: 2,
+                                          ),
                                       error: (_, _) => const SizedBox.shrink(),
                                       data: (categories) {
                                         return DropdownButtonFormField<int?>(
@@ -186,9 +207,13 @@ class _ProductFormDialogState extends ConsumerState<ProductFormDialog> {
                                               value: null,
                                               child: Text('Sin categoria'),
                                             ),
-                                            ...categories.map(_buildCategoryOption),
+                                            ...categories.map(
+                                              _buildCategoryOption,
+                                            ),
                                           ],
-                                          onChanged: (value) => setState(() => _categoryId = value),
+                                          onChanged: (value) => setState(
+                                            () => _categoryId = value,
+                                          ),
                                         );
                                       },
                                     ),
@@ -200,13 +225,16 @@ class _ProductFormDialogState extends ConsumerState<ProductFormDialog> {
                                     ),
                                     const SizedBox(height: 14),
                                     SwitchListTile.adaptive(
-                                      value: _isActive,
+                                      value: _isAvailable,
                                       contentPadding: EdgeInsets.zero,
-                                      title: const Text('Producto activo'),
-                                      subtitle: const Text(
-                                        'Los productos inactivos no deberian mostrarse en POS.',
+                                      title: const Text(
+                                        'Disponible en esta sucursal',
                                       ),
-                                      onChanged: (value) => setState(() => _isActive = value),
+                                      subtitle: const Text(
+                                        'Controla si el producto puede venderse en la sucursal autenticada.',
+                                      ),
+                                      onChanged: (value) =>
+                                          setState(() => _isAvailable = value),
                                     ),
                                   ],
                                 ),
@@ -225,9 +253,10 @@ class _ProductFormDialogState extends ConsumerState<ProductFormDialog> {
                                           child: _buildTextField(
                                             controller: _costPriceController,
                                             label: 'Costo',
-                                            keyboardType: const TextInputType.numberWithOptions(
-                                              decimal: true,
-                                            ),
+                                            keyboardType:
+                                                const TextInputType.numberWithOptions(
+                                                  decimal: true,
+                                                ),
                                             validator: _validateOptionalDouble,
                                           ),
                                         ),
@@ -237,9 +266,10 @@ class _ProductFormDialogState extends ConsumerState<ProductFormDialog> {
                                             controller: _priceController,
                                             label: 'Precio',
                                             required: true,
-                                            keyboardType: const TextInputType.numberWithOptions(
-                                              decimal: true,
-                                            ),
+                                            keyboardType:
+                                                const TextInputType.numberWithOptions(
+                                                  decimal: true,
+                                                ),
                                             validator: _validateRequiredDouble,
                                           ),
                                         ),
@@ -249,7 +279,8 @@ class _ProductFormDialogState extends ConsumerState<ProductFormDialog> {
                                   const SizedBox(height: 18),
                                   _FormSection(
                                     title: 'Inventario',
-                                    subtitle: 'Existencia actual, minimo y unidad.',
+                                    subtitle:
+                                        'Existencia actual, minimo y unidad.',
                                     child: Column(
                                       children: [
                                         Row(
@@ -259,7 +290,8 @@ class _ProductFormDialogState extends ConsumerState<ProductFormDialog> {
                                                 controller: _stockController,
                                                 label: 'Stock actual',
                                                 required: true,
-                                                keyboardType: TextInputType.number,
+                                                keyboardType:
+                                                    TextInputType.number,
                                                 validator: _validateRequiredInt,
                                               ),
                                             ),
@@ -269,7 +301,8 @@ class _ProductFormDialogState extends ConsumerState<ProductFormDialog> {
                                                 controller: _minStockController,
                                                 label: 'Stock minimo',
                                                 required: true,
-                                                keyboardType: TextInputType.number,
+                                                keyboardType:
+                                                    TextInputType.number,
                                                 validator: _validateRequiredInt,
                                               ),
                                             ),
@@ -286,17 +319,14 @@ class _ProductFormDialogState extends ConsumerState<ProductFormDialog> {
                                   const SizedBox(height: 18),
                                   _FormSection(
                                     title: 'Identificacion',
-                                    subtitle: 'Claves internas y codigo de barras.',
+                                    subtitle:
+                                        'SKU global del producto dentro del catalogo.',
                                     child: Column(
                                       children: [
                                         _buildTextField(
                                           controller: _skuController,
                                           label: 'SKU',
-                                        ),
-                                        const SizedBox(height: 14),
-                                        _buildTextField(
-                                          controller: _barcodeController,
-                                          label: 'Codigo de barras',
+                                          required: true,
                                         ),
                                       ],
                                     ),
@@ -324,9 +354,15 @@ class _ProductFormDialogState extends ConsumerState<ProductFormDialog> {
                     const SizedBox(width: 12),
                     ElevatedButton.icon(
                       onPressed: _submit,
-                      icon: Icon(widget.isEditing ? Icons.save_rounded : Icons.add_rounded),
+                      icon: Icon(
+                        widget.isEditing
+                            ? Icons.save_rounded
+                            : Icons.add_rounded,
+                      ),
                       label: Text(
-                        widget.isEditing ? 'Guardar cambios' : 'Guardar producto',
+                        widget.isEditing
+                            ? 'Guardar cambios'
+                            : 'Guardar producto',
                       ),
                     ),
                   ],
@@ -432,11 +468,11 @@ class _FormSection extends StatelessWidget {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: sectionColor,
-          borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: borderColor),
-        ),
+      decoration: BoxDecoration(
+        color: sectionColor,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: borderColor),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

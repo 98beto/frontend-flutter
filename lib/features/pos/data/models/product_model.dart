@@ -5,31 +5,50 @@ class ProductModel extends Product {
     required super.id,
     required super.name,
     required super.sku,
+    required super.branchId,
     required super.price,
     required super.stock,
     required super.category,
     super.categoryId,
-    super.barcode,
     super.brand,
-    super.isActive,
+    super.isAvailable,
   });
 
   factory ProductModel.fromJson(Map<String, dynamic> json) {
     final category = json['category'] as Map<String, dynamic>?;
     final brand = json['brand'] as Map<String, dynamic>?;
+    final branchProduct =
+        json['branch_product'] as Map<String, dynamic>? ?? const {};
 
     return ProductModel(
       id: '${json['id']}',
       name: json['name'] as String? ?? 'Producto sin nombre',
       sku: json['sku'] as String? ?? 'SIN-SKU',
-      price: _toDouble(json['price']),
-      stock: json['stock_quantity'] as int? ?? 0,
+      branchId: _toInt(branchProduct['branch_id']),
+      price: _toDouble(branchProduct['price']),
+      stock: _toInt(branchProduct['stock_quantity']),
       category: category?['name'] as String? ?? 'Sin categoria',
-      categoryId: json['category_id'] as int?,
-      barcode: json['barcode'] as String?,
+      categoryId: _toNullableInt(json['category_id']),
       brand: brand?['name'] as String?,
-      isActive: json['is_active'] as bool? ?? true,
+      isAvailable: branchProduct['is_available'] as bool? ?? true,
     );
+  }
+
+  static int _toInt(dynamic value) {
+    if (value is int) {
+      return value;
+    }
+    if (value is String) {
+      return int.tryParse(value) ?? 0;
+    }
+    return 0;
+  }
+
+  static int? _toNullableInt(dynamic value) {
+    if (value == null) {
+      return null;
+    }
+    return _toInt(value);
   }
 
   static double _toDouble(dynamic value) {

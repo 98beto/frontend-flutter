@@ -101,7 +101,9 @@ class _ClientFormDialogState extends State<ClientFormDialog> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            widget.isEditing ? 'Editar cliente' : 'Nuevo cliente',
+                            widget.isEditing
+                                ? 'Editar cliente'
+                                : 'Nuevo cliente',
                             style: Theme.of(context).textTheme.titleLarge,
                           ),
                           const SizedBox(height: 6),
@@ -187,7 +189,11 @@ class _ClientFormDialogState extends State<ClientFormDialog> {
                       child: ElevatedButton.icon(
                         onPressed: _submit,
                         icon: const Icon(Icons.save_rounded),
-                        label: Text(widget.isEditing ? 'Guardar cambios' : 'Crear cliente'),
+                        label: Text(
+                          widget.isEditing
+                              ? 'Guardar cambios'
+                              : 'Crear cliente',
+                        ),
                       ),
                     ),
                   ],
@@ -212,7 +218,8 @@ class _ClientFormDialogState extends State<ClientFormDialog> {
       controller: controller,
       maxLines: maxLines,
       keyboardType: keyboardType,
-      validator: validator ??
+      validator:
+          validator ??
           (value) {
             if (required && (value == null || value.trim().isEmpty)) {
               return 'Este campo es obligatorio.';

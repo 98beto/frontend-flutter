@@ -32,7 +32,9 @@ class _SaveCartDialogState extends State<SaveCartDialog> {
           decoration: BoxDecoration(
             color: isDark ? AppTheme.panel : AppTheme.lightBg0,
             borderRadius: BorderRadius.circular(28),
-            border: Border.all(color: isDark ? AppTheme.border : AppTheme.lightBg4),
+            border: Border.all(
+              color: isDark ? AppTheme.border : AppTheme.lightBg4,
+            ),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -51,7 +53,9 @@ class _SaveCartDialogState extends State<SaveCartDialog> {
               TextField(
                 controller: _notesController,
                 maxLines: 3,
-                decoration: const InputDecoration(labelText: 'Notas (opcional)'),
+                decoration: const InputDecoration(
+                  labelText: 'Notas (opcional)',
+                ),
               ),
               const SizedBox(height: 22),
               Row(

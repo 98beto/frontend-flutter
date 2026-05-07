@@ -6,8 +6,8 @@ import 'package:pos_desktop/features/clients/presentation/providers/clients_repo
 
 final clientActionsProvider =
     AsyncNotifierProvider<ClientActionsNotifier, ClientRecord?>(
-  ClientActionsNotifier.new,
-);
+      ClientActionsNotifier.new,
+    );
 
 class ClientActionsNotifier extends AsyncNotifier<ClientRecord?> {
   @override

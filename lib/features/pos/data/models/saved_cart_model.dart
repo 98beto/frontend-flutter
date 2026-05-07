@@ -36,7 +36,10 @@ class SavedCartModel extends SavedCart {
       totalAmount: _toDouble(json['total_amount']),
       notes: json['notes'] as String?,
       items: items
-          .map((item) => _SavedCartItemModel.fromJson(item as Map<String, dynamic>))
+          .map(
+            (item) =>
+                _SavedCartItemModel.fromJson(item as Map<String, dynamic>),
+          )
           .toList(),
     );
   }
@@ -60,25 +63,46 @@ class _SavedCartItemModel extends CartItem {
 
   factory _SavedCartItemModel.fromJson(Map<String, dynamic> json) {
     final productJson = json['product'] as Map<String, dynamic>? ?? const {};
+    final branchProduct =
+        productJson['branch_product'] as Map<String, dynamic>? ?? const {};
 
     final product = Product(
       id: '${productJson['id'] ?? json['product_id']}',
       name: productJson['name'] as String? ?? 'Producto sin nombre',
       sku: productJson['sku'] as String? ?? 'SIN-SKU',
+      branchId: _toInt(branchProduct['branch_id']),
       price: SavedCartModel._toDouble(json['unit_price']),
-      stock: productJson['stock_quantity'] as int? ?? 0,
-      category: (productJson['category'] as Map<String, dynamic>?)?['name']
+      stock: _toInt(branchProduct['stock_quantity']),
+      category:
+          (productJson['category'] as Map<String, dynamic>?)?['name']
               as String? ??
           'Sin categoria',
-      categoryId: productJson['category_id'] as int?,
-      barcode: productJson['barcode'] as String?,
-      brand: (productJson['brand'] as Map<String, dynamic>?)?['name'] as String?,
-      isActive: productJson['is_active'] as bool? ?? true,
+      categoryId: _toNullableInt(productJson['category_id']),
+      brand:
+          (productJson['brand'] as Map<String, dynamic>?)?['name'] as String?,
+      isAvailable: branchProduct['is_available'] as bool? ?? true,
     );
 
     return _SavedCartItemModel(
       product: product,
       quantity: json['quantity'] as int? ?? 0,
     );
+  }
+
+  static int _toInt(dynamic value) {
+    if (value is int) {
+      return value;
+    }
+    if (value is String) {
+      return int.tryParse(value) ?? 0;
+    }
+    return 0;
+  }
+
+  static int? _toNullableInt(dynamic value) {
+    if (value == null) {
+      return null;
+    }
+    return _toInt(value);
   }
 }

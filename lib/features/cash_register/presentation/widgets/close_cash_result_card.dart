@@ -27,18 +27,18 @@ class CloseCashResultCard extends StatelessWidget {
     final differenceColor = result.difference > 0
         ? AppTheme.success
         : result.difference < 0
-            ? AppTheme.danger
-            : AppTheme.brand;
+        ? AppTheme.danger
+        : AppTheme.brand;
     final differenceLabel = result.difference > 0
         ? 'Sobrante'
         : result.difference < 0
-            ? 'Faltante'
-            : 'Sin diferencia';
+        ? 'Faltante'
+        : 'Sin diferencia';
     final differenceIcon = result.difference > 0
         ? Icons.trending_up_rounded
         : result.difference < 0
-            ? Icons.trending_down_rounded
-            : Icons.check_circle_outline_rounded;
+        ? Icons.trending_down_rounded
+        : Icons.check_circle_outline_rounded;
 
     return Card(
       child: Padding(
@@ -80,7 +80,9 @@ class CloseCashResultCard extends StatelessWidget {
               decoration: BoxDecoration(
                 color: differenceColor.withValues(alpha: 0.12),
                 borderRadius: BorderRadius.circular(22),
-                border: Border.all(color: differenceColor.withValues(alpha: 0.24)),
+                border: Border.all(
+                  color: differenceColor.withValues(alpha: 0.24),
+                ),
                 boxShadow: [
                   BoxShadow(
                     color: differenceShadowColor,
@@ -91,14 +93,14 @@ class CloseCashResultCard extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                    Container(
-                      width: 48,
-                      height: 48,
-                      decoration: BoxDecoration(
-                        color: differenceInnerColor,
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Icon(differenceIcon, color: differenceColor),
+                  Container(
+                    width: 48,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      color: differenceInnerColor,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Icon(differenceIcon, color: differenceColor),
                   ),
                   const SizedBox(width: 14),
                   Expanded(
@@ -107,16 +109,14 @@ class CloseCashResultCard extends StatelessWidget {
                       children: [
                         Text(
                           differenceLabel,
-                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            color: differenceColor,
-                          ),
+                          style: Theme.of(context).textTheme.titleMedium
+                              ?.copyWith(color: differenceColor),
                         ),
                         const SizedBox(height: 4),
                         Text(
                           '\$${result.difference.toStringAsFixed(2)}',
-                          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                            color: differenceColor,
-                          ),
+                          style: Theme.of(context).textTheme.headlineMedium
+                              ?.copyWith(color: differenceColor),
                         ),
                       ],
                     ),
@@ -151,10 +151,7 @@ class CloseCashResultCard extends StatelessWidget {
 }
 
 class _ResultRow extends StatelessWidget {
-  const _ResultRow({
-    required this.label,
-    required this.value,
-  });
+  const _ResultRow({required this.label, required this.value});
 
   final String label;
   final String value;
@@ -168,18 +165,17 @@ class _ResultRow extends StatelessWidget {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
-        decoration: BoxDecoration(
-          color: rowBackground,
-          borderRadius: BorderRadius.circular(18),
-          border: Border.all(color: rowBorderColor),
-        ),
+      decoration: BoxDecoration(
+        color: rowBackground,
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: rowBorderColor),
+      ),
       child: Row(
         children: [
-          Expanded(child: Text(label, style: Theme.of(context).textTheme.bodyLarge)),
-          Text(
-            value,
-            style: Theme.of(context).textTheme.titleMedium,
+          Expanded(
+            child: Text(label, style: Theme.of(context).textTheme.bodyLarge),
           ),
+          Text(value, style: Theme.of(context).textTheme.titleMedium),
         ],
       ),
     );

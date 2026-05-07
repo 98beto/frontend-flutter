@@ -29,10 +29,9 @@ class ClientsNotifier extends Notifier<ClientsState> {
     );
 
     try {
-      final response = await ref.read(clientsRepositoryProvider).getClients(
-            page: 1,
-            search: state.search,
-          );
+      final response = await ref
+          .read(clientsRepositoryProvider)
+          .getClients(page: 1, search: state.search);
 
       state = state.copyWith(
         items: response.items,
@@ -58,10 +57,9 @@ class ClientsNotifier extends Notifier<ClientsState> {
 
     try {
       final nextPage = state.currentPage + 1;
-      final response = await ref.read(clientsRepositoryProvider).getClients(
-            page: nextPage,
-            search: state.search,
-          );
+      final response = await ref
+          .read(clientsRepositoryProvider)
+          .getClients(page: nextPage, search: state.search);
 
       state = state.copyWith(
         items: [...state.items, ...response.items],

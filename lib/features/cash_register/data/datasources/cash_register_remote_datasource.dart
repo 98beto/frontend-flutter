@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:pos_desktop/core/config/operation_context.dart';
 import 'package:pos_desktop/core/network/api_envelope.dart';
 import 'package:pos_desktop/core/network/api_exception.dart';
 import 'package:pos_desktop/core/network/paginated_response.dart';
@@ -12,20 +11,13 @@ import 'package:pos_desktop/features/cash_register/data/models/open_cash_request
 import 'package:pos_desktop/features/pos/data/models/cash_session_model.dart';
 
 class CashRegisterRemoteDatasource {
-  const CashRegisterRemoteDatasource(this._dio, this._operationContext);
+  const CashRegisterRemoteDatasource(this._dio);
 
   final Dio _dio;
-  final OperationContext _operationContext;
 
   Future<CashSessionModel?> getCurrentCashSession() async {
     try {
-      final response = await _dio.get(
-        '/cash-sessions/current',
-        queryParameters: {
-          'branch_id': _operationContext.branchId,
-          'device_identifier': _operationContext.deviceIdentifier,
-        },
-      );
+      final response = await _dio.get('/cash-sessions/current');
 
       final envelope = ApiEnvelope.fromJson(
         response.data as Map<String, dynamic>,
@@ -81,7 +73,10 @@ class CashRegisterRemoteDatasource {
     }
   }
 
-  Future<void> createCashMovement(int id, CashMovementRequestModel request) async {
+  Future<void> createCashMovement(
+    int id,
+    CashMovementRequestModel request,
+  ) async {
     try {
       await _dio.post('/cash-sessions/$id/movements', data: request.toJson());
     } on DioException catch (error) {
@@ -95,10 +90,7 @@ class CashRegisterRemoteDatasource {
     try {
       final response = await _dio.get(
         '/cash-sessions',
-        queryParameters: {
-          'page': page,
-          'branch_id': _operationContext.branchId,
-        },
+        queryParameters: {'page': page},
       );
 
       final envelope = ApiEnvelope.fromJson(
@@ -152,7 +144,8 @@ class CashRegisterRemoteDatasource {
     if (responseData is Map<String, dynamic>) {
       return ApiException(
         message:
-            responseData['message'] as String? ?? 'No fue posible conectar con la API.',
+            responseData['message'] as String? ??
+            'No fue posible conectar con la API.',
         statusCode: error.response?.statusCode,
         errors: responseData['errors'] as Map<String, dynamic>?,
       );

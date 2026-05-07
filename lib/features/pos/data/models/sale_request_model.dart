@@ -2,7 +2,6 @@ import 'package:pos_desktop/features/pos/data/models/sale_item_request_model.dar
 
 class SaleRequestModel {
   const SaleRequestModel({
-    required this.branchId,
     required this.cashSessionId,
     required this.paymentMethod,
     required this.discountAmount,
@@ -11,7 +10,6 @@ class SaleRequestModel {
   });
 
   final int? customerId;
-  final int branchId;
   final int cashSessionId;
   final String paymentMethod;
   final double discountAmount;
@@ -20,7 +18,6 @@ class SaleRequestModel {
   Map<String, dynamic> toJson() {
     return {
       'customer_id': customerId,
-      'branch_id': branchId,
       'cash_session_id': cashSessionId,
       'payment_method': paymentMethod,
       'discount_amount': discountAmount,

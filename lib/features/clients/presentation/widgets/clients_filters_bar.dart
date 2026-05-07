@@ -46,7 +46,10 @@ class ClientsFiltersBar extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Clientes', style: Theme.of(context).textTheme.titleLarge),
+                      Text(
+                        'Clientes',
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
                       const SizedBox(height: 4),
                       Text(
                         '$total registros cargados. Busca y administra tu cartera comercial.',

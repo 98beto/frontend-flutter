@@ -10,43 +10,24 @@ class SettingsLocalDatasource {
     final defaults = AppSettingsModel.defaults();
 
     return AppSettingsModel(
-      branchId: _sharedPreferences.getInt(AppSettingsModel.branchIdKey) ??
-          defaults.branchId,
-      branchName:
-          _sharedPreferences.getString(AppSettingsModel.branchNameKey) ??
-          defaults.branchName,
-      deviceIdentifier: _sharedPreferences
-              .getString(AppSettingsModel.deviceIdentifierKey) ??
-          defaults.deviceIdentifier,
-      deviceName: _sharedPreferences.getString(AppSettingsModel.deviceNameKey) ??
-          defaults.deviceName,
-      apiBaseUrl: _sharedPreferences.getString(AppSettingsModel.apiBaseUrlKey) ??
+      apiBaseUrl:
+          _sharedPreferences.getString(AppSettingsModel.apiBaseUrlKey) ??
           defaults.apiBaseUrl,
-      defaultTaxRate: _sharedPreferences
-              .getDouble(AppSettingsModel.defaultTaxRateKey) ??
+      defaultTaxRate:
+          _sharedPreferences.getDouble(AppSettingsModel.defaultTaxRateKey) ??
           defaults.defaultTaxRate,
-      defaultPaymentMethod: _sharedPreferences
-              .getString(AppSettingsModel.defaultPaymentMethodKey) ??
+      defaultPaymentMethod:
+          _sharedPreferences.getString(
+            AppSettingsModel.defaultPaymentMethodKey,
+          ) ??
           defaults.defaultPaymentMethod,
-      themeMode: _sharedPreferences.getString(AppSettingsModel.themeModeKey) ??
+      themeMode:
+          _sharedPreferences.getString(AppSettingsModel.themeModeKey) ??
           defaults.themeMode,
     );
   }
 
   AppSettingsModel saveSettings(AppSettingsModel settings) {
-    _sharedPreferences.setInt(AppSettingsModel.branchIdKey, settings.branchId);
-    _sharedPreferences.setString(
-      AppSettingsModel.branchNameKey,
-      settings.branchName,
-    );
-    _sharedPreferences.setString(
-      AppSettingsModel.deviceIdentifierKey,
-      settings.deviceIdentifier,
-    );
-    _sharedPreferences.setString(
-      AppSettingsModel.deviceNameKey,
-      settings.deviceName,
-    );
     _sharedPreferences.setString(
       AppSettingsModel.apiBaseUrlKey,
       settings.apiBaseUrl,
@@ -68,10 +49,6 @@ class SettingsLocalDatasource {
   }
 
   AppSettingsModel resetSettings() {
-    _sharedPreferences.remove(AppSettingsModel.branchIdKey);
-    _sharedPreferences.remove(AppSettingsModel.branchNameKey);
-    _sharedPreferences.remove(AppSettingsModel.deviceIdentifierKey);
-    _sharedPreferences.remove(AppSettingsModel.deviceNameKey);
     _sharedPreferences.remove(AppSettingsModel.apiBaseUrlKey);
     _sharedPreferences.remove(AppSettingsModel.defaultTaxRateKey);
     _sharedPreferences.remove(AppSettingsModel.defaultPaymentMethodKey);

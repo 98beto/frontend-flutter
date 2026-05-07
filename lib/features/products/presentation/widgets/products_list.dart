@@ -143,10 +143,17 @@ class _ProductRowState extends State<_ProductRow> {
         ? AppTheme.black.withValues(alpha: 0.14)
         : AppTheme.lightTextStrong.withValues(alpha: 0.08);
     final iconBackground = item.isLowStock
-        ? (isDark ? AppTheme.danger.withValues(alpha: 0.12) : AppTheme.lightBgRed)
-        : (isDark ? AppTheme.soft.withValues(alpha: 0.28) : AppTheme.lightBgBlue.withValues(alpha: 0.62));
-    final inactiveColor = Theme.of(context).textTheme.bodyMedium?.color ?? AppTheme.muted;
-    final inactiveBackground = isDark ? AppTheme.muted.withValues(alpha: 0.12) : AppTheme.lightBg2;
+        ? (isDark
+              ? AppTheme.danger.withValues(alpha: 0.12)
+              : AppTheme.lightBgRed)
+        : (isDark
+              ? AppTheme.soft.withValues(alpha: 0.28)
+              : AppTheme.lightBgBlue.withValues(alpha: 0.62));
+    final inactiveColor =
+        Theme.of(context).textTheme.bodyMedium?.color ?? AppTheme.muted;
+    final inactiveBackground = isDark
+        ? AppTheme.muted.withValues(alpha: 0.12)
+        : AppTheme.lightBg2;
 
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
@@ -192,10 +199,15 @@ class _ProductRowState extends State<_ProductRow> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(item.name, style: Theme.of(context).textTheme.titleMedium),
+                  Text(
+                    item.name,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
                   const SizedBox(height: 6),
                   Text(
-                    item.sku?.isNotEmpty == true ? item.sku! : 'Sin SKU registrado',
+                    item.sku?.isNotEmpty == true
+                        ? item.sku!
+                        : 'Sin SKU registrado',
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ],
@@ -230,17 +242,22 @@ class _ProductRowState extends State<_ProductRow> {
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 8,
+                  ),
                   decoration: BoxDecoration(
-                    color: item.isActive
-                        ? (isDark ? AppTheme.success.withValues(alpha: 0.12) : AppTheme.lightBgGreen)
+                    color: item.isAvailable
+                        ? (isDark
+                              ? AppTheme.success.withValues(alpha: 0.12)
+                              : AppTheme.lightBgGreen)
                         : inactiveBackground,
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Text(
-                    item.isActive ? 'Activo' : 'Inactivo',
+                    item.isAvailable ? 'Disponible' : 'No disponible',
                     style: TextStyle(
-                      color: item.isActive
+                      color: item.isAvailable
                           ? (isDark ? AppTheme.success : AppTheme.lightSuccess)
                           : inactiveColor,
                       fontWeight: FontWeight.w700,

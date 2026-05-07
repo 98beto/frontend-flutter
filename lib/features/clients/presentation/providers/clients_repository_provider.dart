@@ -4,7 +4,9 @@ import 'package:pos_desktop/features/clients/data/datasources/clients_remote_dat
 import 'package:pos_desktop/features/clients/data/repositories/clients_repository_impl.dart';
 import 'package:pos_desktop/features/clients/domain/repositories/clients_repository.dart';
 
-final clientsRemoteDatasourceProvider = Provider<ClientsRemoteDatasource>((ref) {
+final clientsRemoteDatasourceProvider = Provider<ClientsRemoteDatasource>((
+  ref,
+) {
   return ClientsRemoteDatasource(ref.watch(dioProvider));
 });
 

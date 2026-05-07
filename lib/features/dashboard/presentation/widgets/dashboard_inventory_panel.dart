@@ -34,7 +34,10 @@ class DashboardInventoryPanel extends StatelessWidget {
                 ),
                 if (summary.lowStockCount > 0)
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 8,
+                    ),
                     decoration: BoxDecoration(
                       color: alertBackground,
                       borderRadius: BorderRadius.circular(16),
@@ -102,11 +105,14 @@ class _InventoryTileState extends State<_InventoryTile> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final color = widget.accentColor ?? (isDark ? AppTheme.brand : AppTheme.lightBrand);
+    final color =
+        widget.accentColor ?? (isDark ? AppTheme.brand : AppTheme.lightBrand);
     final backgroundColor = _isHovered
         ? (isDark ? AppTheme.bg2 : AppTheme.lightBg2)
         : (isDark ? AppTheme.bg1 : AppTheme.lightBg1);
-    final borderColor = _isHovered ? color : (isDark ? AppTheme.border : AppTheme.lightBg4);
+    final borderColor = _isHovered
+        ? color
+        : (isDark ? AppTheme.border : AppTheme.lightBg4);
     final shadowColor = isDark
         ? AppTheme.black.withValues(alpha: 0.14)
         : AppTheme.lightTextStrong.withValues(alpha: 0.08);

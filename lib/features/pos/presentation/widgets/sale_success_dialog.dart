@@ -108,11 +108,7 @@ class SaleSuccessDialog extends StatelessWidget {
 }
 
 class _InfoRow extends StatelessWidget {
-  const _InfoRow({
-    required this.label,
-    required this.value,
-    this.valueColor,
-  });
+  const _InfoRow({required this.label, required this.value, this.valueColor});
 
   final String label;
   final String value;
@@ -132,12 +128,14 @@ class _InfoRow extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Expanded(child: Text(label, style: Theme.of(context).textTheme.bodyLarge)),
+          Expanded(
+            child: Text(label, style: Theme.of(context).textTheme.bodyLarge),
+          ),
           Text(
             value,
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-              color: valueColor,
-            ),
+            style: Theme.of(
+              context,
+            ).textTheme.titleMedium?.copyWith(color: valueColor),
           ),
         ],
       ),

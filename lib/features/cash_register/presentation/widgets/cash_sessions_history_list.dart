@@ -83,7 +83,8 @@ class CashSessionsHistoryList extends StatelessWidget {
                       Expanded(
                         child: ListView.separated(
                           itemCount: items.length,
-                          separatorBuilder: (_, _) => const SizedBox(height: 12),
+                          separatorBuilder: (_, _) =>
+                              const SizedBox(height: 12),
                           itemBuilder: (context, index) {
                             final item = items[index];
                             return _SessionTile(
@@ -175,7 +176,10 @@ class _SessionTile extends StatelessWidget {
                     ),
                   ),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 6,
+                    ),
                     decoration: BoxDecoration(
                       color: statusBackground,
                       borderRadius: BorderRadius.circular(999),
@@ -192,10 +196,15 @@ class _SessionTile extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 12),
-              _InfoLine(label: 'Apertura', value: _formatDateTime(item.openedAt)),
+              _InfoLine(
+                label: 'Apertura',
+                value: _formatDateTime(item.openedAt),
+              ),
               _InfoLine(
                 label: 'Cierre',
-                value: item.closedAt == null ? 'Pendiente' : _formatDateTime(item.closedAt!),
+                value: item.closedAt == null
+                    ? 'Pendiente'
+                    : _formatDateTime(item.closedAt!),
               ),
               _InfoLine(
                 label: 'Monto apertura',
@@ -207,7 +216,10 @@ class _SessionTile extends StatelessWidget {
                   value: _currency(item.closingBalance!),
                 ),
               if ((item.deviceIdentifier ?? '').trim().isNotEmpty)
-                _InfoLine(label: 'Dispositivo', value: item.deviceIdentifier!.trim()),
+                _InfoLine(
+                  label: 'Dispositivo',
+                  value: item.deviceIdentifier!.trim(),
+                ),
             ],
           ),
         ),

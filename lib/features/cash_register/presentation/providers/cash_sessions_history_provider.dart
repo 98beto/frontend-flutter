@@ -4,8 +4,8 @@ import 'package:pos_desktop/features/cash_register/presentation/providers/cash_r
 
 final cashSessionsHistoryProvider =
     NotifierProvider<CashSessionsHistoryNotifier, CashSessionsHistoryState>(
-  CashSessionsHistoryNotifier.new,
-);
+      CashSessionsHistoryNotifier.new,
+    );
 
 class CashSessionsHistoryNotifier extends Notifier<CashSessionsHistoryState> {
   @override
@@ -31,14 +31,18 @@ class CashSessionsHistoryNotifier extends Notifier<CashSessionsHistoryState> {
     );
 
     try {
-      final response = await ref.read(cashRegisterRepositoryProvider).getCashSessions(page: 1);
+      final response = await ref
+          .read(cashRegisterRepositoryProvider)
+          .getCashSessions(page: 1);
 
       state = state.copyWith(
         items: response.items,
         currentPage: response.currentPage,
         lastPage: response.lastPage,
         total: response.total,
-        selectedSessionId: response.items.isEmpty ? null : response.items.first.id,
+        selectedSessionId: response.items.isEmpty
+            ? null
+            : response.items.first.id,
         isLoadingInitial: false,
       );
     } catch (error) {
@@ -58,9 +62,9 @@ class CashSessionsHistoryNotifier extends Notifier<CashSessionsHistoryState> {
 
     try {
       final nextPage = state.currentPage + 1;
-      final response = await ref.read(cashRegisterRepositoryProvider).getCashSessions(
-            page: nextPage,
-          );
+      final response = await ref
+          .read(cashRegisterRepositoryProvider)
+          .getCashSessions(page: nextPage);
 
       state = state.copyWith(
         items: [...state.items, ...response.items],

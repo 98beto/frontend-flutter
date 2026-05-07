@@ -43,10 +43,7 @@ class CashSessionMovementsPanel extends ConsumerWidget {
             if (showHeader) ...[
               Text(title, style: Theme.of(context).textTheme.titleLarge),
               const SizedBox(height: 8),
-              Text(
-                subtitle,
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
+              Text(subtitle, style: Theme.of(context).textTheme.bodyMedium),
               const SizedBox(height: 18),
             ],
             if (showSummary) ...[
@@ -57,8 +54,12 @@ class CashSessionMovementsPanel extends ConsumerWidget {
                   _SummaryChip(
                     label: 'Entradas',
                     value: _currency(totalIn),
-                    background: isDark ? AppTheme.bgGreen : AppTheme.lightBgGreen,
-                    foreground: isDark ? AppTheme.success : AppTheme.lightSuccess,
+                    background: isDark
+                        ? AppTheme.bgGreen
+                        : AppTheme.lightBgGreen,
+                    foreground: isDark
+                        ? AppTheme.success
+                        : AppTheme.lightSuccess,
                   ),
                   _SummaryChip(
                     label: 'Salidas',
@@ -87,9 +88,18 @@ class CashSessionMovementsPanel extends ConsumerWidget {
                     initialValue: state.type,
                     decoration: const InputDecoration(labelText: 'Tipo'),
                     items: const [
-                      DropdownMenuItem<String?>(value: null, child: Text('Todos')),
-                      DropdownMenuItem<String?>(value: 'in', child: Text('Entradas')),
-                      DropdownMenuItem<String?>(value: 'out', child: Text('Salidas')),
+                      DropdownMenuItem<String?>(
+                        value: null,
+                        child: Text('Todos'),
+                      ),
+                      DropdownMenuItem<String?>(
+                        value: 'in',
+                        child: Text('Entradas'),
+                      ),
+                      DropdownMenuItem<String?>(
+                        value: 'out',
+                        child: Text('Salidas'),
+                      ),
                     ],
                     onChanged: (value) {
                       notifier.setType(value);
@@ -102,15 +112,30 @@ class CashSessionMovementsPanel extends ConsumerWidget {
                     initialValue: state.category,
                     decoration: const InputDecoration(labelText: 'Categoria'),
                     items: const [
-                      DropdownMenuItem<String?>(value: null, child: Text('Todas')),
-                      DropdownMenuItem<String?>(value: 'sale', child: Text('Venta')),
+                      DropdownMenuItem<String?>(
+                        value: null,
+                        child: Text('Todas'),
+                      ),
+                      DropdownMenuItem<String?>(
+                        value: 'sale',
+                        child: Text('Venta'),
+                      ),
                       DropdownMenuItem<String?>(
                         value: 'withdrawal',
                         child: Text('Retiro'),
                       ),
-                      DropdownMenuItem<String?>(value: 'expense', child: Text('Gasto')),
-                      DropdownMenuItem<String?>(value: 'change', child: Text('Cambio')),
-                      DropdownMenuItem<String?>(value: 'refund', child: Text('Reembolso')),
+                      DropdownMenuItem<String?>(
+                        value: 'expense',
+                        child: Text('Gasto'),
+                      ),
+                      DropdownMenuItem<String?>(
+                        value: 'change',
+                        child: Text('Cambio'),
+                      ),
+                      DropdownMenuItem<String?>(
+                        value: 'refund',
+                        child: Text('Reembolso'),
+                      ),
                       DropdownMenuItem<String?>(
                         value: 'adjustment',
                         child: Text('Ajuste'),
@@ -127,9 +152,18 @@ class CashSessionMovementsPanel extends ConsumerWidget {
                     initialValue: state.source,
                     decoration: const InputDecoration(labelText: 'Origen'),
                     items: const [
-                      DropdownMenuItem<String?>(value: null, child: Text('Todos')),
-                      DropdownMenuItem<String?>(value: 'manual', child: Text('Manual')),
-                      DropdownMenuItem<String?>(value: 'sale', child: Text('Venta')),
+                      DropdownMenuItem<String?>(
+                        value: null,
+                        child: Text('Todos'),
+                      ),
+                      DropdownMenuItem<String?>(
+                        value: 'manual',
+                        child: Text('Manual'),
+                      ),
+                      DropdownMenuItem<String?>(
+                        value: 'sale',
+                        child: Text('Venta'),
+                      ),
                     ],
                     onChanged: (value) {
                       notifier.setSource(value);
@@ -191,10 +225,10 @@ class CashSessionMovementsPanel extends ConsumerWidget {
                       Expanded(
                         child: ListView.separated(
                           itemCount: state.items.length,
-                          separatorBuilder: (_, _) => const SizedBox(height: 12),
-                          itemBuilder: (context, index) => _MovementRow(
-                            item: state.items[index],
-                          ),
+                          separatorBuilder: (_, _) =>
+                              const SizedBox(height: 12),
+                          itemBuilder: (context, index) =>
+                              _MovementRow(item: state.items[index]),
                         ),
                       ),
                       if (state.isLoadingMore) ...[
@@ -255,7 +289,9 @@ class _SummaryChip extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             value,
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(color: foreground),
+            style: Theme.of(
+              context,
+            ).textTheme.titleMedium?.copyWith(color: foreground),
           ),
         ],
       ),
@@ -287,7 +323,9 @@ class _MovementRowState extends State<_MovementRow> {
     final rowBackground = _isHovered
         ? (isDark ? AppTheme.bg2 : AppTheme.lightBg2)
         : (isDark ? AppTheme.bg1 : AppTheme.lightBg1);
-    final borderColor = _isHovered ? accent : (isDark ? AppTheme.border : AppTheme.lightBg4);
+    final borderColor = _isHovered
+        ? accent
+        : (isDark ? AppTheme.border : AppTheme.lightBg4);
     final shadowColor = isDark
         ? AppTheme.black.withValues(alpha: 0.14)
         : AppTheme.lightTextStrong.withValues(alpha: 0.08);
@@ -358,11 +396,16 @@ class _MovementRowState extends State<_MovementRow> {
               children: [
                 Text(
                   _currency(widget.item.amount),
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(color: accent),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleMedium?.copyWith(color: accent),
                 ),
                 if (widget.item.referenceId != null) ...[
                   const SizedBox(height: 4),
-                  Text('#${widget.item.referenceId}', style: Theme.of(context).textTheme.bodySmall),
+                  Text(
+                    '#${widget.item.referenceId}',
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
                 ],
               ],
             ),

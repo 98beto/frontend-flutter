@@ -24,7 +24,9 @@ class SavedCartsDialog extends ConsumerWidget {
 
         return AlertDialog(
           title: const Text('Eliminar carrito'),
-          content: Text('Se eliminara $name. Esta accion no se puede deshacer.'),
+          content: Text(
+            'Se eliminara $name. Esta accion no se puede deshacer.',
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(dialogContext).pop(false),
@@ -52,28 +54,34 @@ class SavedCartsDialog extends ConsumerWidget {
         return;
       }
 
-      ref.read(appNotificationProvider.notifier).showSuccess(
-        title: 'Carrito eliminado',
-        message: '$name se elimino correctamente.',
-      );
+      ref
+          .read(appNotificationProvider.notifier)
+          .showSuccess(
+            title: 'Carrito eliminado',
+            message: '$name se elimino correctamente.',
+          );
     } on ApiException catch (error) {
       if (!context.mounted) {
         return;
       }
 
-      ref.read(appNotificationProvider.notifier).showError(
-        title: 'No fue posible eliminar el carrito',
-        message: error.message,
-      );
+      ref
+          .read(appNotificationProvider.notifier)
+          .showError(
+            title: 'No fue posible eliminar el carrito',
+            message: error.message,
+          );
     } catch (_) {
       if (!context.mounted) {
         return;
       }
 
-      ref.read(appNotificationProvider.notifier).showError(
-        title: 'No fue posible eliminar el carrito',
-        message: 'Verifica la conexion o intenta nuevamente.',
-      );
+      ref
+          .read(appNotificationProvider.notifier)
+          .showError(
+            title: 'No fue posible eliminar el carrito',
+            message: 'Verifica la conexion o intenta nuevamente.',
+          );
     }
   }
 
@@ -92,7 +100,9 @@ class SavedCartsDialog extends ConsumerWidget {
           decoration: BoxDecoration(
             color: isDark ? AppTheme.panel : AppTheme.lightBg0,
             borderRadius: BorderRadius.circular(28),
-            border: Border.all(color: isDark ? AppTheme.border : AppTheme.lightBg4),
+            border: Border.all(
+              color: isDark ? AppTheme.border : AppTheme.lightBg4,
+            ),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -124,7 +134,8 @@ class SavedCartsDialog extends ConsumerWidget {
               const SizedBox(height: 22),
               Expanded(
                 child: savedCartsAsync.when(
-                  loading: () => const Center(child: CircularProgressIndicator()),
+                  loading: () =>
+                      const Center(child: CircularProgressIndicator()),
                   error: (error, stackTrace) => Center(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
@@ -153,7 +164,8 @@ class SavedCartsDialog extends ConsumerWidget {
 
                     return ListView.separated(
                       itemCount: savedCarts.length,
-                      separatorBuilder: (_, index) => const SizedBox(height: 14),
+                      separatorBuilder: (_, index) =>
+                          const SizedBox(height: 14),
                       itemBuilder: (context, index) {
                         final savedCart = savedCarts[index];
 
@@ -170,20 +182,25 @@ class SavedCartsDialog extends ConsumerWidget {
                                 .read(savedCartActionsProvider.notifier)
                                 .recoverCart(savedCart.id);
 
-                            ref.read(posProvider.notifier).loadSavedCart(
-                              savedCartId: recoveredCart.id,
-                              items: recoveredCart.items,
-                              discount: recoveredCart.discountAmount,
-                              customerId: recoveredCart.customerId,
-                              customerName: recoveredCart.customerName,
-                            );
+                            ref
+                                .read(posProvider.notifier)
+                                .loadSavedCart(
+                                  savedCartId: recoveredCart.id,
+                                  items: recoveredCart.items,
+                                  discount: recoveredCart.discountAmount,
+                                  customerId: recoveredCart.customerId,
+                                  customerName: recoveredCart.customerName,
+                                );
                             ref.invalidate(savedCartsProvider);
 
                             if (context.mounted) {
-                              ref.read(appNotificationProvider.notifier).showSuccess(
-                                title: 'Carrito recuperado',
-                                message: '${recoveredCart.name} se cargo en el POS.',
-                              );
+                              ref
+                                  .read(appNotificationProvider.notifier)
+                                  .showSuccess(
+                                    title: 'Carrito recuperado',
+                                    message:
+                                        '${recoveredCart.name} se cargo en el POS.',
+                                  );
                               Navigator.of(context).pop();
                             }
                           },
@@ -270,7 +287,10 @@ class _SavedCartTileState extends State<_SavedCartTile> {
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 8,
+                  ),
                   decoration: BoxDecoration(
                     color: badgeBackground,
                     borderRadius: BorderRadius.circular(16),
@@ -292,7 +312,9 @@ class _SavedCartTileState extends State<_SavedCartTile> {
             ),
             const SizedBox(height: 6),
             Text(
-              savedCart.notes?.trim().isNotEmpty == true ? savedCart.notes! : 'Sin notas',
+              savedCart.notes?.trim().isNotEmpty == true
+                  ? savedCart.notes!
+                  : 'Sin notas',
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             const SizedBox(height: 16),

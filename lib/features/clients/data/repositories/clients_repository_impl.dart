@@ -14,7 +14,10 @@ class ClientsRepositoryImpl implements ClientsRepository {
     int page = 1,
     String? search,
   }) async {
-    final response = await _remoteDatasource.getClients(page: page, search: search);
+    final response = await _remoteDatasource.getClients(
+      page: page,
+      search: search,
+    );
 
     return PaginatedResponse<ClientRecord>(
       items: response.items,

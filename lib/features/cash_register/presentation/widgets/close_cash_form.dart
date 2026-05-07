@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:pos_desktop/core/theme/app_theme.dart';
 
 class CloseCashForm extends StatefulWidget {
-  const CloseCashForm({super.key, required this.onSubmit, this.isSubmitting = false});
+  const CloseCashForm({
+    super.key,
+    required this.onSubmit,
+    this.isSubmitting = false,
+  });
 
   final Future<void> Function(double closingBalance, String? notes) onSubmit;
   final bool isSubmitting;
@@ -31,7 +35,9 @@ class _CloseCashFormState extends State<CloseCashForm> {
     final amount = double.tryParse(_amountController.text.trim()) ?? 0;
     await widget.onSubmit(
       amount,
-      _notesController.text.trim().isEmpty ? null : _notesController.text.trim(),
+      _notesController.text.trim().isEmpty
+          ? null
+          : _notesController.text.trim(),
     );
   }
 
@@ -92,7 +98,9 @@ class _CloseCashFormState extends State<CloseCashForm> {
 
                   final amountField = TextFormField(
                     controller: _amountController,
-                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                    keyboardType: const TextInputType.numberWithOptions(
+                      decimal: true,
+                    ),
                     decoration: const InputDecoration(
                       labelText: 'Monto final contado',
                       helperText: 'Monto real presente al finalizar el turno.',
@@ -111,7 +119,8 @@ class _CloseCashFormState extends State<CloseCashForm> {
                     maxLines: 3,
                     decoration: const InputDecoration(
                       labelText: 'Notas de cierre (opcional)',
-                      hintText: 'Ej. diferencia detectada, observaciones, responsable',
+                      hintText:
+                          'Ej. diferencia detectada, observaciones, responsable',
                     ),
                   );
 
@@ -148,7 +157,9 @@ class _CloseCashFormState extends State<CloseCashForm> {
                   onPressed: widget.isSubmitting ? null : _handleSubmit,
                   icon: const Icon(Icons.lock_rounded),
                   label: Text(
-                    widget.isSubmitting ? 'Cerrando caja...' : 'Confirmar cierre de caja',
+                    widget.isSubmitting
+                        ? 'Cerrando caja...'
+                        : 'Confirmar cierre de caja',
                   ),
                 ),
               ),

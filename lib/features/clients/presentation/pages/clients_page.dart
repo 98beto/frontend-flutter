@@ -67,20 +67,31 @@ class _ClientsPageState extends ConsumerState<ClientsPage> {
         return;
       }
 
-      ref.read(appNotificationProvider.notifier).showSuccess(
-        title: client == null ? 'Cliente creado' : 'Cliente actualizado',
-        message: '${savedClient.name} ya forma parte de tu cartera comercial.',
-      );
+      ref
+          .read(appNotificationProvider.notifier)
+          .showSuccess(
+            title: client == null ? 'Cliente creado' : 'Cliente actualizado',
+            message:
+                '${savedClient.name} ya forma parte de tu cartera comercial.',
+          );
     } on ApiException catch (error) {
-      ref.read(appNotificationProvider.notifier).showError(
-        title: client == null ? 'No fue posible crear el cliente' : 'No fue posible actualizar el cliente',
-        message: _resolveApiErrorMessage(error),
-      );
+      ref
+          .read(appNotificationProvider.notifier)
+          .showError(
+            title: client == null
+                ? 'No fue posible crear el cliente'
+                : 'No fue posible actualizar el cliente',
+            message: _resolveApiErrorMessage(error),
+          );
     } catch (_) {
-      ref.read(appNotificationProvider.notifier).showError(
-        title: client == null ? 'No fue posible crear el cliente' : 'No fue posible actualizar el cliente',
-        message: 'Verifica la conexion o intenta nuevamente.',
-      );
+      ref
+          .read(appNotificationProvider.notifier)
+          .showError(
+            title: client == null
+                ? 'No fue posible crear el cliente'
+                : 'No fue posible actualizar el cliente',
+            message: 'Verifica la conexion o intenta nuevamente.',
+          );
     }
   }
 
@@ -90,7 +101,9 @@ class _ClientsPageState extends ConsumerState<ClientsPage> {
       builder: (dialogContext) {
         return AlertDialog(
           title: const Text('Eliminar cliente'),
-          content: Text('Se eliminara ${client.name}. Esta accion no se puede deshacer.'),
+          content: Text(
+            'Se eliminara ${client.name}. Esta accion no se puede deshacer.',
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(dialogContext).pop(false),
@@ -116,20 +129,26 @@ class _ClientsPageState extends ConsumerState<ClientsPage> {
         return;
       }
 
-      ref.read(appNotificationProvider.notifier).showSuccess(
-        title: 'Cliente eliminado',
-        message: '${client.name} fue eliminado del catalogo comercial.',
-      );
+      ref
+          .read(appNotificationProvider.notifier)
+          .showSuccess(
+            title: 'Cliente eliminado',
+            message: '${client.name} fue eliminado del catalogo comercial.',
+          );
     } on ApiException catch (error) {
-      ref.read(appNotificationProvider.notifier).showError(
-        title: 'No fue posible eliminar el cliente',
-        message: _resolveApiErrorMessage(error),
-      );
+      ref
+          .read(appNotificationProvider.notifier)
+          .showError(
+            title: 'No fue posible eliminar el cliente',
+            message: _resolveApiErrorMessage(error),
+          );
     } catch (_) {
-      ref.read(appNotificationProvider.notifier).showError(
-        title: 'No fue posible eliminar el cliente',
-        message: 'Verifica la conexion o intenta nuevamente.',
-      );
+      ref
+          .read(appNotificationProvider.notifier)
+          .showError(
+            title: 'No fue posible eliminar el cliente',
+            message: 'Verifica la conexion o intenta nuevamente.',
+          );
     }
   }
 

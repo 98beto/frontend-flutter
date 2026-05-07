@@ -58,9 +58,14 @@ class SalesFiltersBar extends StatelessWidget {
                         flex: 2,
                         child: DropdownButtonFormField<String?>(
                           initialValue: selectedPaymentMethod,
-                          decoration: const InputDecoration(labelText: 'Metodo de pago'),
+                          decoration: const InputDecoration(
+                            labelText: 'Metodo de pago',
+                          ),
                           items: const [
-                            DropdownMenuItem<String?>(value: null, child: Text('Todos')),
+                            DropdownMenuItem<String?>(
+                              value: null,
+                              child: Text('Todos'),
+                            ),
                             DropdownMenuItem<String?>(
                               value: 'cash',
                               child: Text('Efectivo'),
@@ -121,9 +126,14 @@ class SalesFiltersBar extends StatelessWidget {
                         width: 220,
                         child: DropdownButtonFormField<String?>(
                           initialValue: selectedPaymentMethod,
-                          decoration: const InputDecoration(labelText: 'Metodo de pago'),
+                          decoration: const InputDecoration(
+                            labelText: 'Metodo de pago',
+                          ),
                           items: const [
-                            DropdownMenuItem<String?>(value: null, child: Text('Todos')),
+                            DropdownMenuItem<String?>(
+                              value: null,
+                              child: Text('Todos'),
+                            ),
                             DropdownMenuItem<String?>(
                               value: 'cash',
                               child: Text('Efectivo'),

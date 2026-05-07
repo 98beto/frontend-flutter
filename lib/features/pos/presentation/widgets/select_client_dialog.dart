@@ -81,10 +81,9 @@ class _SelectClientDialogState extends ConsumerState<SelectClientDialog> {
     });
 
     try {
-      final response = await ref.read(clientsRepositoryProvider).getClients(
-            page: 1,
-            search: _search,
-          );
+      final response = await ref
+          .read(clientsRepositoryProvider)
+          .getClients(page: 1, search: _search);
 
       if (!mounted) {
         return;
@@ -115,10 +114,9 @@ class _SelectClientDialogState extends ConsumerState<SelectClientDialog> {
     });
 
     try {
-      final response = await ref.read(clientsRepositoryProvider).getClients(
-            page: _currentPage + 1,
-            search: _search,
-          );
+      final response = await ref
+          .read(clientsRepositoryProvider)
+          .getClients(page: _currentPage + 1, search: _search);
 
       if (!mounted) {
         return;
@@ -156,7 +154,9 @@ class _SelectClientDialogState extends ConsumerState<SelectClientDialog> {
           decoration: BoxDecoration(
             color: isDark ? AppTheme.panel : AppTheme.lightBg0,
             borderRadius: BorderRadius.circular(28),
-            border: Border.all(color: isDark ? AppTheme.border : AppTheme.lightBg4),
+            border: Border.all(
+              color: isDark ? AppTheme.border : AppTheme.lightBg4,
+            ),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -215,7 +215,8 @@ class _SelectClientDialogState extends ConsumerState<SelectClientDialog> {
               ),
               const SizedBox(height: 16),
               OutlinedButton.icon(
-                onPressed: () => Navigator.of(context).pop(ClientSelectionResult.clear()),
+                onPressed: () =>
+                    Navigator.of(context).pop(ClientSelectionResult.clear()),
                 icon: const Icon(Icons.person_off_rounded),
                 label: const Text('Usar publico general'),
               ),
@@ -316,9 +317,9 @@ class _ClientOptionTileState extends State<_ClientOptionTile> {
         color: AppTheme.transparent,
         child: InkWell(
           borderRadius: BorderRadius.circular(20),
-          onTap: () => Navigator.of(context).pop(
-            ClientSelectionResult.pick(id: item.id, name: item.name),
-          ),
+          onTap: () => Navigator.of(
+            context,
+          ).pop(ClientSelectionResult.pick(id: item.id, name: item.name)),
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 160),
             curve: Curves.easeOutCubic,
@@ -344,12 +345,16 @@ class _ClientOptionTileState extends State<_ClientOptionTile> {
                 Text(item.name, style: Theme.of(context).textTheme.titleMedium),
                 const SizedBox(height: 8),
                 Text(
-                  item.email?.trim().isNotEmpty == true ? item.email! : 'Sin correo',
+                  item.email?.trim().isNotEmpty == true
+                      ? item.email!
+                      : 'Sin correo',
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  item.phone?.trim().isNotEmpty == true ? item.phone! : 'Sin telefono',
+                  item.phone?.trim().isNotEmpty == true
+                      ? item.phone!
+                      : 'Sin telefono',
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
               ],

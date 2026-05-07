@@ -29,7 +29,9 @@ class _SupplierFormDialogState extends State<SupplierFormDialog> {
     super.initState();
     final supplier = widget.initialSupplier;
     _nameController = TextEditingController(text: supplier?.name ?? '');
-    _contactPersonController = TextEditingController(text: supplier?.contactPerson ?? '');
+    _contactPersonController = TextEditingController(
+      text: supplier?.contactPerson ?? '',
+    );
     _emailController = TextEditingController(text: supplier?.email ?? '');
     _phoneController = TextEditingController(text: supplier?.phone ?? '');
     _creditDaysController = TextEditingController(
@@ -114,7 +116,9 @@ class _SupplierFormDialogState extends State<SupplierFormDialog> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            widget.isEditing ? 'Editar proveedor' : 'Nuevo proveedor',
+                            widget.isEditing
+                                ? 'Editar proveedor'
+                                : 'Nuevo proveedor',
                             style: Theme.of(context).textTheme.titleLarge,
                           ),
                           const SizedBox(height: 6),
@@ -222,7 +226,9 @@ class _SupplierFormDialogState extends State<SupplierFormDialog> {
                         onPressed: _submit,
                         icon: const Icon(Icons.save_rounded),
                         label: Text(
-                          widget.isEditing ? 'Guardar cambios' : 'Crear proveedor',
+                          widget.isEditing
+                              ? 'Guardar cambios'
+                              : 'Crear proveedor',
                         ),
                       ),
                     ),
@@ -248,7 +254,8 @@ class _SupplierFormDialogState extends State<SupplierFormDialog> {
       controller: controller,
       maxLines: maxLines,
       keyboardType: keyboardType,
-      validator: validator ??
+      validator:
+          validator ??
           (value) {
             if (required && (value == null || value.trim().isEmpty)) {
               return 'Este campo es obligatorio.';

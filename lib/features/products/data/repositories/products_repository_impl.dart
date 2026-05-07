@@ -1,5 +1,6 @@
 import 'package:pos_desktop/core/network/paginated_response.dart';
 import 'package:pos_desktop/features/products/data/datasources/products_remote_datasource.dart';
+import 'package:pos_desktop/features/products/data/models/product_branch_update_request_model.dart';
 import 'package:pos_desktop/features/products/data/models/product_upsert_request_model.dart';
 import 'package:pos_desktop/features/products/domain/entities/product_category.dart';
 import 'package:pos_desktop/features/products/domain/entities/product_record.dart';
@@ -15,14 +16,14 @@ class ProductsRepositoryImpl implements ProductsRepository {
     int page = 1,
     String? search,
     int? categoryId,
-    bool? isActive,
+    bool? isAvailable,
     bool lowStockOnly = false,
   }) async {
     final response = await _remoteDatasource.getProducts(
       page: page,
       search: search,
       categoryId: categoryId,
-      isActive: isActive,
+      isAvailable: isAvailable,
       lowStockOnly: lowStockOnly,
     );
 
@@ -52,8 +53,19 @@ class ProductsRepositoryImpl implements ProductsRepository {
   }
 
   @override
-  Future<ProductRecord> updateProduct(int id, ProductUpsertRequestModel request) {
+  Future<ProductRecord> updateProduct(
+    int id,
+    ProductUpsertRequestModel request,
+  ) {
     return _remoteDatasource.updateProduct(id, request);
+  }
+
+  @override
+  Future<ProductRecord> updateBranchProduct(
+    int id,
+    ProductBranchUpdateRequestModel request,
+  ) {
+    return _remoteDatasource.updateBranchProduct(id, request);
   }
 
   @override

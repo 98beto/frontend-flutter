@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pos_desktop/features/dashboard/presentation/providers/dashboard_provider.dart';
 import 'package:pos_desktop/features/pos/presentation/providers/products_provider.dart'
     as pos_products;
+import 'package:pos_desktop/features/products/data/models/product_branch_update_request_model.dart';
 import 'package:pos_desktop/features/products/data/models/product_upsert_request_model.dart';
 import 'package:pos_desktop/features/products/domain/entities/product_record.dart';
 import 'package:pos_desktop/features/products/presentation/providers/product_detail_provider.dart';
@@ -10,8 +11,8 @@ import 'package:pos_desktop/features/products/presentation/providers/products_re
 
 final productActionsProvider =
     AsyncNotifierProvider<ProductActionsNotifier, ProductRecord?>(
-  ProductActionsNotifier.new,
-);
+      ProductActionsNotifier.new,
+    );
 
 class ProductActionsNotifier extends AsyncNotifier<ProductRecord?> {
   @override
@@ -30,11 +31,15 @@ class ProductActionsNotifier extends AsyncNotifier<ProductRecord?> {
   Future<ProductRecord> updateProduct(
     int id,
     ProductUpsertRequestModel request,
+    ProductBranchUpdateRequestModel branchRequest,
   ) async {
     state = const AsyncLoading();
-    state = await AsyncValue.guard(
-      () => ref.read(productsRepositoryProvider).updateProduct(id, request),
-    );
+    state = await AsyncValue.guard(() async {
+      await ref.read(productsRepositoryProvider).updateProduct(id, request);
+      return ref
+          .read(productsRepositoryProvider)
+          .updateBranchProduct(id, branchRequest);
+    });
 
     ref.invalidate(productDetailProvider(id));
     _invalidateRelatedData();

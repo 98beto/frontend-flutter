@@ -37,18 +37,23 @@ class DashboardCashPanel extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: statusBackground,
-                       borderRadius: BorderRadius.circular(16),
-                     ),
-                     child: Text(
-                       summary.hasOpenCashSession ? 'Caja abierta' : 'Caja cerrada',
-                       style: TextStyle(
-                         color: statusColor,
-                       fontWeight: FontWeight.w700,
-                     ),
-                   ),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 8,
+                  ),
+                  decoration: BoxDecoration(
+                    color: statusBackground,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Text(
+                    summary.hasOpenCashSession
+                        ? 'Caja abierta'
+                        : 'Caja cerrada',
+                    style: TextStyle(
+                      color: statusColor,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -58,10 +63,14 @@ class DashboardCashPanel extends StatelessWidget {
                 spacing: 16,
                 runSpacing: 16,
                 children: [
-                  _DataTile(label: 'Sesion', value: '#${summary.cashSessionId}'),
+                  _DataTile(
+                    label: 'Sesion',
+                    value: '#${summary.cashSessionId}',
+                  ),
                   _DataTile(
                     label: 'Apertura',
-                    value: '\$${(summary.cashSessionOpeningBalance ?? 0).toStringAsFixed(2)}',
+                    value:
+                        '\$${(summary.cashSessionOpeningBalance ?? 0).toStringAsFixed(2)}',
                   ),
                   _DataTile(
                     label: 'Hora',
@@ -79,7 +88,9 @@ class DashboardCashPanel extends StatelessWidget {
             OutlinedButton.icon(
               onPressed: onOpenCashRegister,
               icon: const Icon(Icons.account_balance_wallet_rounded),
-              label: Text(summary.hasOpenCashSession ? 'Ir a Caja' : 'Abrir caja'),
+              label: Text(
+                summary.hasOpenCashSession ? 'Ir a Caja' : 'Abrir caja',
+              ),
             ),
           ],
         ),

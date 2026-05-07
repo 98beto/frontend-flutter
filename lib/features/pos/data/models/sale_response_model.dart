@@ -14,7 +14,8 @@ class SaleResponseModel extends SaleResult {
       totalAmount: _toDouble(json['total_amount']),
       paymentMethod: json['payment_method'] as String? ?? 'cash',
       saleDate:
-          DateTime.tryParse(json['sale_date'] as String? ?? '') ?? DateTime.now(),
+          DateTime.tryParse(json['sale_date'] as String? ?? '') ??
+          DateTime.now(),
     );
   }
 

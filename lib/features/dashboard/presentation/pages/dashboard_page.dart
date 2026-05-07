@@ -131,7 +131,8 @@ class DashboardPage extends ConsumerWidget {
                   DashboardCashPanel(
                     summary: summary,
                     onOpenCashRegister: () {
-                      ref.read(appSectionProvider.notifier).state = AppSection.cashRegister;
+                      ref.read(appSectionProvider.notifier).state =
+                          AppSection.cashRegister;
                     },
                   ),
                   const SizedBox(height: 20),
@@ -146,13 +147,16 @@ class DashboardPage extends ConsumerWidget {
                   ref.read(appSectionProvider.notifier).state = AppSection.pos;
                 },
                 onOpenCashRegister: () {
-                  ref.read(appSectionProvider.notifier).state = AppSection.cashRegister;
+                  ref.read(appSectionProvider.notifier).state =
+                      AppSection.cashRegister;
                 },
                 onOpenSales: () {
-                  ref.read(appSectionProvider.notifier).state = AppSection.sales;
+                  ref.read(appSectionProvider.notifier).state =
+                      AppSection.sales;
                 },
                 onOpenInventory: () {
-                  ref.read(appSectionProvider.notifier).state = AppSection.inventory;
+                  ref.read(appSectionProvider.notifier).state =
+                      AppSection.inventory;
                 },
               );
 

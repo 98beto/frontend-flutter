@@ -1,4 +1,5 @@
 import 'package:pos_desktop/core/network/paginated_response.dart';
+import 'package:pos_desktop/features/products/data/models/product_branch_update_request_model.dart';
 import 'package:pos_desktop/features/products/data/models/product_upsert_request_model.dart';
 import 'package:pos_desktop/features/products/domain/entities/product_category.dart';
 import 'package:pos_desktop/features/products/domain/entities/product_record.dart';
@@ -8,7 +9,7 @@ abstract class ProductsRepository {
     int page = 1,
     String? search,
     int? categoryId,
-    bool? isActive,
+    bool? isAvailable,
     bool lowStockOnly = false,
   });
 
@@ -18,7 +19,15 @@ abstract class ProductsRepository {
 
   Future<ProductRecord> createProduct(ProductUpsertRequestModel request);
 
-  Future<ProductRecord> updateProduct(int id, ProductUpsertRequestModel request);
+  Future<ProductRecord> updateProduct(
+    int id,
+    ProductUpsertRequestModel request,
+  );
+
+  Future<ProductRecord> updateBranchProduct(
+    int id,
+    ProductBranchUpdateRequestModel request,
+  );
 
   Future<void> deleteProduct(int id);
 }

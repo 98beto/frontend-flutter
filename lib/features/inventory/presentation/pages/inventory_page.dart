@@ -72,21 +72,27 @@ class _InventoryPageState extends ConsumerState<InventoryPage> {
         return;
       }
 
-      ref.read(appNotificationProvider.notifier).showSuccess(
-        title: 'Movimiento registrado',
-        message:
-            '${_typeLabel(movement.type)} aplicada a ${movement.productName} por ${movement.quantity}.',
-      );
+      ref
+          .read(appNotificationProvider.notifier)
+          .showSuccess(
+            title: 'Movimiento registrado',
+            message:
+                '${_typeLabel(movement.type)} aplicada a ${movement.productName} por ${movement.quantity}.',
+          );
     } on ApiException catch (error) {
-      ref.read(appNotificationProvider.notifier).showError(
-        title: 'No fue posible registrar el movimiento',
-        message: _resolveApiErrorMessage(error),
-      );
+      ref
+          .read(appNotificationProvider.notifier)
+          .showError(
+            title: 'No fue posible registrar el movimiento',
+            message: _resolveApiErrorMessage(error),
+          );
     } catch (_) {
-      ref.read(appNotificationProvider.notifier).showError(
-        title: 'No fue posible registrar el movimiento',
-        message: 'Verifica la conexion o intenta nuevamente.',
-      );
+      ref
+          .read(appNotificationProvider.notifier)
+          .showError(
+            title: 'No fue posible registrar el movimiento',
+            message: 'Verifica la conexion o intenta nuevamente.',
+          );
     }
   }
 
@@ -176,11 +182,14 @@ class _InventoryPageState extends ConsumerState<InventoryPage> {
               isLoadingInitial: movementsState.isLoadingInitial,
               isLoadingMore: movementsState.isLoadingMore,
               errorMessage: movementsState.errorMessage,
-              onRetry: ref.read(inventoryMovementsProvider.notifier).loadInitial,
+              onRetry: ref
+                  .read(inventoryMovementsProvider.notifier)
+                  .loadInitial,
               onOpenDetail: (movement) {
                 showDialog<void>(
                   context: context,
-                  builder: (_) => InventoryMovementDetailDialog(movementId: movement.id),
+                  builder: (_) =>
+                      InventoryMovementDetailDialog(movementId: movement.id),
                 );
               },
             ),
@@ -206,8 +215,10 @@ class _InventoryPageState extends ConsumerState<InventoryPage> {
               isLoading: false,
               errorMessage: null,
               onRetry: () => ref.invalidate(lowStockProductsProvider),
-              onQuickAdjustment: (product) =>
-                  _openMovementDialog(productId: product.id, type: 'adjustment'),
+              onQuickAdjustment: (product) => _openMovementDialog(
+                productId: product.id,
+                type: 'adjustment',
+              ),
             ),
           ),
         ],

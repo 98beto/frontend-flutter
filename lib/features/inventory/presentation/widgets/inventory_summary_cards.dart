@@ -61,16 +61,17 @@ class InventorySummaryCards extends StatelessWidget {
                   label: 'Productos activos',
                   value: '${summary.activeProducts}',
                   icon: Icons.check_circle_outline_rounded,
-                  accentColor: isDark ? AppTheme.success : AppTheme.lightSuccess,
+                  accentColor: isDark
+                      ? AppTheme.success
+                      : AppTheme.lightSuccess,
                 ),
                 _SummaryTile(
                   label: 'Bajo stock',
                   value: '${summary.lowStockCount}',
                   icon: Icons.warning_amber_rounded,
-                  accentColor:
-                      summary.lowStockCount > 0
-                          ? (isDark ? AppTheme.danger : AppTheme.lightDanger)
-                          : (isDark ? AppTheme.success : AppTheme.lightSuccess),
+                  accentColor: summary.lowStockCount > 0
+                      ? (isDark ? AppTheme.danger : AppTheme.lightDanger)
+                      : (isDark ? AppTheme.success : AppTheme.lightSuccess),
                 ),
               ],
             ),
@@ -104,11 +105,14 @@ class _SummaryTileState extends State<_SummaryTile> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final color = widget.accentColor ?? (isDark ? AppTheme.brand : AppTheme.lightBrand);
+    final color =
+        widget.accentColor ?? (isDark ? AppTheme.brand : AppTheme.lightBrand);
     final backgroundColor = _isHovered
         ? (isDark ? AppTheme.bg2 : AppTheme.lightBg2)
         : (isDark ? AppTheme.bg1 : AppTheme.lightBg1);
-    final borderColor = _isHovered ? color : (isDark ? AppTheme.border : AppTheme.lightBg4);
+    final borderColor = _isHovered
+        ? color
+        : (isDark ? AppTheme.border : AppTheme.lightBg4);
     final shadowColor = isDark
         ? AppTheme.black.withValues(alpha: 0.14)
         : AppTheme.lightTextStrong.withValues(alpha: 0.08);
@@ -152,9 +156,15 @@ class _SummaryTileState extends State<_SummaryTile> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(widget.label, style: Theme.of(context).textTheme.bodyMedium),
+                  Text(
+                    widget.label,
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
                   const SizedBox(height: 6),
-                  Text(widget.value, style: Theme.of(context).textTheme.titleLarge),
+                  Text(
+                    widget.value,
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
                 ],
               ),
             ),
